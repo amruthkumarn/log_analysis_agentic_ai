@@ -1,9 +1,9 @@
 from typing import Annotated, Sequence, TypedDict, Dict, List, Set
 from langgraph.graph import Graph, StateGraph
-from langchain_core.messages import BaseMessage, HumanMessage
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
@@ -15,6 +15,9 @@ from collections import defaultdict
 import json
 from document_processor import DocumentProcessor
 import logging
+from pydantic import BaseModel, Field, validator
+from typing import List, Optional
+from langchain.output_parsers import OutputFixingParser
 
 # Configure logging
 logging.basicConfig(
@@ -963,15 +966,61 @@ def create_anomaly_prompt(rag_manager: RAGManager):
     ])
 
 def create_root_cause_prompt(rag_manager: RAGManager):
+    system_message_intro = (
+        "You are an expert system and network administrator tasked with identifying a root cause for a SPECIFIC TRIGGERING ERROR EVENT provided to you."
+        "Analyze ONLY the provided single triggering error event, its immediate details, and its position within the larger error chain (also provided). "
+        "Focus on the primary trigger for THIS SPECIFIC failure. "
+        "Your response MUST BE A SINGLE, VALID JSON OBJECT. No other text, no markdown, just the JSON. "
+        "The JSON object must contain the following fields, populated with information derived from the provided error event details:"
+        # Note: Explicitly list fields instead of saying 'adhere to schema' initially
+    )
+    
+    fields_description_content = {
+        "problem_description": "[String: Brief 1-2 sentence description of the core problem observed FOR THE PROVIDED TRIGGERING ERROR EVENT. Use details like the service name and error type FROM THE TRIGGERING ERROR. E.g., 'Timeout occurred in 3scale API Gateway while processing session abc123.' NOT 'Transaction X failed.']",
+        "probable_root_cause_summary": "[String: Concise summary of the MOST LIKELY root cause FOR THE PROVIDED TRIGGERING ERROR EVENT. This summary MUST explain what likely caused THIS SPECIFIC error message in THIS specific service. E.g., 'The 3scale API Gateway timed out because the backend service it called (service_id=123) did not respond within the 5000ms window.' NOT a generic summary or a summary of a different error in the chain.]",
+        "key_error_log_messages": "[[List containing EXACTLY ONE string: the UNMODIFIED 'EXACT Triggering Error Message' provided in the input. No other messages. No modifications.]]",
+        "confidence_score": "[Float or null: Score 0.0-1.0 for confidence, e.g., 0.85, or null if unsure.]",
+        "associated_identifiers": {
+            "session_id": "[String or null: EXACT session_id from input.]",
+            "urc": "[String or null: EXACT URC from the triggering error event.]",
+            "uid": "[String or null: EXACT UID from the triggering error event.]",
+            "service_name": "[String or null: EXACT service_name where the triggering error was logged.]",
+            "api_endpoint": "[String or null: EXACT API endpoint from the triggering error event.]",
+            "transaction_type": "[String or null: EXACT transaction type from the triggering error event.]"
+        }
+    }
+    # Rephrased: less like a formal schema, more like a field guide
+    fields_description = f"Description of fields to include in your JSON response (ensure all are present):\\n{json.dumps(fields_description_content, indent=2)}"
+
+    example_json_instruction = (
+        "\\nIMPORTANT: Follow the structure of this EXAMPLE JSON for your output. "
+        "Populate all fields using the ACTUAL data from THE SPECIFIC TRIGGERING ERROR EVENT provided in the input, NOT these example values. "
+        "Focus all descriptions and summaries on THAT specific triggering error. "
+        "The 'key_error_log_messages' field must contain ONLY the exact triggering message string from the input.\\n"
+    )
+    
+    example_json_content = {
+        "problem_description": "A timeout error occurred in the '3scale API Gateway' service for session 'abc123' and URC 'root123'.",
+        "probable_root_cause_summary": "The '3scale API Gateway' service experienced a timeout because the backend service (identified by service_id=123) failed to respond within the configured 5000ms timeout period, as stated in the triggering error message.",
+        "key_error_log_messages": ["Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms"],
+        "confidence_score": 0.9,
+        "associated_identifiers": {
+            "session_id": "abc123",
+            "urc": "root123",
+            "uid": None,
+            "service_name": "3scale API Gateway",
+            "api_endpoint": None,
+            "transaction_type": None
+        }
+    }
+    example_json = f"Example JSON structure to follow:\\n```json\\n{json.dumps(example_json_content, indent=2)}\\n```"
+    
+    # Construct the full system message
+    # Ensuring RAG context is clearly separated and its role defined later in the user message part by analyze_root_cause
+    final_system_message = f"{system_message_intro}\\n\\n{fields_description}\\n\\n{example_json_instruction}\\n{example_json}"
+
     return ChatPromptTemplate.from_messages([
-        ("system", """You are a root cause analysis agent. Your task is to:
-        1. Build causal inference graphs
-        2. Identify potential root causes
-        3. Calculate probability scores
-        4. Validate hypotheses
-        5. Generate explanations
-        
-        Use the provided documentation context to understand system architecture and known issues."""),
+        SystemMessage(content=final_system_message),
         MessagesPlaceholder(variable_name="messages"),
     ])
 
@@ -986,7 +1035,88 @@ def create_anomaly_agent(model: OllamaLLM):
     return create_anomaly_prompt(rag_manager) | model | StrOutputParser()
 
 def create_root_cause_agent(model: OllamaLLM):
-    return create_root_cause_prompt(rag_manager) | model | StrOutputParser()
+    prompt = create_root_cause_prompt(rag_manager)
+    # Original parser
+    json_parser = JsonOutputParser(pydantic_object=LLMRootCauseAnalysis)
+    # Wrap with OutputFixingParser
+    output_fixing_parser = OutputFixingParser.from_llm(llm=model, parser=json_parser)
+    return prompt | model | output_fixing_parser
+
+def create_recommendation_prompt(rag_manager: RAGManager):
+    system_message_intro = (
+        "You are an expert system support engineer. "
+        "You will be given a root cause analysis for a SINGLE, SPECIFIC triggering error event. "
+        "Your task is to provide recommendations that DIRECTLY ADDRESS THIS ANALYZED ERROR. "
+        "Suggest 2-3 distinct recommendations: 1-2 for immediate remediation of THIS error, and 1 for prevention of THIS type of error in THIS context. "
+        "Your response MUST BE A SINGLE, VALID JSON OBJECT. No other text allowed. "
+        "The JSON object must have ONE top-level key: \"recommendations\", value is a list of recommendation objects. "
+        "Adhere strictly to the schema. Identifiers MUST be EXACT values from input. "
+        "Recommendations MUST be highly specific to the analyzed error (e.g., the specific service like '3scale API Gateway', the specific error type like 'timeout'). Generic advice is NOT acceptable."
+    )
+
+    # Define schema description with corrected newlines for the prompt
+    recommendation_item_schema = {
+        "recommendation_type": "[String: Type: 'Immediate Remediation' or 'Preventive Measure'.]",
+        "recommendation_description": "[String: Clear, concise description of action that DIRECTLY addresses the SPECIFIC PROBLEM identified in the provided analysis (e.g., 'Investigate network latency between 3scale API Gateway and its backend service with service_id=123', 'Implement a retry mechanism with backoff in 3scale API Gateway for calls to service_id=123').]",
+        "action_steps": ["[List of strings: Specific, actionable steps for THIS recommendation. Max 3-4 steps. E.g., ['Check firewall rules for 3scale API Gateway to backend service_id=123', 'Analyze historical performance metrics for service_id=123'].]", "[List of strings: Specific, actionable steps for THIS recommendation. Max 3-4 steps. E.g., ['Check firewall rules for 3scale API Gateway to backend service_id=123', 'Analyze historical performance metrics for service_id=123'].]", "[List of strings: Specific, actionable steps for THIS recommendation. Max 3-4 steps. E.g., ['Check firewall rules for 3scale API Gateway to backend service_id=123', 'Analyze historical performance metrics for service_id=123'].]"],
+        "relevant_documentation": ["[List of strings: Docs relevant to THIS specific recommendation and error type, e.g., ['3scale API Gateway Timeout Configuration Guide', 'Network Troubleshooting for Backend Services']. Use [] if none.]", "[List of strings: Docs relevant to THIS specific recommendation and error type, e.g., ['3scale API Gateway Timeout Configuration Guide', 'Network Troubleshooting for Backend Services']. Use [] if none.]", "[List of strings: Docs relevant to THIS specific recommendation and error type, e.g., ['3scale API Gateway Timeout Configuration Guide', 'Network Troubleshooting for Backend Services']. Use [] if none.]"],
+        "applicable_to_identifiers": {
+            "session_id": "[String or null: EXACT session_id from input analysis.]",
+            "service_name": "[String or null: EXACT service_name from input analysis (e.g., '3scale API Gateway'). MUST BE THE SERVICE FROM THE ANALYSIS.]",
+            "urc": "[String or null: EXACT URC from input analysis.]"
+        }
+    }
+    schema_description = (
+        f"Schema for EACH object in the 'recommendations' list:\n{json.dumps(recommendation_item_schema, indent=2)}\n"
+    )
+
+    example_json_instruction = (
+        "\nBelow is an EXAMPLE. Populate with ACTUAL data from the input analysis. Recommendations MUST be specific to the error details provided in that analysis.\n"
+    )
+
+    # Define example_json using triple quotes for easier multiline JSON string
+    example_json_content = {
+        "recommendations": [
+            {
+                "recommendation_type": "Immediate Remediation",
+                "recommendation_description": "Investigate connectivity and current load on the backend service (service_id=123) that the '3scale API Gateway' failed to reach within the timeout period.",
+                "action_steps": ["Check logs for backend service (service_id=123) around the time of the incident.", "Verify network path connectivity between '3scale API Gateway' and service_id=123.", "Assess current resource utilization (CPU, memory, network) of service_id=123."],
+                "relevant_documentation": ["Troubleshooting Timeouts for 3scale API Gateway", "Backend Service (service_id=123) Operations Guide"],
+                "applicable_to_identifiers": {
+                    "session_id": "abc123",
+                    "service_name": "3scale API Gateway",
+                    "urc": "root123"
+                }
+            },
+            {
+                "recommendation_type": "Preventive Measure",
+                "recommendation_description": "Consider increasing the timeout configuration for backend service_id=123 within '3scale API Gateway' if legitimate calls are expected to take longer, or implement circuit breaker patterns.",
+                "action_steps": ["Analyze typical response times for service_id=123 to determine an appropriate timeout.", "Update timeout settings in '3scale API Gateway' configuration for this specific backend.", "Explore adding a circuit breaker library to the gateway's interaction with this backend."],
+                "relevant_documentation": ["3scale API Gateway Configuration: Timeouts", "Circuit Breaker Pattern for Microservices"],
+                "applicable_to_identifiers": {
+                    "session_id": "abc123",
+                    "service_name": "3scale API Gateway",
+                    "urc": "root123"
+                }
+            }
+        ]
+    }
+    example_json = f"```json\n{json.dumps(example_json_content, indent=2)}\n```"
+    
+    final_system_message = f"{system_message_intro}\n\n{schema_description}\n{example_json_instruction}\n{example_json}"
+
+    return ChatPromptTemplate.from_messages([
+        SystemMessage(content=final_system_message),
+        MessagesPlaceholder(variable_name="messages"),
+    ])
+
+def create_recommendation_agent(model: OllamaLLM):
+    prompt = create_recommendation_prompt(rag_manager)
+    # Original parser
+    json_parser = JsonOutputParser(pydantic_object=LLMRecommendations)
+    # Wrap with OutputFixingParser
+    output_fixing_parser = OutputFixingParser.from_llm(llm=model, parser=json_parser)
+    return prompt | model | output_fixing_parser
 
 # Define agent nodes with specialized functionality
 def parse_logs(state: AgentState) -> AgentState:
@@ -1134,106 +1264,171 @@ def detect_anomalies(state: AgentState) -> AgentState:
     }
 
 def analyze_root_cause(state: AgentState) -> AgentState:
-    """Analyze root causes using causal inference."""
     messages = state["messages"]
     correlations = state["correlations"]
-
-    # DEBUG: Print correlations and error chains
     logger.info("--- DEBUG: Correlations passed to RCA ---")
     logger.info(json.dumps(correlations, indent=2, default=str))
-    for correlation in correlations:
-        logger.info(f"Session: {correlation.get('session_id', 'N/A')}")
-        logger.info(f"Error Chains: {json.dumps(correlation.get('error_chains', []), indent=2, default=str)}")
 
-    # Get documentation context for system architecture
-    doc_context = rag_manager.get_relevant_context("system architecture and known issues")
+    doc_context_for_analysis = rag_manager.get_relevant_context("system architecture, known issues, error types and patterns")
     
-    # Build causal inference graph from correlations
-    causal_graph = {
-        'nodes': set(),
-        'edges': [],
-        'weights': {}
-    }
-    
-    # Define static error types that are always considered for root cause analysis
+    programmatically_identified_root_causes = []
     static_error_types = [
-        'rate_limit',
-        'authentication',
-        'backend_service_health_check',
-        'backend_service_timeout',
-        'timeout',
-        'connection',
-        'queue',
-        'performance',
-        'validation',
-        'business',
-        'system'
+        'rate_limit', 'authentication', 'backend_service_health_check',
+        'backend_service_timeout', 'timeout', 'connection', 'queue',
+        'performance', 'validation', 'business', 'system'
     ]
-    
-    # Retrieve dynamic error types from documentation
-    doc_context = rag_manager.get_relevant_context("error types and patterns")
-    dynamic_error_types = []
-    for line in doc_context:
-        if "error" in line.lower():
-            # Extract error type from documentation line
-            match = re.search(r'error\s+(?:type|pattern)\s*:\s*(\w+)', line.lower())
-            if match:
-                error_type = match.group(1)
-                if error_type not in static_error_types:
-                    dynamic_error_types.append(error_type)
-    
-    # Merge static and dynamic error types
-    root_cause_error_types = static_error_types + dynamic_error_types
-    logger.info(f"RCA_DEBUG: Initial root_cause_error_types: {root_cause_error_types}") # Log initial list
-    
-    # Identify potential root causes
-    root_causes = []
+    # Dynamic error types could be added here if needed from RAG
+    root_cause_error_types = static_error_types
+
     for correlation in correlations:
-        # Process error chains from the correlation
         for error_chain in correlation.get('error_chains', []):
-            logger.info(f"RCA_DEBUG: Processing error_chain for session {correlation.get('session_id')} with impact {error_chain.get('impact_level')}")
             if error_chain.get('impact_level') in ['HIGH', 'CRITICAL', 'MEDIUM', 'LOW']:
                 for error_details in error_chain.get('errors', []):
                     current_error_type = error_details.get('error_type')
-                    logger.info(f"RCA_DEBUG: Checking error: Type='{current_error_type}', Message='{error_details.get('message')}'")
-                    logger.info(f"RCA_DEBUG: root_cause_error_types currently is: {root_cause_error_types}")
-                    
-                    is_in_list = current_error_type in root_cause_error_types
-                    logger.info(f"RCA_DEBUG: Is '{current_error_type}' in root_cause_error_types? {is_in_list}")
-
-                    if is_in_list:
-                        logger.info(f"RCA_DEBUG: MATCH FOUND! Adding to root_causes.")
-                        # Found an error in the chain whose type matches our root cause criteria
-                        root_causes.append({
-                            'timestamp': error_details.get('timestamp'), # Timestamp of the specific error
+                    if current_error_type in root_cause_error_types:
+                        programmatically_identified_root_causes.append({
+                            'timestamp': error_details.get('timestamp'),
                             'triggering_error_message': error_details.get('message'),
-                            'triggering_error_type': error_details.get('error_type'),
-                            'session_id': correlation.get('session_id'), # Session ID from the correlation
-                            'root_urc_of_session': correlation.get('root_urc'), # Root URC of the session
+                            'triggering_error_type': current_error_type,
+                            'source_service_from_log': error_details.get('source'), # Original source from log
+                            'session_id': correlation.get('session_id'),
+                            'root_urc_of_session': correlation.get('root_urc'),
+                            'error_specific_urc': error_details.get('urc'),
+                            'error_specific_uid': error_details.get('uid'),
+                            'error_specific_api_endpoint': error_details.get('api_endpoint'),
+                            'error_specific_transaction_type': error_details.get('transaction_type'),
                             'overall_chain_impact': error_chain.get('impact_level'),
-                            'affected_components_from_error': error_details.get('impact', {}).get('affected_components', {}),
-                            'full_error_chain_details': error_chain # Include the full chain for context
+                            'full_error_chain_details_for_context': error_chain 
                         })
-                        # Once a relevant error is found in a chain, we consider this chain for root cause.
-                        # We can break from iterating errors in *this* chain if one is enough.
-                        break # Add the chain once if any error in it is a root cause type
+                        break # Process this chain once
     
-    logger.info(f"RCA_DEBUG: Final root_causes list before returning from analyze_root_cause: {json.dumps(root_causes, indent=2, default=str)}") # ADDED
-    # Get AI analysis with documentation context
-    analysis = create_root_cause_agent(llm).invoke({
-        "messages": messages + [
-            HumanMessage(content=f"Documentation Context:\n{''.join(doc_context)}\n\nRoot Causes:\n{str(root_causes)}")
+    logger.info(f"RCA_DEBUG: Programmatically identified {len(programmatically_identified_root_causes)} potential root cause events.")
+
+    final_rca_results_with_llm_analysis = []
+
+    for idx, rc_item in enumerate(programmatically_identified_root_causes):
+        logger.info(f"RCA_DEBUG: Processing individual root cause item {idx+1}/{len(programmatically_identified_root_causes)}: URC {rc_item.get('root_urc_of_session')} - Type {rc_item.get('triggering_error_type')}")
+
+        # Prepare specific input for LLMRootCauseAnalysis
+        # Ensure all expected keys for RootCauseIdentifiers are present, defaulting to None if missing from rc_item
+        identifiers_for_llm = RootCauseIdentifiers(
+            session_id=rc_item.get('session_id'),
+            urc=rc_item.get('error_specific_urc') or rc_item.get('root_urc_of_session'), # Prioritize error specific URC
+            uid=rc_item.get('error_specific_uid'),
+            service_name=rc_item.get('source_service_from_log'), # Use the original log source as service name
+            api_endpoint=rc_item.get('error_specific_api_endpoint'),
+            transaction_type=rc_item.get('error_specific_transaction_type')
+        ).model_dump(exclude_none=True) # Pass as dict, exclude_none for cleaner input if some are None
+
+        # Construct the detailed input message for initial analysis LLM
+        # This approach helps with complex f-string formatting and escaping
+        initial_analysis_parts = [
+            f"Analyze the following specific error event for its root cause. ",
+            f"Focus EXCLUSIVELY on THIS triggering error event and its immediate details. ",
+            f"The 'Full Error Chain' and 'Documentation Context' are for overall context ONLY; your core analysis (problem_description, probable_root_cause_summary) MUST be about THIS specific error.\\n",
+            f"Key Details for THIS error (Your analysis MUST use these exact details):",
+            f"- Session ID: {rc_item.get('session_id')}",
+            f"- URC of this error event: {rc_item.get('error_specific_urc', 'N/A')}",
+            f"- Root URC of session (for context only): {rc_item.get('root_urc_of_session', 'N/A')}",
+            f"- UID of this error event: {rc_item.get('error_specific_uid', 'N/A')}",
+            f"- Service where error logged (use this for service_name in output): {rc_item.get('source_service_from_log')}",
+            f"- Triggering Error Type (use this for descriptions): {rc_item.get('triggering_error_type')}",
+            f"- EXACT Triggering Error Message (this is the primary subject of your analysis): '{rc_item.get('triggering_error_message')}'", # No extra quotes around the message itself here
+            f"- API Endpoint (if any): {rc_item.get('error_specific_api_endpoint', 'N/A')}",
+            f"- Transaction Type (if any): {rc_item.get('error_specific_transaction_type', 'N/A')}\\n",
+            f"Full Error Chain for broader context (DO NOT make this the subject of your 'problem_description' or 'probable_root_cause_summary'):",
+            json.dumps(rc_item.get('full_error_chain_details_for_context'), indent=2, default=str) + "\\n",
+            f"Documentation Context (for general understanding of error types or components - ONLY use if directly relevant to explaining THIS SPECIFIC error event):",
+            ''.join(doc_context_for_analysis) + "\\n",
+            f"Instructions for filling the JSON object:",
+            f"1. Populate ALL fields according to schema.",
+            f"2. 'associated_identifiers': Use EXACT values from 'Key Details for THIS error' (session_id, error_specific_urc, error_specific_uid, source_service_from_log as service_name, etc.).",
+            f"3. 'key_error_log_messages': MUST be a list with ONE string: the UNMODIFIED 'EXACT Triggering Error Message' (which is '{rc_item.get('triggering_error_message')}'). No other text/prefixes.",
+            f"4. 'problem_description': Describe THE PROBLEM shown by the 'EXACT Triggering Error Message' in the 'Service where error logged'. Be specific to THIS event.",
+            f"5. 'probable_root_cause_summary': Explain THE LIKELY CAUSE of the 'EXACT Triggering Error Message' occurring in the 'Service where error logged'. Relate directly to THIS specific message and service."
         ]
-    })
+        initial_analysis_input_content = "\n".join(initial_analysis_parts)
+
+        logger.info(f"RCA_DEBUG: Input content for initial analysis LLM call:\\n{initial_analysis_input_content}")
+
+        raw_initial_analysis_data = create_root_cause_agent(llm).invoke({
+            "messages": [HumanMessage(content=initial_analysis_input_content)]
+        })
+        logger.info(f"RCA_DEBUG: Raw initial analysis data from LLM for item {idx+1}: {raw_initial_analysis_data}")
+
+        validated_initial_analysis_obj = None
+        llm_generated_rca_dict = None
+        try:
+            validated_initial_analysis_obj = LLMRootCauseAnalysis.model_validate(raw_initial_analysis_data)
+            llm_generated_rca_dict = validated_initial_analysis_obj.model_dump(exclude_none=True)
+            logger.info(f"RCA_DEBUG: Successfully validated initial LLM analysis for item {idx+1}: {llm_generated_rca_dict}")
+        except Exception as e:
+            logger.error(f"RCA_DEBUG: Failed to validate LLM initial_analysis_data for item {idx+1}. Data: {raw_initial_analysis_data}. Error: {e}")
+            llm_generated_rca_dict = {
+                "error": "Failed to validate LLM output for initial analysis against required schema.",
+                "raw_llm_output": raw_initial_analysis_data,
+                "validation_error_details": str(e)
+            }
+
+        # Prepare for recommendation LLM call
+        recommendation_parts = [
+            f"You are given the following root cause analysis FOR A SINGLE, SPECIFIC TRIGGERING ERROR:\\n",
+            json.dumps(llm_generated_rca_dict, indent=2, default=str) + "\\n",
+            f"Key context for THIS specific error event (Your recommendations MUST address this specific context):",
+            f"- Original Triggering Error Message: {rc_item.get('triggering_error_message')}",
+            f"- Original Error Type: {rc_item.get('triggering_error_type')}",
+            f"- Session ID: {rc_item.get('session_id')}",
+            f"- Service where error logged (recommendations should target this service): {rc_item.get('source_service_from_log')}\\n",
+            f"Documentation Context (for general understanding - recommendations must be specific to the analyzed error, NOT generic documentation points unless they directly solve THIS specific analyzed error):",
+            ''.join(doc_context_for_analysis) + "\\n",
+            f"Instructions for generating recommendations JSON:",
+            f"1. Create recommendations that DIRECTLY address the 'problem_description' and 'probable_root_cause_summary' from the provided analysis for the SPECIFIC error (e.g., if analysis says 'Timeout in X due to Y', recommend how to fix Y or handle timeouts in X related to Y).",
+            f"2. Populate ALL fields per schema.",
+            f"3. 'recommendation_description': Must be a direct consequence of the analyzed root cause FOR THIS SPECIFIC ERROR. E.g., if the problem is a timeout in '{rc_item.get('source_service_from_log')}', recommendations must relate to fixing/handling timeouts in '{rc_item.get('source_service_from_log')}'.",
+            f"4. 'applicable_to_identifiers': Use EXACT values from the 'Key context' (Session ID, and '{rc_item.get('source_service_from_log')}' as service_name). URC should be from the analysis if relevant to the recommendation for THIS error.",
+            f"5. Recommendations MUST be specific to the problem outlined in the provided 'llm_initial_analysis' and the 'Key context for this specific error event'. Do not recommend solutions for other problems that might be in the broader documentation or error chain unless they are the direct cause/solution for THIS specific triggering error."
+        ]
+        recommendation_input_content = "\n".join(recommendation_parts)
+        
+        logger.info(f"RCA_DEBUG: Input content for recommendation LLM call for item {idx+1}:\\n{recommendation_input_content}")
+
+        raw_recommendations_data = create_recommendation_agent(llm).invoke({
+            "messages": [HumanMessage(content=recommendation_input_content)]
+        })
+        logger.info(f"RCA_DEBUG: Raw recommendations data from LLM for item {idx+1}: {raw_recommendations_data}")
+        
+        llm_generated_recommendations_dict = None
+        try:
+            validated_recommendations_obj = LLMRecommendations.model_validate(raw_recommendations_data)
+            llm_generated_recommendations_dict = validated_recommendations_obj.model_dump(exclude_none=True)
+            logger.info(f"RCA_DEBUG: Successfully validated LLM recommendations for item {idx+1}: {llm_generated_recommendations_dict}")
+        except Exception as e:
+            logger.error(f"RCA_DEBUG: Failed to validate LLM recommendations_data for item {idx+1}. Data: {raw_recommendations_data}. Error: {e}")
+            llm_generated_recommendations_dict = {
+                "error": "Failed to validate LLM output for recommendations against required schema.",
+                "raw_llm_output": raw_recommendations_data,
+                "validation_error_details_recommendation": str(e) # Changed key to avoid clash
+            }
+        
+        # Combine original programmatic data with LLM analysis and recommendations
+        final_rc_item = {
+            **rc_item, # Original data like timestamps, triggering messages, full chain
+            "llm_initial_analysis": llm_generated_rca_dict,
+            "llm_recommendations": llm_generated_recommendations_dict
+        }
+        final_rca_results_with_llm_analysis.append(final_rc_item)
     
+    final_summary_for_state_message = f"Processed {len(programmatically_identified_root_causes)} root cause events, generating individual LLM analysis and recommendations for each."
+    logger.info(f"RCA_DEBUG: analyze_root_cause returning {len(final_rca_results_with_llm_analysis)} items.")
+
     return {
-        "messages": messages + [HumanMessage(content=analysis)],
+        "messages": messages + [HumanMessage(content=final_summary_for_state_message)],
         "raw_logs": state["raw_logs"],
         "normalized_logs": state["normalized_logs"],
         "log_content": state["log_content"],
         "correlations": correlations,
         "impact_analysis": state.get("impact_analysis", {}),
-        "root_causes": root_causes
+        "root_causes": final_rca_results_with_llm_analysis
     }
 
 # Helper functions for UPART extraction
@@ -1547,6 +1742,45 @@ def save_root_cause_to_json(analysis_results: Dict, output_dir: str = "analysis_
     with open(root_cause_path, 'w') as f:
         json.dump({"timestamp": timestamp, "root_causes": root_causes}, f, indent=2)
     return root_cause_path
+
+# Pydantic models for structured LLM output - REVISED
+class RootCauseIdentifiers(BaseModel):
+    session_id: Optional[str] = Field(None, description="The EXACT session_id from the input data relevant to this root cause, if applicable.")
+    urc: Optional[str] = Field(None, description="The EXACT URC from the input data if specifically relevant to this root cause.")
+    uid: Optional[str] = Field(None, description="The EXACT UID from the input data if specifically relevant to this root cause.")
+    service_name: Optional[str] = Field(None, description="The EXACT service name (e.g., 'payment_service', 'api_gateway') from the input data relevant to this root cause.")
+    api_endpoint: Optional[str] = Field(None, description="The EXACT API endpoint from the input data, if relevant.")
+    transaction_type: Optional[str] = Field(None, description="The EXACT transaction type from the input data, if relevant.")
+
+class LLMRootCauseAnalysis(BaseModel):
+    problem_description: str = Field(description="A brief (1-2 sentence) description of the core problem observed.")
+    probable_root_cause_summary: str = Field(description="A concise summary of the MOST LIKELY root cause (e.g., 'Authentication failure in payment_service due to invalid credentials'). Do NOT include specific identifiers like session_id here; use the 'associated_identifiers' field for that.")
+    key_error_log_messages: List[str] = Field(description="List of 1-3 EXACT log message strings from the input error chain that are most indicative of THIS specific root cause.")
+    confidence_score: Optional[float] = Field(None, description="A score between 0.0 and 1.0 indicating confidence in this identified root cause (e.g., 0.85). Use null if not determinable.")
+    associated_identifiers: RootCauseIdentifiers = Field(description="Key EXACT identifiers from the input data that are directly associated with this specific root cause analysis.")
+
+    @validator('key_error_log_messages')
+    def check_log_messages(cls, v):
+        if not v or not all(isinstance(item, str) for item in v):
+            raise ValueError('key_error_log_messages must be a non-empty list of strings')
+        if any('[' in item or ']' in item for item in v):
+             logger.warning(f"LLM_VALIDATION_WARN: key_error_log_messages item may contain placeholder-like brackets: {v}")
+        return v
+
+class RecommendationIdentifiers(BaseModel):
+    session_id: Optional[str] = Field(None, description="The EXACT session_id this recommendation applies to, if specific. Use null if general.")
+    service_name: Optional[str] = Field(None, description="The EXACT service name this recommendation applies to, if specific. Use null if general.")
+    urc: Optional[str] = Field(None, description="The EXACT URC this recommendation applies to, if specific. Use null if general.")
+
+class RecommendationItem(BaseModel):
+    recommendation_type: str = Field(description="Type of recommendation (e.g., 'Immediate Remediation', 'Preventive Measure', 'Further Investigation').")
+    recommendation_description: str = Field(description="A clear, concise description of the recommended action. Do NOT include specific identifiers like session_id here; use 'applicable_to_identifiers' for that.")
+    action_steps: Optional[List[str]] = Field(default_factory=list, description="Specific, actionable steps to implement the recommendation. Max 3-4 steps.")
+    relevant_documentation: Optional[List[str]] = Field(default_factory=list, description="References to specific titles or sections in documentation that support this recommendation (e.g., 'Firewall Configuration Guide, Section 2.3').")
+    applicable_to_identifiers: Optional[RecommendationIdentifiers] = Field(None, description="Key EXACT identifiers from input data this recommendation primarily targets. Use null or omit if recommendation is general.")
+
+class LLMRecommendations(BaseModel):
+    recommendations: List[RecommendationItem] = Field(description="A list of structured recommendations based on the root cause analysis.")
 
 def main():
     """Main function to run the log analysis workflow."""
