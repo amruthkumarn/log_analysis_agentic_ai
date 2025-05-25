@@ -1,0 +1,2885 @@
+2025-05-25 14:22:42,075 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-05-25 14:22:42,183 - faiss.loader - INFO - Loading faiss.
+2025-05-25 14:22:42,215 - faiss.loader - INFO - Successfully loaded faiss.
+2025-05-25 14:22:42,218 - faiss - INFO - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-05-25 14:22:42,307 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-05-25 14:22:42,588 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-05-25 14:23:18,583 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-05-25 14:23:18,945 - __main__ - INFO - Verifying required files...
+2025-05-25 14:23:18,945 - __main__ - INFO - Starting log analysis...
+2025-05-25 14:23:18,945 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,945 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,945 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'rate_limit', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {'response_time_ms': 2500}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'unknown_error', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'authentication', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Extracted session_id: abc123
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Extracted URC: root123
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': 'abc123', 'cif_id': None, 'urc': 'root123', 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'timeout', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'rate_limit', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'unknown_error', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,946 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'authentication', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'timeout', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'rate_limit', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'unknown_error', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {'response_time_ms': 2200}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'rate_limit', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'authentication', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'timeout', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted session_id: abc123
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted URC: root123
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Detected login event
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': True, 'is_request': False, 'is_response': False, 'session_id': 'abc123', 'cif_id': '456789', 'urc': 'root123', 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {'response_time_ms': 150}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted URC: root123
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Detected API request
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': True, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'root123', 'uid': None, 'transaction_type': 'transfer', 'api_endpoint': '/api/v1/transfer', 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted UID: root123
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Detected API response
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': True, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'root123', 'transaction_type': 'transfer', 'api_endpoint': '/api/v1/transfer', 'error_type': None, 'severity': None, 'metrics': {'response_time_ms': 200}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted URC: child1
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted UID: root123
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Detected API request
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': True, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child1', 'uid': 'root123', 'transaction_type': 'debit', 'api_endpoint': '/api/v1/debit', 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted UID: child1
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Detected API response
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': True, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'child1', 'transaction_type': 'debit', 'api_endpoint': '/api/v1/debit', 'error_type': None, 'severity': None, 'metrics': {'response_time_ms': 180}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted URC: child2
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted UID: child1
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Detected API request
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': True, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child2', 'uid': 'child1', 'transaction_type': 'notify', 'api_endpoint': '/api/v1/notify', 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,947 - log_analysis_agent - INFO - Extracted UID: child2
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Detected API response
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': True, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'child2', 'transaction_type': 'notify', 'api_endpoint': '/api/v1/notify', 'error_type': None, 'severity': None, 'metrics': {'response_time_ms': 160}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted URC: child3
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted UID: child2
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Detected API request
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': True, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child3', 'uid': 'child2', 'transaction_type': 'audit', 'api_endpoint': '/api/v1/audit', 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted UID: child3
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Detected API response
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': True, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'child3', 'transaction_type': 'audit', 'api_endpoint': '/api/v1/audit', 'error_type': None, 'severity': None, 'metrics': {'response_time_ms': 140}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted URC: child2
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child2', 'uid': None, 'transaction_type': 'notify', 'api_endpoint': '/api/v1/notify', 'error_type': 'rate_limit', 'severity': 'HIGH', 'metrics': {'response_time_ms': 500}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted URC: child2
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child2', 'uid': None, 'transaction_type': 'notify', 'api_endpoint': '/api/v1/notify', 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {'response_time_ms': 800}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted URC: child3
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child3', 'uid': None, 'transaction_type': 'audit', 'api_endpoint': '/api/v1/audit', 'error_type': 'authentication', 'severity': 'HIGH', 'metrics': {'response_time_ms': 300}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted URC: child1
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted UID: root123
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child1', 'uid': 'root123', 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Extracted session_id: abc123
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': 'abc123', 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {'response_time_ms': 100}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'rate_limit', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'rate_limit', 'severity': 'CRITICAL', 'metrics': {}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'system', 'severity': 'CRITICAL', 'metrics': {}}
+2025-05-25 14:23:18,948 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'authentication', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: root123
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'root123', 'uid': None, 'transaction_type': 'transfer', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: root123
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'root123', 'transaction_type': 'transfer', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: child1
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: root123
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child1', 'uid': 'root123', 'transaction_type': 'debit', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: child1
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'child1', 'transaction_type': 'debit', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: child2
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: child1
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child2', 'uid': 'child1', 'transaction_type': 'notify', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: child2
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'child2', 'transaction_type': 'notify', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: child2
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child2', 'uid': None, 'transaction_type': 'notify', 'api_endpoint': None, 'error_type': 'rate_limit', 'severity': 'CRITICAL', 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: child3
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: child2
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child3', 'uid': 'child2', 'transaction_type': 'audit', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: child3
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: INFO): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': None, 'uid': 'child3', 'transaction_type': 'audit', 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: child2
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child2', 'uid': None, 'transaction_type': 'notify', 'api_endpoint': None, 'error_type': 'system', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: child2
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted UID: child1
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: WARN): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child2', 'uid': 'child1', 'transaction_type': None, 'api_endpoint': None, 'error_type': 'connection', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: child3
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'child3', 'uid': None, 'transaction_type': 'audit', 'api_endpoint': None, 'error_type': 'authentication', 'severity': 'CRITICAL', 'metrics': {}}
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Extracted URC: req125
+2025-05-25 14:23:18,949 - log_analysis_agent - INFO - Final parsed message (level: ERROR): {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': None, 'cif_id': None, 'urc': 'req125', 'uid': None, 'transaction_type': 'transfer', 'api_endpoint': None, 'error_type': 'authentication', 'severity': 'MEDIUM', 'metrics': {}}
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Starting log correlation
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Created a flat list of 83 log entries from all sources.
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Found login event: User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms from 3scale_api_gateway
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Session ID: abc123, URC: root123
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Processing session abc123 starting with root URC root123
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Session abc123, Pass 1: Known URCs/UIDs: {'root123'}
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Session abc123, Pass 2: Known URCs/UIDs: {'child1', 'child3', 'root123', 'child2'}
+2025-05-25 14:23:18,951 - log_analysis_agent - INFO - Session abc123: No new entries added in pass 2. Concluding entry collection.
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Collected 27 entries for session abc123 with root URC root123.
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Building API call tree
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Checking entry: Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Parsed message: {'is_login': False, 'is_request': False, 'is_response': False, 'session_id': 'abc123', 'cif_id': None, 'urc': 'root123', 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': 'timeout', 'severity': 'HIGH', 'metrics': {}}
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Checking entry: User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Parsed message: {'is_login': True, 'is_request': False, 'is_response': False, 'session_id': 'abc123', 'cif_id': '456789', 'urc': 'root123', 'uid': None, 'transaction_type': None, 'api_endpoint': None, 'error_type': None, 'severity': None, 'metrics': {'response_time_ms': 150}}
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Found root entry: User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Root URC: root123
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Root session_id: abc123
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Created root node with URC: root123 at level 0
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - 
+Processing entry: Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:00
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - URC: root123
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,952 - log_analysis_agent - INFO - Session ID: abc123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'root123'. Node keys: ['root123']
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE root123: Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:00
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: abc123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Request received URC=root123 transaction_type=transfer endpoint=/api/v1/transfer
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:01
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Node for URC root123 already exists. Request entry: Request received URC=root123 transaction_type=transfer endpoint=/api/v1/transfer
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Processing transfer request URC=root123 transaction_type=transfer
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:01
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Response sent UID=root123 transaction_type=transfer endpoint=/api/v1/transfer response_time=200ms
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:02
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Added response to node with UID: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Transfer request validated UID=root123 transaction_type=transfer
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:02
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Request received URC=child1 UID=root123 transaction_type=debit endpoint=/api/v1/debit
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:03
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: child1
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Found parent node root123 for child1 via UID.
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Added child node child1 (level 1) to parent root123 (level 0)
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Debit request initiated URC=child1 UID=root123 transaction_type=debit
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:03
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: child1
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: root123
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Response sent UID=child1 transaction_type=debit endpoint=/api/v1/debit response_time=180ms
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:04
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: child1
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Added response to node with UID: child1
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Debit processed UID=child1 transaction_type=debit
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:04
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: child1
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - 
+Processing entry: Request received URC=child2 UID=child1 transaction_type=notify endpoint=/api/v1/notify
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:05
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - URC: child2
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - UID: child1
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Found parent node child1 for child2 via UID.
+2025-05-25 14:23:18,953 - log_analysis_agent - INFO - Added child node child2 (level 2) to parent child1 (level 1)
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Notification request sent URC=child2 UID=child1 transaction_type=notify
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:05
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: child1
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Response sent UID=child2 transaction_type=notify endpoint=/api/v1/notify response_time=160ms
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:06
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Added response to node with UID: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Notification sent UID=child2 transaction_type=notify
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:06
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Request received URC=child3 UID=child2 transaction_type=audit endpoint=/api/v1/audit
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:07
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: child3
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Found parent node child2 for child3 via UID.
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Added child node child3 (level 3) to parent child2 (level 2)
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:07
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child2'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child2: Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Response sent UID=child3 transaction_type=audit endpoint=/api/v1/audit response_time=140ms
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:08
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: child3
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Added response to node with UID: child3
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Audit request sent URC=child3 UID=child2 transaction_type=audit
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:08
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: child3
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:09
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child2'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child2: Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: Audit completed UID=child3 transaction_type=audit
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:09
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: child3
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:10
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child2'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child2: High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - 
+Processing entry: High latency detected URC=child2 transaction_type=notify
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:10
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - URC: child2
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,954 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child2'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child2: High latency detected URC=child2 transaction_type=notify
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - 
+Processing entry: Database connection pool exhausted URC=child2 UID=child1, pool_size=100
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:10
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - URC: child2
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - UID: child1
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child2'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child2: Database connection pool exhausted URC=child2 UID=child1, pool_size=100
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - 
+Processing entry: Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:11
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - URC: child3
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child3'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child3: Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - 
+Processing entry: Infrastructure error URC=child1 UID=root123, details=NFS unresponsive
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:11
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - URC: child1
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - UID: root123
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child1'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child1: Infrastructure error URC=child1 UID=root123, details=NFS unresponsive
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - 
+Processing entry: Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:11
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - URC: child3
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - ERROR_CHECK: Processing error entry for URC: 'child3'. Node keys: ['root123', 'child1', 'child2', 'child3']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - SUCCESS: Added error TO NODE child3: Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - 
+Processing entry: User logged out session_id=abc123 response_time=100ms
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Timestamp: 2024-03-20 10:17:12
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - URC: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - UID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Session ID: abc123
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - 
+Final Tree Structure:
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Node URC: root123
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Session ID: abc123
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Level: 0
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Children: ['child1']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -   Node URC: child1
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -   Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -   Level: 1
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -   Children: ['child2']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -     Node URC: child2
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -     Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -     Level: 2
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -     Children: ['child3']
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -       Node URC: child3
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -       Session ID: None
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -       Level: 3
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO -       Children: []
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Built API call tree with 4 nodes
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Finding error chains from API call tree
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Determined session_id for API tree: abc123
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracting errors from node root123. It has 1 direct errors.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracted 1 errors in total from node root123.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracting errors from node child1. It has 1 direct errors.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracted 1 errors in total from node child1.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracting errors from node child2. It has 5 direct errors.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracted 5 errors in total from node child2.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracting errors from node child3. It has 2 direct errors.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - FIND_ERROR_CHAINS: Extracted 2 errors in total from node child3.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Formatting error chain for session abc123 with 9 raw errors.
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Analyzing error chain for scope: abc123
+2025-05-25 14:23:18,955 - log_analysis_agent - INFO - Processing error: Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms at 2024-03-20 10:17:00
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: timeout with 0 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: Infrastructure error URC=child1 UID=root123, details=NFS unresponsive at 2024-03-20 10:17:11
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: system with 0 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL at 2024-03-20 10:17:07
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: rate_limit with 2 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms at 2024-03-20 10:17:09
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: rate_limit with 2 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms at 2024-03-20 10:17:10
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: system with 0 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: High latency detected URC=child2 transaction_type=notify at 2024-03-20 10:17:10
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: system with 0 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: Database connection pool exhausted URC=child2 UID=child1, pool_size=100 at 2024-03-20 10:17:10
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: connection with 0 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms at 2024-03-20 10:17:11
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: authentication with 2 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Processing error: Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL at 2024-03-20 10:17:11
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Added error to chain: authentication with 2 related errors
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Found and formatted 1 error chains for the API tree.
+2025-05-25 14:23:18,956 - log_analysis_agent - INFO - Calculated average response time: 170.00ms from 4 responses.
+2025-05-25 14:23:18,957 - log_analysis_agent - INFO - Finished processing session abc123. Correlation: {
+  "session_id": "abc123",
+  "root_urc": "root123",
+  "login_event": {
+    "timestamp": "2024-03-20 10:17:00",
+    "level": "INFO",
+    "source": "api_gateway",
+    "message": "User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms",
+    "parsed_message": {
+      "is_login": true,
+      "is_request": false,
+      "is_response": false,
+      "session_id": "abc123",
+      "cif_id": "456789",
+      "urc": "root123",
+      "uid": null,
+      "transaction_type": null,
+      "api_endpoint": null,
+      "error_type": null,
+      "severity": null,
+      "metrics": {
+        "response_time_ms": 150
+      }
+    },
+    "source_file": "3scale_api_gateway"
+  },
+  "api_calls": [
+    {
+      "urc": "root123",
+      "request_log_entry": {
+        "timestamp": "2024-03-20 10:17:00",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms",
+        "parsed_message": {
+          "is_login": true,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": "456789",
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 150
+          }
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "response_log_entry": {
+        "timestamp": "2024-03-20 10:17:02",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "Response sent UID=root123 transaction_type=transfer endpoint=/api/v1/transfer response_time=200ms",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "session_id": null,
+          "cif_id": null,
+          "urc": null,
+          "uid": "root123",
+          "transaction_type": "transfer",
+          "api_endpoint": "/api/v1/transfer",
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 200
+          }
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "associated_error_log_entries": [
+        {
+          "timestamp": "2024-03-20 10:17:00",
+          "level": "ERROR",
+          "source": "3scale API Gateway",
+          "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "root123",
+            "uid": null,
+            "transaction_type": null,
+            "api_endpoint": null,
+            "error_type": "timeout",
+            "severity": "HIGH",
+            "metrics": {}
+          },
+          "source_file": "3scale_api_gateway"
+        }
+      ],
+      "children_urcs": [
+        "child1"
+      ],
+      "level_in_tree": 0
+    },
+    {
+      "urc": "child1",
+      "request_log_entry": {
+        "timestamp": "2024-03-20 10:17:03",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "Request received URC=child1 UID=root123 transaction_type=debit endpoint=/api/v1/debit",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "session_id": null,
+          "cif_id": null,
+          "urc": "child1",
+          "uid": "root123",
+          "transaction_type": "debit",
+          "api_endpoint": "/api/v1/debit",
+          "error_type": null,
+          "severity": null,
+          "metrics": {}
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "response_log_entry": {
+        "timestamp": "2024-03-20 10:17:04",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "Response sent UID=child1 transaction_type=debit endpoint=/api/v1/debit response_time=180ms",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "session_id": null,
+          "cif_id": null,
+          "urc": null,
+          "uid": "child1",
+          "transaction_type": "debit",
+          "api_endpoint": "/api/v1/debit",
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 180
+          }
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "associated_error_log_entries": [
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child1",
+            "uid": "root123",
+            "transaction_type": null,
+            "api_endpoint": null,
+            "error_type": "system",
+            "severity": "HIGH",
+            "metrics": {}
+          },
+          "source_file": "3scale_api_gateway"
+        }
+      ],
+      "children_urcs": [
+        "child2"
+      ],
+      "level_in_tree": 1
+    },
+    {
+      "urc": "child2",
+      "request_log_entry": {
+        "timestamp": "2024-03-20 10:17:05",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "Request received URC=child2 UID=child1 transaction_type=notify endpoint=/api/v1/notify",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "session_id": null,
+          "cif_id": null,
+          "urc": "child2",
+          "uid": "child1",
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "error_type": null,
+          "severity": null,
+          "metrics": {}
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "response_log_entry": {
+        "timestamp": "2024-03-20 10:17:06",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "Response sent UID=child2 transaction_type=notify endpoint=/api/v1/notify response_time=160ms",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "session_id": null,
+          "cif_id": null,
+          "urc": null,
+          "uid": "child2",
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 160
+          }
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "associated_error_log_entries": [
+        {
+          "timestamp": "2024-03-20 10:17:07",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": null,
+            "error_type": "rate_limit",
+            "severity": "CRITICAL",
+            "metrics": {}
+          },
+          "source_file": "payment_service"
+        },
+        {
+          "timestamp": "2024-03-20 10:17:09",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": "/api/v1/notify",
+            "error_type": "rate_limit",
+            "severity": "HIGH",
+            "metrics": {
+              "response_time_ms": 500
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "api_gateway",
+          "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": "/api/v1/notify",
+            "error_type": "system",
+            "severity": "MEDIUM",
+            "metrics": {
+              "response_time_ms": 800
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "High latency detected URC=child2 transaction_type=notify",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": null,
+            "error_type": "system",
+            "severity": "MEDIUM",
+            "metrics": {}
+          },
+          "source_file": "payment_service"
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child2",
+            "uid": "child1",
+            "transaction_type": null,
+            "api_endpoint": null,
+            "error_type": "connection",
+            "severity": "MEDIUM",
+            "metrics": {}
+          },
+          "source_file": "payment_service"
+        }
+      ],
+      "children_urcs": [
+        "child3"
+      ],
+      "level_in_tree": 2
+    },
+    {
+      "urc": "child3",
+      "request_log_entry": {
+        "timestamp": "2024-03-20 10:17:07",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "Request received URC=child3 UID=child2 transaction_type=audit endpoint=/api/v1/audit",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "session_id": null,
+          "cif_id": null,
+          "urc": "child3",
+          "uid": "child2",
+          "transaction_type": "audit",
+          "api_endpoint": "/api/v1/audit",
+          "error_type": null,
+          "severity": null,
+          "metrics": {}
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "response_log_entry": {
+        "timestamp": "2024-03-20 10:17:08",
+        "level": "INFO",
+        "source": "api_gateway",
+        "message": "Response sent UID=child3 transaction_type=audit endpoint=/api/v1/audit response_time=140ms",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "session_id": null,
+          "cif_id": null,
+          "urc": null,
+          "uid": "child3",
+          "transaction_type": "audit",
+          "api_endpoint": "/api/v1/audit",
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 140
+          }
+        },
+        "source_file": "3scale_api_gateway"
+      },
+      "associated_error_log_entries": [
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child3",
+            "uid": null,
+            "transaction_type": "audit",
+            "api_endpoint": "/api/v1/audit",
+            "error_type": "authentication",
+            "severity": "HIGH",
+            "metrics": {
+              "response_time_ms": 300
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": null,
+            "urc": "child3",
+            "uid": null,
+            "transaction_type": "audit",
+            "api_endpoint": null,
+            "error_type": "authentication",
+            "severity": "CRITICAL",
+            "metrics": {}
+          },
+          "source_file": "payment_service"
+        }
+      ],
+      "children_urcs": [],
+      "level_in_tree": 3
+    }
+  ],
+  "error_chains": [
+    {
+      "session_id": "abc123",
+      "errors": [
+        {
+          "timestamp": "2024-03-20 10:17:00",
+          "level": "ERROR",
+          "source": "3scale API Gateway",
+          "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+          "error_type": "timeout",
+          "session_id": "abc123",
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": true,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child1",
+          "uid": "root123",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:07",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:09",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "api_gateway",
+          "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "High latency detected URC=child2 transaction_type=notify",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+          "error_type": "connection",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": "child1",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": "/api/v1/audit",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/audit",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        }
+      ],
+      "total_errors": 9,
+      "impact_level": "CRITICAL"
+    }
+  ],
+  "metrics": {
+    "total_calls": 4,
+    "error_count": 9,
+    "avg_response_time": 170.0
+  }
+}
+2025-05-25 14:23:18,957 - log_analysis_agent - INFO - Finished log correlation. Found 1 sessions with data.
+2025-05-25 14:23:19,036 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-05-25 14:23:21,737 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2025-05-25 14:23:36,119 - log_analysis_agent - INFO - --- DEBUG: Correlations passed to RCA ---
+2025-05-25 14:23:36,119 - log_analysis_agent - INFO - [
+  {
+    "session_id": "abc123",
+    "root_urc": "root123",
+    "login_event": {
+      "timestamp": "2024-03-20 10:17:00",
+      "level": "INFO",
+      "source": "api_gateway",
+      "message": "User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms",
+      "parsed_message": {
+        "is_login": true,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": "456789",
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": null,
+        "severity": null,
+        "metrics": {
+          "response_time_ms": 150
+        }
+      },
+      "source_file": "3scale_api_gateway"
+    },
+    "api_calls": [
+      {
+        "urc": "root123",
+        "request_log_entry": {
+          "timestamp": "2024-03-20 10:17:00",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms",
+          "parsed_message": {
+            "is_login": true,
+            "is_request": false,
+            "is_response": false,
+            "session_id": "abc123",
+            "cif_id": "456789",
+            "urc": "root123",
+            "uid": null,
+            "transaction_type": null,
+            "api_endpoint": null,
+            "error_type": null,
+            "severity": null,
+            "metrics": {
+              "response_time_ms": 150
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "response_log_entry": {
+          "timestamp": "2024-03-20 10:17:02",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "Response sent UID=root123 transaction_type=transfer endpoint=/api/v1/transfer response_time=200ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": true,
+            "session_id": null,
+            "cif_id": null,
+            "urc": null,
+            "uid": "root123",
+            "transaction_type": "transfer",
+            "api_endpoint": "/api/v1/transfer",
+            "error_type": null,
+            "severity": null,
+            "metrics": {
+              "response_time_ms": 200
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "associated_error_log_entries": [
+          {
+            "timestamp": "2024-03-20 10:17:00",
+            "level": "ERROR",
+            "source": "3scale API Gateway",
+            "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "root123",
+              "uid": null,
+              "transaction_type": null,
+              "api_endpoint": null,
+              "error_type": "timeout",
+              "severity": "HIGH",
+              "metrics": {}
+            },
+            "source_file": "3scale_api_gateway"
+          }
+        ],
+        "children_urcs": [
+          "child1"
+        ],
+        "level_in_tree": 0
+      },
+      {
+        "urc": "child1",
+        "request_log_entry": {
+          "timestamp": "2024-03-20 10:17:03",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "Request received URC=child1 UID=root123 transaction_type=debit endpoint=/api/v1/debit",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": true,
+            "is_response": false,
+            "session_id": null,
+            "cif_id": null,
+            "urc": "child1",
+            "uid": "root123",
+            "transaction_type": "debit",
+            "api_endpoint": "/api/v1/debit",
+            "error_type": null,
+            "severity": null,
+            "metrics": {}
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "response_log_entry": {
+          "timestamp": "2024-03-20 10:17:04",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "Response sent UID=child1 transaction_type=debit endpoint=/api/v1/debit response_time=180ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": true,
+            "session_id": null,
+            "cif_id": null,
+            "urc": null,
+            "uid": "child1",
+            "transaction_type": "debit",
+            "api_endpoint": "/api/v1/debit",
+            "error_type": null,
+            "severity": null,
+            "metrics": {
+              "response_time_ms": 180
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "associated_error_log_entries": [
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "level": "ERROR",
+            "source": "api_gateway",
+            "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child1",
+              "uid": "root123",
+              "transaction_type": null,
+              "api_endpoint": null,
+              "error_type": "system",
+              "severity": "HIGH",
+              "metrics": {}
+            },
+            "source_file": "3scale_api_gateway"
+          }
+        ],
+        "children_urcs": [
+          "child2"
+        ],
+        "level_in_tree": 1
+      },
+      {
+        "urc": "child2",
+        "request_log_entry": {
+          "timestamp": "2024-03-20 10:17:05",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "Request received URC=child2 UID=child1 transaction_type=notify endpoint=/api/v1/notify",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": true,
+            "is_response": false,
+            "session_id": null,
+            "cif_id": null,
+            "urc": "child2",
+            "uid": "child1",
+            "transaction_type": "notify",
+            "api_endpoint": "/api/v1/notify",
+            "error_type": null,
+            "severity": null,
+            "metrics": {}
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "response_log_entry": {
+          "timestamp": "2024-03-20 10:17:06",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "Response sent UID=child2 transaction_type=notify endpoint=/api/v1/notify response_time=160ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": true,
+            "session_id": null,
+            "cif_id": null,
+            "urc": null,
+            "uid": "child2",
+            "transaction_type": "notify",
+            "api_endpoint": "/api/v1/notify",
+            "error_type": null,
+            "severity": null,
+            "metrics": {
+              "response_time_ms": 160
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "associated_error_log_entries": [
+          {
+            "timestamp": "2024-03-20 10:17:07",
+            "level": "ERROR",
+            "source": "payment_service",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child2",
+              "uid": null,
+              "transaction_type": "notify",
+              "api_endpoint": null,
+              "error_type": "rate_limit",
+              "severity": "CRITICAL",
+              "metrics": {}
+            },
+            "source_file": "payment_service"
+          },
+          {
+            "timestamp": "2024-03-20 10:17:09",
+            "level": "ERROR",
+            "source": "api_gateway",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child2",
+              "uid": null,
+              "transaction_type": "notify",
+              "api_endpoint": "/api/v1/notify",
+              "error_type": "rate_limit",
+              "severity": "HIGH",
+              "metrics": {
+                "response_time_ms": 500
+              }
+            },
+            "source_file": "3scale_api_gateway"
+          },
+          {
+            "timestamp": "2024-03-20 10:17:10",
+            "level": "WARN",
+            "source": "api_gateway",
+            "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child2",
+              "uid": null,
+              "transaction_type": "notify",
+              "api_endpoint": "/api/v1/notify",
+              "error_type": "system",
+              "severity": "MEDIUM",
+              "metrics": {
+                "response_time_ms": 800
+              }
+            },
+            "source_file": "3scale_api_gateway"
+          },
+          {
+            "timestamp": "2024-03-20 10:17:10",
+            "level": "WARN",
+            "source": "payment_service",
+            "message": "High latency detected URC=child2 transaction_type=notify",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child2",
+              "uid": null,
+              "transaction_type": "notify",
+              "api_endpoint": null,
+              "error_type": "system",
+              "severity": "MEDIUM",
+              "metrics": {}
+            },
+            "source_file": "payment_service"
+          },
+          {
+            "timestamp": "2024-03-20 10:17:10",
+            "level": "WARN",
+            "source": "payment_service",
+            "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child2",
+              "uid": "child1",
+              "transaction_type": null,
+              "api_endpoint": null,
+              "error_type": "connection",
+              "severity": "MEDIUM",
+              "metrics": {}
+            },
+            "source_file": "payment_service"
+          }
+        ],
+        "children_urcs": [
+          "child3"
+        ],
+        "level_in_tree": 2
+      },
+      {
+        "urc": "child3",
+        "request_log_entry": {
+          "timestamp": "2024-03-20 10:17:07",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "Request received URC=child3 UID=child2 transaction_type=audit endpoint=/api/v1/audit",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": true,
+            "is_response": false,
+            "session_id": null,
+            "cif_id": null,
+            "urc": "child3",
+            "uid": "child2",
+            "transaction_type": "audit",
+            "api_endpoint": "/api/v1/audit",
+            "error_type": null,
+            "severity": null,
+            "metrics": {}
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "response_log_entry": {
+          "timestamp": "2024-03-20 10:17:08",
+          "level": "INFO",
+          "source": "api_gateway",
+          "message": "Response sent UID=child3 transaction_type=audit endpoint=/api/v1/audit response_time=140ms",
+          "parsed_message": {
+            "is_login": false,
+            "is_request": false,
+            "is_response": true,
+            "session_id": null,
+            "cif_id": null,
+            "urc": null,
+            "uid": "child3",
+            "transaction_type": "audit",
+            "api_endpoint": "/api/v1/audit",
+            "error_type": null,
+            "severity": null,
+            "metrics": {
+              "response_time_ms": 140
+            }
+          },
+          "source_file": "3scale_api_gateway"
+        },
+        "associated_error_log_entries": [
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "level": "ERROR",
+            "source": "api_gateway",
+            "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child3",
+              "uid": null,
+              "transaction_type": "audit",
+              "api_endpoint": "/api/v1/audit",
+              "error_type": "authentication",
+              "severity": "HIGH",
+              "metrics": {
+                "response_time_ms": 300
+              }
+            },
+            "source_file": "3scale_api_gateway"
+          },
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "level": "ERROR",
+            "source": "payment_service",
+            "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+            "parsed_message": {
+              "is_login": false,
+              "is_request": false,
+              "is_response": false,
+              "session_id": "abc123",
+              "cif_id": null,
+              "urc": "child3",
+              "uid": null,
+              "transaction_type": "audit",
+              "api_endpoint": null,
+              "error_type": "authentication",
+              "severity": "CRITICAL",
+              "metrics": {}
+            },
+            "source_file": "payment_service"
+          }
+        ],
+        "children_urcs": [],
+        "level_in_tree": 3
+      }
+    ],
+    "error_chains": [
+      {
+        "session_id": "abc123",
+        "errors": [
+          {
+            "timestamp": "2024-03-20 10:17:00",
+            "level": "ERROR",
+            "source": "3scale API Gateway",
+            "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+            "error_type": "timeout",
+            "session_id": "abc123",
+            "urc": "root123",
+            "uid": null,
+            "transaction_type": null,
+            "api_endpoint": null,
+            "related_errors": [],
+            "impact": {
+              "severity": "HIGH",
+              "affected_components": {
+                "session": "abc123"
+              },
+              "performance_impact": true,
+              "security_impact": false
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "level": "ERROR",
+            "source": "api_gateway",
+            "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+            "error_type": "system",
+            "session_id": "abc123",
+            "urc": "child1",
+            "uid": "root123",
+            "transaction_type": null,
+            "api_endpoint": null,
+            "related_errors": [],
+            "impact": {
+              "severity": "HIGH",
+              "affected_components": {
+                "session": "abc123"
+              },
+              "performance_impact": false,
+              "security_impact": false
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:07",
+            "level": "ERROR",
+            "source": "payment_service",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+            "error_type": "rate_limit",
+            "session_id": "abc123",
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": null,
+            "related_errors": [
+              {
+                "timestamp": "2024-03-20 10:17:11",
+                "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+                "relationship": "causes",
+                "api_endpoint": "/api/v1/audit"
+              },
+              {
+                "timestamp": "2024-03-20 10:17:11",
+                "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+                "relationship": "causes",
+                "api_endpoint": null
+              }
+            ],
+            "impact": {
+              "severity": "CRITICAL",
+              "affected_components": {
+                "session": "abc123",
+                "transaction": "notify"
+              },
+              "performance_impact": false,
+              "security_impact": true
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:09",
+            "level": "ERROR",
+            "source": "api_gateway",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+            "error_type": "rate_limit",
+            "session_id": "abc123",
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": "/api/v1/notify",
+            "related_errors": [
+              {
+                "timestamp": "2024-03-20 10:17:11",
+                "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+                "relationship": "causes",
+                "api_endpoint": "/api/v1/audit"
+              },
+              {
+                "timestamp": "2024-03-20 10:17:11",
+                "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+                "relationship": "causes",
+                "api_endpoint": null
+              }
+            ],
+            "impact": {
+              "severity": "HIGH",
+              "affected_components": {
+                "session": "abc123",
+                "endpoint": "/api/v1/notify",
+                "transaction": "notify"
+              },
+              "performance_impact": false,
+              "security_impact": true
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:10",
+            "level": "WARN",
+            "source": "api_gateway",
+            "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+            "error_type": "system",
+            "session_id": "abc123",
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": "/api/v1/notify",
+            "related_errors": [],
+            "impact": {
+              "severity": "MEDIUM",
+              "affected_components": {
+                "session": "abc123",
+                "endpoint": "/api/v1/notify",
+                "transaction": "notify"
+              },
+              "performance_impact": false,
+              "security_impact": false
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:10",
+            "level": "WARN",
+            "source": "payment_service",
+            "message": "High latency detected URC=child2 transaction_type=notify",
+            "error_type": "system",
+            "session_id": "abc123",
+            "urc": "child2",
+            "uid": null,
+            "transaction_type": "notify",
+            "api_endpoint": null,
+            "related_errors": [],
+            "impact": {
+              "severity": "MEDIUM",
+              "affected_components": {
+                "session": "abc123",
+                "transaction": "notify"
+              },
+              "performance_impact": false,
+              "security_impact": false
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:10",
+            "level": "WARN",
+            "source": "payment_service",
+            "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+            "error_type": "connection",
+            "session_id": "abc123",
+            "urc": "child2",
+            "uid": "child1",
+            "transaction_type": null,
+            "api_endpoint": null,
+            "related_errors": [],
+            "impact": {
+              "severity": "MEDIUM",
+              "affected_components": {
+                "session": "abc123"
+              },
+              "performance_impact": false,
+              "security_impact": false
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "level": "ERROR",
+            "source": "api_gateway",
+            "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+            "error_type": "authentication",
+            "session_id": "abc123",
+            "urc": "child3",
+            "uid": null,
+            "transaction_type": "audit",
+            "api_endpoint": "/api/v1/audit",
+            "related_errors": [
+              {
+                "timestamp": "2024-03-20 10:17:07",
+                "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+                "relationship": "caused_by",
+                "api_endpoint": null
+              },
+              {
+                "timestamp": "2024-03-20 10:17:09",
+                "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+                "relationship": "caused_by",
+                "api_endpoint": "/api/v1/notify"
+              }
+            ],
+            "impact": {
+              "severity": "HIGH",
+              "affected_components": {
+                "session": "abc123",
+                "endpoint": "/api/v1/audit",
+                "transaction": "audit"
+              },
+              "performance_impact": false,
+              "security_impact": true
+            }
+          },
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "level": "ERROR",
+            "source": "payment_service",
+            "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+            "error_type": "authentication",
+            "session_id": "abc123",
+            "urc": "child3",
+            "uid": null,
+            "transaction_type": "audit",
+            "api_endpoint": null,
+            "related_errors": [
+              {
+                "timestamp": "2024-03-20 10:17:07",
+                "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+                "relationship": "caused_by",
+                "api_endpoint": null
+              },
+              {
+                "timestamp": "2024-03-20 10:17:09",
+                "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+                "relationship": "caused_by",
+                "api_endpoint": "/api/v1/notify"
+              }
+            ],
+            "impact": {
+              "severity": "CRITICAL",
+              "affected_components": {
+                "session": "abc123",
+                "transaction": "audit"
+              },
+              "performance_impact": false,
+              "security_impact": true
+            }
+          }
+        ],
+        "total_errors": 9,
+        "impact_level": "CRITICAL"
+      }
+    ],
+    "metrics": {
+      "total_calls": 4,
+      "error_count": 9,
+      "avg_response_time": 170.0
+    }
+  }
+]
+2025-05-25 14:23:36,120 - log_analysis_agent - INFO - Session: abc123
+2025-05-25 14:23:36,120 - log_analysis_agent - INFO - Error Chains: [
+  {
+    "session_id": "abc123",
+    "errors": [
+      {
+        "timestamp": "2024-03-20 10:17:00",
+        "level": "ERROR",
+        "source": "3scale API Gateway",
+        "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+        "error_type": "timeout",
+        "session_id": "abc123",
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "related_errors": [],
+        "impact": {
+          "severity": "HIGH",
+          "affected_components": {
+            "session": "abc123"
+          },
+          "performance_impact": true,
+          "security_impact": false
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:11",
+        "level": "ERROR",
+        "source": "api_gateway",
+        "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+        "error_type": "system",
+        "session_id": "abc123",
+        "urc": "child1",
+        "uid": "root123",
+        "transaction_type": null,
+        "api_endpoint": null,
+        "related_errors": [],
+        "impact": {
+          "severity": "HIGH",
+          "affected_components": {
+            "session": "abc123"
+          },
+          "performance_impact": false,
+          "security_impact": false
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:07",
+        "level": "ERROR",
+        "source": "payment_service",
+        "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+        "error_type": "rate_limit",
+        "session_id": "abc123",
+        "urc": "child2",
+        "uid": null,
+        "transaction_type": "notify",
+        "api_endpoint": null,
+        "related_errors": [
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+            "relationship": "causes",
+            "api_endpoint": "/api/v1/audit"
+          },
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+            "relationship": "causes",
+            "api_endpoint": null
+          }
+        ],
+        "impact": {
+          "severity": "CRITICAL",
+          "affected_components": {
+            "session": "abc123",
+            "transaction": "notify"
+          },
+          "performance_impact": false,
+          "security_impact": true
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:09",
+        "level": "ERROR",
+        "source": "api_gateway",
+        "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+        "error_type": "rate_limit",
+        "session_id": "abc123",
+        "urc": "child2",
+        "uid": null,
+        "transaction_type": "notify",
+        "api_endpoint": "/api/v1/notify",
+        "related_errors": [
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+            "relationship": "causes",
+            "api_endpoint": "/api/v1/audit"
+          },
+          {
+            "timestamp": "2024-03-20 10:17:11",
+            "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+            "relationship": "causes",
+            "api_endpoint": null
+          }
+        ],
+        "impact": {
+          "severity": "HIGH",
+          "affected_components": {
+            "session": "abc123",
+            "endpoint": "/api/v1/notify",
+            "transaction": "notify"
+          },
+          "performance_impact": false,
+          "security_impact": true
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:10",
+        "level": "WARN",
+        "source": "api_gateway",
+        "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+        "error_type": "system",
+        "session_id": "abc123",
+        "urc": "child2",
+        "uid": null,
+        "transaction_type": "notify",
+        "api_endpoint": "/api/v1/notify",
+        "related_errors": [],
+        "impact": {
+          "severity": "MEDIUM",
+          "affected_components": {
+            "session": "abc123",
+            "endpoint": "/api/v1/notify",
+            "transaction": "notify"
+          },
+          "performance_impact": false,
+          "security_impact": false
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:10",
+        "level": "WARN",
+        "source": "payment_service",
+        "message": "High latency detected URC=child2 transaction_type=notify",
+        "error_type": "system",
+        "session_id": "abc123",
+        "urc": "child2",
+        "uid": null,
+        "transaction_type": "notify",
+        "api_endpoint": null,
+        "related_errors": [],
+        "impact": {
+          "severity": "MEDIUM",
+          "affected_components": {
+            "session": "abc123",
+            "transaction": "notify"
+          },
+          "performance_impact": false,
+          "security_impact": false
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:10",
+        "level": "WARN",
+        "source": "payment_service",
+        "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+        "error_type": "connection",
+        "session_id": "abc123",
+        "urc": "child2",
+        "uid": "child1",
+        "transaction_type": null,
+        "api_endpoint": null,
+        "related_errors": [],
+        "impact": {
+          "severity": "MEDIUM",
+          "affected_components": {
+            "session": "abc123"
+          },
+          "performance_impact": false,
+          "security_impact": false
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:11",
+        "level": "ERROR",
+        "source": "api_gateway",
+        "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+        "error_type": "authentication",
+        "session_id": "abc123",
+        "urc": "child3",
+        "uid": null,
+        "transaction_type": "audit",
+        "api_endpoint": "/api/v1/audit",
+        "related_errors": [
+          {
+            "timestamp": "2024-03-20 10:17:07",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+            "relationship": "caused_by",
+            "api_endpoint": null
+          },
+          {
+            "timestamp": "2024-03-20 10:17:09",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+            "relationship": "caused_by",
+            "api_endpoint": "/api/v1/notify"
+          }
+        ],
+        "impact": {
+          "severity": "HIGH",
+          "affected_components": {
+            "session": "abc123",
+            "endpoint": "/api/v1/audit",
+            "transaction": "audit"
+          },
+          "performance_impact": false,
+          "security_impact": true
+        }
+      },
+      {
+        "timestamp": "2024-03-20 10:17:11",
+        "level": "ERROR",
+        "source": "payment_service",
+        "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+        "error_type": "authentication",
+        "session_id": "abc123",
+        "urc": "child3",
+        "uid": null,
+        "transaction_type": "audit",
+        "api_endpoint": null,
+        "related_errors": [
+          {
+            "timestamp": "2024-03-20 10:17:07",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+            "relationship": "caused_by",
+            "api_endpoint": null
+          },
+          {
+            "timestamp": "2024-03-20 10:17:09",
+            "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+            "relationship": "caused_by",
+            "api_endpoint": "/api/v1/notify"
+          }
+        ],
+        "impact": {
+          "severity": "CRITICAL",
+          "affected_components": {
+            "session": "abc123",
+            "transaction": "audit"
+          },
+          "performance_impact": false,
+          "security_impact": true
+        }
+      }
+    ],
+    "total_errors": 9,
+    "impact_level": "CRITICAL"
+  }
+]
+2025-05-25 14:23:36,162 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-05-25 14:23:36,202 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+2025-05-25 14:23:36,204 - log_analysis_agent - INFO - RCA_DEBUG: Initial root_cause_error_types: ['rate_limit', 'authentication', 'backend_service_health_check', 'backend_service_timeout', 'timeout', 'connection', 'queue', 'performance', 'validation', 'business', 'system']
+2025-05-25 14:23:36,204 - log_analysis_agent - INFO - RCA_DEBUG: Processing error_chain for session abc123 with impact CRITICAL
+2025-05-25 14:23:36,204 - log_analysis_agent - INFO - RCA_DEBUG: Checking error: Type='timeout', Message='Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms'
+2025-05-25 14:23:36,204 - log_analysis_agent - INFO - RCA_DEBUG: root_cause_error_types currently is: ['rate_limit', 'authentication', 'backend_service_health_check', 'backend_service_timeout', 'timeout', 'connection', 'queue', 'performance', 'validation', 'business', 'system']
+2025-05-25 14:23:36,204 - log_analysis_agent - INFO - RCA_DEBUG: Is 'timeout' in root_cause_error_types? True
+2025-05-25 14:23:36,204 - log_analysis_agent - INFO - RCA_DEBUG: MATCH FOUND! Adding to root_causes.
+2025-05-25 14:23:36,204 - log_analysis_agent - INFO - RCA_DEBUG: Final root_causes list before returning from analyze_root_cause: [
+  {
+    "timestamp": "2024-03-20 10:17:00",
+    "triggering_error_message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+    "triggering_error_type": "timeout",
+    "session_id": "abc123",
+    "root_urc_of_session": "root123",
+    "overall_chain_impact": "CRITICAL",
+    "affected_components_from_error": {
+      "session": "abc123"
+    },
+    "full_error_chain_details": {
+      "session_id": "abc123",
+      "errors": [
+        {
+          "timestamp": "2024-03-20 10:17:00",
+          "level": "ERROR",
+          "source": "3scale API Gateway",
+          "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+          "error_type": "timeout",
+          "session_id": "abc123",
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": true,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child1",
+          "uid": "root123",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:07",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:09",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "api_gateway",
+          "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "High latency detected URC=child2 transaction_type=notify",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+          "error_type": "connection",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": "child1",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": "/api/v1/audit",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/audit",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        }
+      ],
+      "total_errors": 9,
+      "impact_level": "CRITICAL"
+    }
+  }
+]
+2025-05-25 14:23:38,336 - httpx - INFO - HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2025-05-25 14:23:47,967 - log_analysis_agent - INFO - MAIN_DEBUG: final_state['root_causes'] before saving: [
+  {
+    "timestamp": "2024-03-20 10:17:00",
+    "triggering_error_message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+    "triggering_error_type": "timeout",
+    "session_id": "abc123",
+    "root_urc_of_session": "root123",
+    "overall_chain_impact": "CRITICAL",
+    "affected_components_from_error": {
+      "session": "abc123"
+    },
+    "full_error_chain_details": {
+      "session_id": "abc123",
+      "errors": [
+        {
+          "timestamp": "2024-03-20 10:17:00",
+          "level": "ERROR",
+          "source": "3scale API Gateway",
+          "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+          "error_type": "timeout",
+          "session_id": "abc123",
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": true,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child1",
+          "uid": "root123",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:07",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:09",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "api_gateway",
+          "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "High latency detected URC=child2 transaction_type=notify",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+          "error_type": "connection",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": "child1",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": "/api/v1/audit",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/audit",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        }
+      ],
+      "total_errors": 9,
+      "impact_level": "CRITICAL"
+    }
+  }
+]
+2025-05-25 14:23:47,972 - log_analysis_agent - INFO - SAVE_JSON_DEBUG: root_causes list received in save_root_cause_to_json: [
+  {
+    "timestamp": "2024-03-20 10:17:00",
+    "triggering_error_message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+    "triggering_error_type": "timeout",
+    "session_id": "abc123",
+    "root_urc_of_session": "root123",
+    "overall_chain_impact": "CRITICAL",
+    "affected_components_from_error": {
+      "session": "abc123"
+    },
+    "full_error_chain_details": {
+      "session_id": "abc123",
+      "errors": [
+        {
+          "timestamp": "2024-03-20 10:17:00",
+          "level": "ERROR",
+          "source": "3scale API Gateway",
+          "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+          "error_type": "timeout",
+          "session_id": "abc123",
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": true,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Infrastructure error URC=child1 UID=root123, details=NFS unresponsive",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child1",
+          "uid": "root123",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:07",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:09",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+          "error_type": "rate_limit",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+              "relationship": "causes",
+              "api_endpoint": "/api/v1/audit"
+            },
+            {
+              "timestamp": "2024-03-20 10:17:11",
+              "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+              "relationship": "causes",
+              "api_endpoint": null
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "api_gateway",
+          "message": "High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": "/api/v1/notify",
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/notify",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "High latency detected URC=child2 transaction_type=notify",
+          "error_type": "system",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": null,
+          "transaction_type": "notify",
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "notify"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:10",
+          "level": "WARN",
+          "source": "payment_service",
+          "message": "Database connection pool exhausted URC=child2 UID=child1, pool_size=100",
+          "error_type": "connection",
+          "session_id": "abc123",
+          "urc": "child2",
+          "uid": "child1",
+          "transaction_type": null,
+          "api_endpoint": null,
+          "related_errors": [],
+          "impact": {
+            "severity": "MEDIUM",
+            "affected_components": {
+              "session": "abc123"
+            },
+            "performance_impact": false,
+            "security_impact": false
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "api_gateway",
+          "message": "Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": "/api/v1/audit",
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "HIGH",
+            "affected_components": {
+              "session": "abc123",
+              "endpoint": "/api/v1/audit",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        },
+        {
+          "timestamp": "2024-03-20 10:17:11",
+          "level": "ERROR",
+          "source": "payment_service",
+          "message": "Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL",
+          "error_type": "authentication",
+          "session_id": "abc123",
+          "urc": "child3",
+          "uid": null,
+          "transaction_type": "audit",
+          "api_endpoint": null,
+          "related_errors": [
+            {
+              "timestamp": "2024-03-20 10:17:07",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL",
+              "relationship": "caused_by",
+              "api_endpoint": null
+            },
+            {
+              "timestamp": "2024-03-20 10:17:09",
+              "message": "Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms",
+              "relationship": "caused_by",
+              "api_endpoint": "/api/v1/notify"
+            }
+          ],
+          "impact": {
+            "severity": "CRITICAL",
+            "affected_components": {
+              "session": "abc123",
+              "transaction": "audit"
+            },
+            "performance_impact": false,
+            "security_impact": true
+          }
+        }
+      ],
+      "total_errors": 9,
+      "impact_level": "CRITICAL"
+    }
+  }
+]
+2025-05-25 14:23:47,974 - __main__ - INFO - Analysis completed successfully

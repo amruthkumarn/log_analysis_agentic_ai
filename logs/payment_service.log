@@ -1,0 +1,13 @@
+[2024-03-20 10:17:01] [INFO] payment_service: Processing transfer request URC=root123 transaction_type=transfer
+[2024-03-20 10:17:02] [INFO] payment_service: Transfer request validated UID=root123 transaction_type=transfer
+[2024-03-20 10:17:03] [INFO] payment_service: Debit request initiated URC=child1 UID=root123 transaction_type=debit
+[2024-03-20 10:17:04] [INFO] payment_service: Debit processed UID=child1 transaction_type=debit
+[2024-03-20 10:17:05] [INFO] payment_service: Notification request sent URC=child2 UID=child1 transaction_type=notify
+[2024-03-20 10:17:06] [INFO] payment_service: Notification sent UID=child2 transaction_type=notify
+[2024-03-20 10:17:07] [ERROR] payment_service: Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL
+[2024-03-20 10:17:08] [INFO] payment_service: Audit request sent URC=child3 UID=child2 transaction_type=audit
+[2024-03-20 10:17:09] [INFO] payment_service: Audit completed UID=child3 transaction_type=audit
+[2024-03-20 10:17:10] [WARN] payment_service: High latency detected URC=child2 transaction_type=notify
+[2024-03-20 10:17:10] [WARN] payment_service: Database connection pool exhausted URC=child2 UID=child1, pool_size=100
+[2024-03-20 10:17:11] [ERROR] payment_service: Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL
+[2024-03-20 10:17:15] [ERROR] payment_service: Invalid authentication token URC=req125 transaction_type=transfer, severity=MEDIUM 

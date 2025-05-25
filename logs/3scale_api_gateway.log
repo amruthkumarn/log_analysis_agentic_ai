@@ -1,0 +1,70 @@
+[2024-03-20 10:15:23] [INFO] 3scale API Gateway: Service started successfully
+[2024-03-20 10:15:45] [INFO] 3scale API Gateway: Rate limit configuration loaded for service_id=123
+[2024-03-20 10:15:47] [INFO] 3scale API Gateway: Rate limit configuration loaded for service_id=456
+[2024-03-20 10:15:50] [INFO] 3scale API Gateway: Cache initialized with 1000 entries
+[2024-03-20 10:15:55] [INFO] 3scale API Gateway: Backend service health check passed for service_id=123
+[2024-03-20 10:15:57] [INFO] 3scale API Gateway: Backend service health check passed for service_id=456
+[2024-03-20 10:16:12] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=123, client_id=client_456, limit=1000, current=1200
+[2024-03-20 10:16:15] [WARN] 3scale API Gateway: High latency detected for endpoint /api/v1/users, response_time=2500ms, threshold=1000ms
+[2024-03-20 10:16:20] [INFO] 3scale API Gateway: Circuit breaker opened for backend service_id=123, failure_threshold=5
+[2024-03-20 10:16:25] [WARN] 3scale API Gateway: Backend service response time increasing, current=3000ms, threshold=2000ms
+[2024-03-20 10:16:30] [INFO] 3scale API Gateway: Retry attempt 1/3 for failed request to /api/v1/users
+[2024-03-20 10:16:35] [ERROR] 3scale API Gateway: Backend service health check failed for service_id=123, status=503
+[2024-03-20 10:16:40] [WARN] 3scale API Gateway: Cache hit ratio below threshold, current=45%, threshold=60%
+[2024-03-20 10:16:45] [INFO] 3scale API Gateway: Rate limit reset for service_id=123, new_limit=1000
+[2024-03-20 10:16:50] [ERROR] 3scale API Gateway: Authentication failed for service_id=123, invalid credentials, client_id=client_456
+[2024-03-20 10:16:55] [WARN] 3scale API Gateway: Memory usage high, current=85%, threshold=80%
+[2024-03-20 10:17:00] [ERROR] 3scale API Gateway: Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms
+[2024-03-20 10:17:05] [INFO] 3scale API Gateway: Circuit breaker closed for backend service_id=123
+[2024-03-20 10:17:10] [WARN] 3scale API Gateway: High error rate detected, current=25%, threshold=20%
+[2024-03-20 10:17:15] [INFO] 3scale API Gateway: Cache miss for service_id=123, key=user_profile_789
+[2024-03-20 10:17:20] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=123, client_id=client_456, limit=1000, current=1500
+[2024-03-20 10:17:25] [WARN] 3scale API Gateway: Backend service response time critical, current=4000ms, threshold=2000ms
+[2024-03-20 10:17:30] [INFO] 3scale API Gateway: Retry attempt 2/3 for failed request to /api/v1/users
+[2024-03-20 10:17:35] [ERROR] 3scale API Gateway: Backend service health check failed for service_id=123, status=503
+[2024-03-20 10:17:40] [WARN] 3scale API Gateway: Cache hit ratio critical, current=30%, threshold=60%
+[2024-03-20 10:17:45] [INFO] 3scale API Gateway: Rate limit reset for service_id=123, new_limit=1000
+[2024-03-20 10:17:50] [ERROR] 3scale API Gateway: Authentication failed for service_id=123, invalid credentials, client_id=client_456
+[2024-03-20 10:17:55] [WARN] 3scale API Gateway: Memory usage critical, current=90%, threshold=80%
+[2024-03-20 10:18:00] [ERROR] 3scale API Gateway: Backend service timeout for service_id=123, timeout=5000ms
+[2024-03-20 10:18:05] [INFO] 3scale API Gateway: Circuit breaker opened for backend service_id=123, failure_threshold=5
+[2024-03-20 10:18:10] [WARN] 3scale API Gateway: High error rate critical, current=35%, threshold=20%
+[2024-03-20 10:18:15] [INFO] 3scale API Gateway: Cache miss for service_id=123, key=user_profile_789
+[2024-03-20 10:18:20] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=123, client_id=client_456, limit=1000, current=1800
+[2024-03-20 10:18:25] [WARN] 3scale API Gateway: Backend service response time critical, current=5000ms, threshold=2000ms
+[2024-03-20 10:18:30] [INFO] 3scale API Gateway: Rate limit reset for service_id=123, new_limit=1000
+[2024-03-20 10:18:35] [INFO] 3scale API Gateway: Service health check passed for service_id=123
+[2024-03-20 10:18:40] [INFO] 3scale API Gateway: Cache hit ratio improving, current=55%, threshold=60%
+[2024-03-20 10:18:45] [INFO] 3scale API Gateway: Memory usage normalizing, current=75%, threshold=80%
+[2024-03-20 10:18:50] [INFO] 3scale API Gateway: Backend service response time improving, current=1500ms, threshold=2000ms
+[2024-03-20 10:18:55] [INFO] 3scale API Gateway: Error rate normalizing, current=15%, threshold=20%
+[2024-03-20 10:19:00] [INFO] 3scale API Gateway: Service health check passed for service_id=456
+[2024-03-20 10:19:05] [WARN] 3scale API Gateway: High latency detected for endpoint /api/v2/products, response_time=2200ms, threshold=1000ms
+[2024-03-20 10:19:10] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=456, client_id=client_789, limit=2000, current=2500
+[2024-03-20 10:19:15] [WARN] 3scale API Gateway: Backend service response time increasing for service_id=456, current=2800ms, threshold=2000ms
+[2024-03-20 10:19:20] [INFO] 3scale API Gateway: Circuit breaker opened for backend service_id=456, failure_threshold=5
+[2024-03-20 10:19:25] [ERROR] 3scale API Gateway: Backend service health check failed for service_id=456, status=503
+[2024-03-20 10:19:30] [WARN] 3scale API Gateway: Cache hit ratio below threshold for service_id=456, current=40%, threshold=60%
+[2024-03-20 10:19:35] [INFO] 3scale API Gateway: Rate limit reset for service_id=456, new_limit=2000
+[2024-03-20 10:19:40] [ERROR] 3scale API Gateway: Authentication failed for service_id=456, invalid credentials, client_id=client_789
+[2024-03-20 10:19:45] [WARN] 3scale API Gateway: Memory usage high, current=82%, threshold=80%
+[2024-03-20 10:19:50] [ERROR] 3scale API Gateway: Backend service timeout for service_id=456, timeout=5000ms
+[2024-03-20 10:19:55] [INFO] 3scale API Gateway: Circuit breaker closed for backend service_id=456
+[2024-03-20 10:17:00] [INFO] api_gateway: User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms
+[2024-03-20 10:17:01] [INFO] api_gateway: Request received URC=root123 transaction_type=transfer endpoint=/api/v1/transfer
+[2024-03-20 10:17:02] [INFO] api_gateway: Response sent UID=root123 transaction_type=transfer endpoint=/api/v1/transfer response_time=200ms
+[2024-03-20 10:17:03] [INFO] api_gateway: Request received URC=child1 UID=root123 transaction_type=debit endpoint=/api/v1/debit
+[2024-03-20 10:17:04] [INFO] api_gateway: Response sent UID=child1 transaction_type=debit endpoint=/api/v1/debit response_time=180ms
+[2024-03-20 10:17:05] [INFO] api_gateway: Request received URC=child2 UID=child1 transaction_type=notify endpoint=/api/v1/notify
+[2024-03-20 10:17:06] [INFO] api_gateway: Response sent UID=child2 transaction_type=notify endpoint=/api/v1/notify response_time=160ms
+[2024-03-20 10:17:07] [INFO] api_gateway: Request received URC=child3 UID=child2 transaction_type=audit endpoint=/api/v1/audit
+[2024-03-20 10:17:08] [INFO] api_gateway: Response sent UID=child3 transaction_type=audit endpoint=/api/v1/audit response_time=140ms
+[2024-03-20 10:17:09] [ERROR] api_gateway: Rate limit exceeded URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=500ms
+[2024-03-20 10:17:10] [WARN] api_gateway: High latency detected URC=child2 transaction_type=notify endpoint=/api/v1/notify response_time=800ms
+[2024-03-20 10:17:11] [ERROR] api_gateway: Authentication failed URC=child3 transaction_type=audit endpoint=/api/v1/audit response_time=300ms
+[2024-03-20 10:17:11] [ERROR] api_gateway: Infrastructure error URC=child1 UID=root123, details=NFS unresponsive
+[2024-03-20 10:17:12] [INFO] api_gateway: User logged out session_id=abc123 response_time=100ms
+[2024-03-20 10:20:00] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=123, client_id=client_456, limit=1000, current=2000, severity=MEDIUM
+[2024-03-20 10:20:30] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=123, client_id=client_456, limit=1000, current=3000, severity=CRITICAL
+[2024-03-20 10:20:45] [ERROR] 3scale API Gateway: Backend service health check failed for service_id=123, status=503, severity=CRITICAL
+[2024-03-20 10:21:00] [ERROR] 3scale API Gateway: Authentication failed for service_id=123, invalid credentials, client_id=client_456, severity=MEDIUM 
