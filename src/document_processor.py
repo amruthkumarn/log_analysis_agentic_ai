@@ -5,10 +5,17 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_ollama import OllamaEmbeddings
 from langchain_core.documents import Document
+from pathlib import Path
+
+# Helper function to get project root
+def get_project_root() -> Path:
+    # Assumes this file is in src/ or a similar subdir
+    return Path(__file__).resolve().parent.parent
 
 class DocumentProcessor:
     def __init__(self, docs_dir: str = "documentation"):
-        self.docs_dir = docs_dir
+        self.project_root = get_project_root()
+        self.docs_dir = self.project_root / docs_dir
         self.embeddings = OllamaEmbeddings(model="llama3.2:1b")
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
@@ -30,9 +37,14 @@ class DocumentProcessor:
         """Process all PDF documents in the documentation directory."""
         documents = []
         
+        if not self.docs_dir.exists():
+            self.docs_dir.mkdir(parents=True, exist_ok=True)
+            # No documents to process if directory was just created
+            return 0
+
         for filename in os.listdir(self.docs_dir):
             if filename.endswith('.pdf'):
-                file_path = os.path.join(self.docs_dir, filename)
+                file_path = self.docs_dir / filename
                 text = self.extract_text_from_pdf(file_path)
                 
                 # Split text into chunks

@@ -8,3 +8,11 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Log files
+*.log
+
+# IDE-specific files
+.vscode/
+.idea/
+*.DS_Store

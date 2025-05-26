@@ -1,46 +1,134 @@
 # Log Analysis AI Agent
 
-This is a multi-agent AI application built with LangGraph and LangChain for analyzing logs from 3scale and TIBCO systems. The application uses the Ollama LLM (llama2:3.1b) to provide intelligent log analysis and recommendations.
+## Overview
 
-## Features
+This project implements a sophisticated multi-agent system designed for comprehensive analysis of application and system logs. It leverages the power of Large Language Models (LLMs) through LangGraph and LangChain, integrated with Ollama for local model execution (e.g., `llama3.2:1b`). The primary goal is to automate the process of parsing diverse log formats, correlating events across multiple log sources, detecting anomalies, performing in-depth root cause analysis (RCA) for errors, and generating actionable recommendations for remediation and prevention.
 
-- Log analysis for 3scale and TIBCO systems
-- Error pattern detection
-- Performance issue identification
-- Security concern analysis
-- Actionable recommendations generation
+The system is built to handle complex error scenarios, including those involving chained URC/UIDs (Unique Request/Identifier Chains) for tracking transactions across microservices. It uses a Retrieval Augmented Generation (RAG) mechanism to enrich LLM analysis with contextual information from provided documentation, leading to more accurate and relevant insights.
+
+## Key Features
+
+*   **Multi-Agent System**: Utilizes a graph-based approach (LangGraph) to orchestrate specialized agents for different stages of log analysis.
+*   **Advanced Log Parsing**: Intelligently parses various log formats, extracting structured information including timestamps, log levels, service names, and detailed message content. It specifically looks for session IDs, URC/UIDs, API endpoints, transaction types, and error indicators.
+*   **Session-Based Correlation**: Groups log entries by session ID and correlates events within each session by analyzing URC/UID chains to build a coherent narrative of activities and errors.
+*   **API Call Tree Construction**: For each session, builds a hierarchical tree of API calls based on URC/UID relationships, allowing visualization and analysis of call dependencies and error propagation up to a defined depth (currently 4 levels).
+*   **Error Chain Analysis**: Identifies and analyzes chains of errors within a session, assessing impact levels (e.g., CRITICAL, HIGH) based on error types and severity.
+*   **LLM-Powered Root Cause Analysis (RCA)**: For identified critical error events, an LLM agent performs a detailed root cause analysis. This includes:
+    *   A concise problem description.
+    *   A probable root cause summary.
+    *   Identification of key error log messages.
+    *   A confidence score for the analysis.
+    *   Associated identifiers (session_id, urc, uid, service_name, etc.).
+*   **Actionable LLM-Generated Recommendations**: Based on the RCA, another LLM agent generates specific, actionable recommendations categorized into:
+    *   Immediate Remediation steps.
+    *   Preventive Measures.
+    Each recommendation includes action steps, relevant documentation references (if found by RAG), and applicable identifiers.
+*   **Retrieval Augmented Generation (RAG)**: Integrates with project-specific documentation (supports .txt, .md, .pdf files placed in the `documentation/` directory) to provide LLMs with relevant context, improving the quality of analysis and recommendations.
+*   **Structured JSON Output**: All analysis results, including detailed session breakdowns, API call trees, error chains, RCA, and recommendations, are saved in well-structured JSON files for easy consumption and further processing.
+*   **Command-Line Interface**: Log files for analysis are provided via command-line arguments, allowing flexibility.
+*   **Robust Error Handling**: Includes Pydantic model validation for LLM outputs and programmatic safeguards to ensure critical data integrity in the final JSON reports, even with LLM inconsistencies.
 
 ## Prerequisites
 
-- Python 3.8+
-- Ollama with llama2:3.1b model installed
-- UV package manager
+*   Python >=3.13
+*   Ollama installed and running locally.
+*   The `llama3.2:1b` model (or a compatible model) pulled via Ollama: `ollama pull llama3.2:1b`
+*   `uv` (Python packaging tool): If not present, install with `pip install uv`.
 
-## Installation
+## Project Structure
 
-1. Clone the repository
-2. Install dependencies using UV:
-```bash
-uv pip install -r requirements.txt
+```
+.gitignore
+README.md
+analysis_output/	# Timestamped JSON output files from analysis runs
+documentation/		# User-provided documentation ( .txt, .md, .pdf) for RAG context
+logs/			# Directory for input application/system log files for analysis
+    3scale_api_gateway.log  # Example log file
+    payment_service.log     # Example log file
+    tibco_businessworks.log # Example log file
+    log_analysis.log	# Operational logs of the Log Analysis AI Agent itself
+pyproject.toml		# Defines project metadata, dependencies, and build system (for PEP 517/518)
+src/
+    __init__.py
+    document_processor.py	# Handles PDF document loading and splitting for RAG
+    log_analysis_agent.py	# Main script: includes agent definitions, LangGraph workflow, LLM interactions, RAG, parsing logic, and CLI argument handling.
+# uv.lock (if generated by `uv pip install`)
 ```
 
-## Usage
+## Setup and Installation
 
-Run the application with sample logs:
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd <repository-name> # e.g., langgraph_ai_agents
+    ```
+
+2.  **Create and activate a virtual environment (recommended):**
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate
+    # On Windows: .venv\Scripts\activate
+    ```
+
+3.  **Install dependencies using `uv`:**
+    ```bash
+    uv pip install -e .
+    ```
+    This command installs the package in editable mode, including dependencies specified in `pyproject.toml`.
+
+4.  **Prepare Documentation for RAG (Optional but Recommended):**
+    Place any relevant documentation files (e.g., system architecture diagrams, API specifications, troubleshooting guides, known issues) into the `documentation/` directory. Supported formats are `.txt`, `.md`, and `.pdf`. The RAG system will process these to provide better contextual understanding to the LLM agents.
+
+5.  **Prepare Log Files:**
+    Place the log files you want to analyze into the `logs/` directory (or any other location, as paths will be passed via CLI). The agent can process multiple log files, deriving service names from filenames (e.g., `my_service.log` becomes service `my_service`).
+
+## Running the Analysis
+
+To run the log analysis, execute the `log_analysis_agent.py` script as a module from the project root directory, providing the paths to your log files using the `--log-files` argument:
+
 ```bash
-python log_analysis_agent.py
+python -m src.log_analysis_agent --log-files logs/3scale_api_gateway.log logs/tibco_businessworks.log logs/payment_service.log
 ```
 
-To analyze your own logs, modify the `sample_log` variable in `log_analysis_agent.py` with your log content.
+**Command Breakdown:**
+*   `python -m src.log_analysis_agent`: Runs the agent script as a module.
+*   `--log-files`: Specifies that the following arguments are paths to log files.
+*   `logs/file1.log logs/file2.log ...`: Space-separated list of paths to the log files to be analyzed.
+
+## Output
+
+The analysis results are saved in timestamped JSON files within the `analysis_output/` directory:
+
+*   **`full_analysis_<timestamp>.json`**: Contains the comprehensive data from the analysis run. This includes:
+    *   General LLM interaction messages.
+    *   Original log content provided to the agents.
+    *   Detailed session-by-session breakdown (`sessions` key), with each session containing:
+        *   Login event details.
+        *   The constructed API call tree with requests, responses, and associated errors for each node.
+        *   Programmatically identified error chains with impact analysis.
+        *   Performance metrics like average response time for the session.
+*   **`root_cause_analysis_<timestamp>.json`**: Presents a focused list of root causes (`root_causes` key). Each item in the list corresponds to a significant error event and includes:
+    *   The original triggering error message and its context (timestamp, source service, URC/UIDs).
+    *   `llm_initial_analysis`: The detailed root cause analysis from the LLM, including problem description, probable root cause summary, key error messages (programmatically verified), confidence score, and associated identifiers (programmatically verified/corrected).
+    *   `llm_recommendations`: A list of actionable recommendations from the LLM, each with a type, description, action steps, relevant documentation (if any from RAG), and applicable identifiers (programmatically verified/corrected to ensure relevance to the specific error event).
+
+Additionally, the Log Analysis AI Agent's own operational logs (diagnostics, debug messages) are written to `logs/log_analysis.log`.
+
+## Key Pydantic Models (for LLM output structure)
+
+The system relies on Pydantic models to define and validate the structure of JSON outputs expected from the LLMs. Key models include:
+
+*   `LLMRootCauseAnalysis`: Defines the expected structure for the initial root cause analysis.
+*   `RootCauseIdentifiers`: Nested model for identifiers within `LLMRootCauseAnalysis`.
+*   `LLMRecommendations`: Defines the expected structure for the list of recommendations.
+*   `RecommendationItem`: Defines the structure for an individual recommendation.
+*   `RecommendationIdentifiers`: Nested model for identifiers within `RecommendationItem`.
+
+Detailed definitions for these models can be found at the end of the `src/log_analysis_agent.py` file.
 
 ## Architecture
 
-The application uses a multi-agent system with two main components:
-
-1. Log Analyzer Agent: Analyzes logs for patterns, errors, and issues
-2. Recommendation Agent: Generates actionable recommendations based on the analysis
-
-The agents communicate through a LangGraph workflow, ensuring a structured and efficient analysis process.
+The application uses a multi-agent system built with LangGraph. Different agents are responsible for specific tasks such as log parsing, event correlation, anomaly detection, root cause analysis, and generating recommendations. A Retrieval Augmented Generation (RAG) component leverages documents in the `documentation/` directory to provide context to the LLM for more accurate analysis.
 
 ## Contributing
 

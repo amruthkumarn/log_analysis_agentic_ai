@@ -1,1 +1,4 @@
- 
+[2025-05-26 17:00:02] [INFO] tibco_businessworks: Forwarding request to order_service, session_id=xyz789, URC=order_svc_call_101, UID=order_req_001, target_service=order_service
+[2025-05-26 17:00:03] [INFO] order_service: Requesting inventory check for order creation, session_id=xyz789, URC=inv_check_201, UID=order_svc_call_101, item_id=ITEMXYZ789
+[2025-05-26 17:00:05] [INFO] order_service: Requesting user profile for order authorization, session_id=xyz789, URC=profile_req_301, UID=order_svc_call_101, user_id=test_user_2
+[2025-05-26 17:00:07] [ERROR] order_service: Failed to retrieve user profile for order, session_id=xyz789, URC=order_svc_fail_101, UID=order_svc_call_101, reason=Downstream service reported permission denied, target_service=user_profile_service 

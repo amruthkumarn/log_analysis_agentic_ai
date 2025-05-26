@@ -10,4 +10,6 @@
 [2024-03-20 10:17:10] [WARN] payment_service: High latency detected URC=child2 transaction_type=notify
 [2024-03-20 10:17:10] [WARN] payment_service: Database connection pool exhausted URC=child2 UID=child1, pool_size=100
 [2024-03-20 10:17:11] [ERROR] payment_service: Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL
-[2024-03-20 10:17:15] [ERROR] payment_service: Invalid authentication token URC=req125 transaction_type=transfer, severity=MEDIUM 
+[2024-03-20 10:17:15] [ERROR] payment_service: Invalid authentication token URC=req125 transaction_type=transfer, severity=MEDIUM
+[2025-05-26 17:00:04] [INFO] inventory_service: Inventory check received for item_id=ITEMXYZ789, session_id=xyz789, URC=inv_svc_resp_201, UID=inv_check_201, status=available, stock_level=150
+[2025-05-26 17:00:06] [ERROR] user_profile_service: Permission denied while accessing profile for user_id=test_user_2, session_id=xyz789, URC=profile_svc_err_301, UID=profile_req_301, error_code=AUTH_005, message=Access to requested user profile data is forbidden for the current operator. 

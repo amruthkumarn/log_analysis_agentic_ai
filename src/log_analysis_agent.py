@@ -1,30 +1,39 @@
-from typing import Annotated, Sequence, TypedDict, Dict, List, Set
-from langgraph.graph import Graph, StateGraph
+from typing import Annotated, Sequence, TypedDict, Dict, List
+from langgraph.graph import StateGraph
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
-from langchain_core.runnables import RunnablePassthrough
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
-from datetime import datetime, timedelta
 import re
 from collections import defaultdict
 import json
-from document_processor import DocumentProcessor
+from .document_processor import DocumentProcessor
 import logging
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 from langchain.output_parsers import OutputFixingParser
+from pathlib import Path
+from datetime import datetime
+import argparse # Added for command-line arguments
+
+# Helper function to get project root
+def get_project_root() -> Path:
+    return Path(__file__).resolve().parent.parent
 
 # Configure logging
+project_root = get_project_root()
+LOG_FILE_PATH = project_root / "logs" / "log_analysis.log"
+LOG_FILE_PATH.parent.mkdir(parents=True, exist_ok=True) # Ensure logs directory exists
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('log_analysis.log'),
+        logging.FileHandler(LOG_FILE_PATH),
         logging.StreamHandler()
     ]
 )
@@ -73,7 +82,8 @@ class RootCauseState(TypedDict):
 # RAG Integration
 class RAGManager:
     def __init__(self, docs_dir: str = "documentation"):
-        self.docs_dir = docs_dir
+        self.project_root = get_project_root()
+        self.docs_dir = self.project_root / docs_dir
         self.embeddings = OllamaEmbeddings(model="llama3.2:1b")
         self.vectorstore = None
         self.document_processor = DocumentProcessor(docs_dir)
@@ -82,7 +92,8 @@ class RAGManager:
     def initialize_vectorstore(self):
         """Initialize the vector store with documentation."""
         if not os.path.exists(self.docs_dir):
-            os.makedirs(self.docs_dir)
+            os.makedirs(self.docs_dir, exist_ok=True)
+            logger.info(f"Created documentation directory at {self.docs_dir}")
             return
         
         # Load and split documents
@@ -578,14 +589,21 @@ def build_api_call_tree(entries: List[dict]) -> Dict[str, APICallNode]:
             else:
                 logger.warning(f"Response UID {parsed['uid']} not found in nodes")
         
-        elif parsed['error_type'] and parsed['urc']:
+        elif parsed['error_type'] and (parsed['urc'] or parsed['uid']): # Check if URC or UID exists for the error
             # This is an error, add it to the corresponding node
-            logger.info(f"ERROR_CHECK: Processing error entry for URC: '{parsed['urc']}'. Node keys: {list(nodes.keys())}")
-            if parsed['urc'] in nodes:
+            logger.info(f"ERROR_CHECK: Processing error entry. Error URC: '{parsed.get('urc')}', Error UID: '{parsed.get('uid')}'. Node keys: {list(nodes.keys())}")
+            error_associated = False
+            if parsed.get('urc') and parsed['urc'] in nodes:
                 nodes[parsed['urc']].errors.append(entry)
-                logger.info(f"SUCCESS: Added error TO NODE {parsed['urc']}: {entry['message']}")
-            else:
-                logger.warning(f"Error URC {parsed['urc']} not found in nodes")
+                logger.info(f"SUCCESS: Added error TO NODE {parsed['urc']} via error's URC: {entry['message']}")
+                error_associated = True
+            elif parsed.get('uid') and parsed['uid'] in nodes: # If error's URC not found or error has no URC, try its UID to find parent node
+                nodes[parsed['uid']].errors.append(entry)
+                logger.info(f"SUCCESS: Added error TO NODE {parsed['uid']} via error's UID (linked to parent request): {entry['message']}")
+                error_associated = True
+            
+            if not error_associated:
+                logger.warning(f"Could not associate error with any existing node. Error URC: {parsed.get('urc')}, UID: {parsed.get('uid')}. Message: {entry['message']}")
     
     # Print final tree structure
     logger.info("\nFinal Tree Structure:")
@@ -971,14 +989,14 @@ def create_root_cause_prompt(rag_manager: RAGManager):
         "Analyze ONLY the provided single triggering error event, its immediate details, and its position within the larger error chain (also provided). "
         "Focus on the primary trigger for THIS SPECIFIC failure. "
         "Your response MUST BE A SINGLE, VALID JSON OBJECT. No other text, no markdown, just the JSON. "
+        "All keys in the main JSON object (e.g., 'problem_description', 'probable_root_cause_summary', etc.) MUST be unique; do not repeat keys. " # Added instruction
         "The JSON object must contain the following fields, populated with information derived from the provided error event details:"
-        # Note: Explicitly list fields instead of saying 'adhere to schema' initially
     )
     
     fields_description_content = {
         "problem_description": "[String: Brief 1-2 sentence description of the core problem observed FOR THE PROVIDED TRIGGERING ERROR EVENT. Use details like the service name and error type FROM THE TRIGGERING ERROR. E.g., 'Timeout occurred in 3scale API Gateway while processing session abc123.' NOT 'Transaction X failed.']",
         "probable_root_cause_summary": "[String: Concise summary of the MOST LIKELY root cause FOR THE PROVIDED TRIGGERING ERROR EVENT. This summary MUST explain what likely caused THIS SPECIFIC error message in THIS specific service. E.g., 'The 3scale API Gateway timed out because the backend service it called (service_id=123) did not respond within the 5000ms window.' NOT a generic summary or a summary of a different error in the chain.]",
-        "key_error_log_messages": "[[List containing EXACTLY ONE string: the UNMODIFIED 'EXACT Triggering Error Message' provided in the input. No other messages. No modifications.]]",
+        "key_error_log_messages": "[List containing EXACTLY ONE string. This string itself MUST be the UNMODIFIED 'EXACT Triggering Error Message' from the input. DO NOT add any surrounding brackets or quotes to the message string itself within this list element. For example, if the input message is 'X failed', the list item should be \"X failed\", NOT \"[X failed]\" or \"'X failed'\".]",
         "confidence_score": "[Float or null: Score 0.0-1.0 for confidence, e.g., 0.85, or null if unsure.]",
         "associated_identifiers": {
             "session_id": "[String or null: EXACT session_id from input.]",
@@ -989,20 +1007,19 @@ def create_root_cause_prompt(rag_manager: RAGManager):
             "transaction_type": "[String or null: EXACT transaction type from the triggering error event.]"
         }
     }
-    # Rephrased: less like a formal schema, more like a field guide
     fields_description = f"Description of fields to include in your JSON response (ensure all are present):\\n{json.dumps(fields_description_content, indent=2)}"
 
     example_json_instruction = (
         "\\nIMPORTANT: Follow the structure of this EXAMPLE JSON for your output. "
         "Populate all fields using the ACTUAL data from THE SPECIFIC TRIGGERING ERROR EVENT provided in the input, NOT these example values. "
         "Focus all descriptions and summaries on THAT specific triggering error. "
-        "The 'key_error_log_messages' field must contain ONLY the exact triggering message string from the input.\\n"
+        "The 'key_error_log_messages' field must contain ONLY the exact triggering message string from the input, without any extra brackets around the string itself."
     )
     
     example_json_content = {
         "problem_description": "A timeout error occurred in the '3scale API Gateway' service for session 'abc123' and URC 'root123'.",
         "probable_root_cause_summary": "The '3scale API Gateway' service experienced a timeout because the backend service (identified by service_id=123) failed to respond within the configured 5000ms timeout period, as stated in the triggering error message.",
-        "key_error_log_messages": ["Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms"],
+        "key_error_log_messages": ["Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms"], # Example shows clean string
         "confidence_score": 0.9,
         "associated_identifiers": {
             "session_id": "abc123",
@@ -1342,8 +1359,8 @@ def analyze_root_cause(state: AgentState) -> AgentState:
             ''.join(doc_context_for_analysis) + "\\n",
             f"Instructions for filling the JSON object:",
             f"1. Populate ALL fields according to schema.",
-            f"2. 'associated_identifiers': Use EXACT values from 'Key Details for THIS error' (session_id, error_specific_urc, error_specific_uid, source_service_from_log as service_name, etc.).",
-            f"3. 'key_error_log_messages': MUST be a list with ONE string: the UNMODIFIED 'EXACT Triggering Error Message' (which is '{rc_item.get('triggering_error_message')}'). No other text/prefixes.",
+            f"2. 'associated_identifiers': This MUST be an object. Populate its sub-fields ('session_id', 'urc', 'uid', 'service_name', 'api_endpoint', 'transaction_type') using relevant values from the \"Key Details for THIS error\" section. If a value is not applicable or available in those key details, it can be omitted or set to null.",
+            f"3. 'key_error_log_messages': MUST be a list with ONE string: the UNMODIFIED 'EXACT Triggering Error Message' (which is '{rc_item.get('triggering_error_message')}'). The string itself should not have extra brackets or quotes added around it by you. For example, if the message is 'X', the list item is \"X\", not \"[X]\".",
             f"4. 'problem_description': Describe THE PROBLEM shown by the 'EXACT Triggering Error Message' in the 'Service where error logged'. Be specific to THIS event.",
             f"5. 'probable_root_cause_summary': Explain THE LIKELY CAUSE of the 'EXACT Triggering Error Message' occurring in the 'Service where error logged'. Relate directly to THIS specific message and service."
         ]
@@ -1362,6 +1379,43 @@ def analyze_root_cause(state: AgentState) -> AgentState:
             validated_initial_analysis_obj = LLMRootCauseAnalysis.model_validate(raw_initial_analysis_data)
             llm_generated_rca_dict = validated_initial_analysis_obj.model_dump(exclude_none=True)
             logger.info(f"RCA_DEBUG: Successfully validated initial LLM analysis for item {idx+1}: {llm_generated_rca_dict}")
+
+            # Programmatically ensure critical identifiers are present and correct
+            if 'associated_identifiers' not in llm_generated_rca_dict:
+                llm_generated_rca_dict['associated_identifiers'] = {}
+            
+            # Override/ensure session_id from rc_item
+            if rc_item.get('session_id'):
+                llm_generated_rca_dict['associated_identifiers']['session_id'] = rc_item['session_id']
+            
+            # Override/ensure urc from rc_item (prioritize error_specific_urc)
+            urc_to_use = rc_item.get('error_specific_urc') or rc_item.get('root_urc_of_session')
+            if urc_to_use:
+                llm_generated_rca_dict['associated_identifiers']['urc'] = urc_to_use
+            
+            # Override/ensure service_name from rc_item
+            if rc_item.get('source_service_from_log'):
+                llm_generated_rca_dict['associated_identifiers']['service_name'] = rc_item['source_service_from_log']
+            
+            # Ensure uid if present in rc_item
+            if rc_item.get('error_specific_uid'): # UID is more specific if available
+                llm_generated_rca_dict['associated_identifiers']['uid'] = rc_item['error_specific_uid']
+            
+            # Ensure api_endpoint if present in rc_item (and if LLM didn't provide a more specific one it thought relevant)
+            # For api_endpoint and transaction_type, we might prefer the LLM's version if it associated one, 
+            # but ensure it's there if rc_item has it and LLM missed it.
+            if rc_item.get('error_specific_api_endpoint') and not llm_generated_rca_dict['associated_identifiers'].get('api_endpoint'):
+                 llm_generated_rca_dict['associated_identifiers']['api_endpoint'] = rc_item.get('error_specific_api_endpoint')
+            
+            if rc_item.get('error_specific_transaction_type') and not llm_generated_rca_dict['associated_identifiers'].get('transaction_type'):
+                 llm_generated_rca_dict['associated_identifiers']['transaction_type'] = rc_item.get('error_specific_transaction_type')
+
+            # Programmatically ensure key_error_log_messages is the exact triggering message
+            if rc_item.get('triggering_error_message'):
+                llm_generated_rca_dict['key_error_log_messages'] = [rc_item['triggering_error_message']]
+
+            logger.info(f"RCA_DEBUG: After programmatic update - llm_initial_analysis for item {idx+1}: {llm_generated_rca_dict}")
+
         except Exception as e:
             logger.error(f"RCA_DEBUG: Failed to validate LLM initial_analysis_data for item {idx+1}. Data: {raw_initial_analysis_data}. Error: {e}")
             llm_generated_rca_dict = {
@@ -1402,6 +1456,30 @@ def analyze_root_cause(state: AgentState) -> AgentState:
             validated_recommendations_obj = LLMRecommendations.model_validate(raw_recommendations_data)
             llm_generated_recommendations_dict = validated_recommendations_obj.model_dump(exclude_none=True)
             logger.info(f"RCA_DEBUG: Successfully validated LLM recommendations for item {idx+1}: {llm_generated_recommendations_dict}")
+
+            # Programmatically ensure correct identifiers in recommendations
+            if llm_generated_recommendations_dict and 'recommendations' in llm_generated_recommendations_dict:
+                for rec_item_llm in llm_generated_recommendations_dict['recommendations']:
+                    if 'applicable_to_identifiers' not in rec_item_llm or not isinstance(rec_item_llm['applicable_to_identifiers'], dict):
+                        rec_item_llm['applicable_to_identifiers'] = {}
+                    
+                    # Use session_id from the main rc_item for this error event
+                    if rc_item.get('session_id'):
+                        rec_item_llm['applicable_to_identifiers']['session_id'] = rc_item['session_id']
+                    
+                    # Use service_name from the main rc_item (source_service_from_log)
+                    if rc_item.get('source_service_from_log'):
+                        rec_item_llm['applicable_to_identifiers']['service_name'] = rc_item['source_service_from_log']
+                    
+                    # Use urc from the main rc_item (error_specific_urc or root_urc_of_session)
+                    urc_to_use_for_rec = rc_item.get('error_specific_urc') or rc_item.get('root_urc_of_session')
+                    if urc_to_use_for_rec:
+                        rec_item_llm['applicable_to_identifiers']['urc'] = urc_to_use_for_rec
+                    # We generally don't need UID, API endpoint, transaction_type for recommendation applicability as they are too specific
+                    # unless the LLM thought it was relevant. We primarily care about session, service, URC.
+
+            logger.info(f"RCA_DEBUG: After programmatic update - llm_recommendations for item {idx+1}: {llm_generated_recommendations_dict}")
+
         except Exception as e:
             logger.error(f"RCA_DEBUG: Failed to validate LLM recommendations_data for item {idx+1}. Data: {raw_recommendations_data}. Error: {e}")
             llm_generated_recommendations_dict = {
@@ -1649,7 +1727,9 @@ app = workflow.compile()
 
 def save_analysis_to_json(analysis_results: Dict, output_dir: str = "analysis_output") -> Dict[str, str]:
     """Save analysis results to JSON files in the specified directory."""
-    os.makedirs(output_dir, exist_ok=True)
+    project_root = get_project_root()
+    output_path = project_root / output_dir
+    os.makedirs(output_path, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     # Convert sets to lists and datetime objects to strings for JSON serialization
@@ -1698,12 +1778,12 @@ def save_analysis_to_json(analysis_results: Dict, output_dir: str = "analysis_ou
     }
     
     # Save full analysis
-    full_analysis_path = os.path.join(output_dir, f"full_analysis_{timestamp}.json")
+    full_analysis_path = output_path / f"full_analysis_{timestamp}.json"
     with open(full_analysis_path, 'w') as f:
         json.dump(full_analysis, f, indent=2)
     
     return {
-        "full_analysis": full_analysis_path
+        "full_analysis": str(full_analysis_path)
     }
 
 def format_log_content(log_entries: Dict[str, List[dict]]) -> Dict[str, str]:
@@ -1734,14 +1814,16 @@ def format_log_content(log_entries: Dict[str, List[dict]]) -> Dict[str, str]:
 
 def save_root_cause_to_json(analysis_results: Dict, output_dir: str = "analysis_output") -> str:
     """Save root cause analysis results to a separate JSON file."""
-    os.makedirs(output_dir, exist_ok=True)
+    project_root = get_project_root()
+    output_path = project_root / output_dir
+    os.makedirs(output_path, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     root_causes = analysis_results.get("root_causes", [])
     logger.info(f"SAVE_JSON_DEBUG: root_causes list received in save_root_cause_to_json: {json.dumps(root_causes, indent=2, default=str)}") # ADDED
-    root_cause_path = os.path.join(output_dir, f"root_cause_analysis_{timestamp}.json")
+    root_cause_path = output_path / f"root_cause_analysis_{timestamp}.json"
     with open(root_cause_path, 'w') as f:
         json.dump({"timestamp": timestamp, "root_causes": root_causes}, f, indent=2)
-    return root_cause_path
+    return str(root_cause_path)
 
 # Pydantic models for structured LLM output - REVISED
 class RootCauseIdentifiers(BaseModel):
@@ -1759,6 +1841,30 @@ class LLMRootCauseAnalysis(BaseModel):
     confidence_score: Optional[float] = Field(None, description="A score between 0.0 and 1.0 indicating confidence in this identified root cause (e.g., 0.85). Use null if not determinable.")
     associated_identifiers: RootCauseIdentifiers = Field(description="Key EXACT identifiers from the input data that are directly associated with this specific root cause analysis.")
 
+    @validator('key_error_log_messages', pre=True)
+    def ensure_list_of_strings(cls, v):
+        if isinstance(v, str):
+            return [v]
+        if isinstance(v, list) and all(isinstance(s, str) for s in v):
+            return v
+        if isinstance(v, list) and not all(isinstance(s, str) for s in v):
+            new_v = []
+            for item in v:
+                if isinstance(item, str):
+                    new_v.append(item)
+                else:
+                    try:
+                        new_v.append(str(item))
+                    except:
+                        # Optionally log problematic item if it can't be coerced
+                        pass
+            if new_v: # If we successfully extracted/coerced some strings
+                return new_v
+        # If it's not a string or a list of strings that could be coerced,
+        # raise a TypeError, which Pydantic will convert to a ValidationError.
+        # This signals that the input is not in an expected/recoverable format.
+        raise TypeError('key_error_log_messages must be a string or a list of strings that can be coerced')
+    
     @validator('key_error_log_messages')
     def check_log_messages(cls, v):
         if not v or not all(isinstance(item, str) for item in v):
@@ -1782,27 +1888,39 @@ class RecommendationItem(BaseModel):
 class LLMRecommendations(BaseModel):
     recommendations: List[RecommendationItem] = Field(description="A list of structured recommendations based on the root cause analysis.")
 
-def main():
+def main(log_file_paths: List[str]): # Modified function signature
     """Main function to run the log analysis workflow."""
     try:
-        # Read log files
-        log_files = {
-            '3scale_api_gateway': 'logs/3scale_api_gateway.log',
-            'tibco_businessworks': 'logs/tibco_businessworks.log',
-            'payment_service': 'logs/payment_service.log'
-        }
-        
-        # Parse logs into a dictionary of log entries
+        # Read log files based on provided paths
         raw_logs = {}
-        for service, file_path in log_files.items():
+        for file_path_str in log_file_paths:
+            file_path = Path(file_path_str)
+            if not file_path.exists():
+                logger.error(f"Log file not found: {file_path_str}. Skipping.")
+                print(f"Error: Log file not found: {file_path_str}. Skipping.")
+                continue
+            
+            # Derive service name from filename (e.g., "3scale_api_gateway.log" -> "3scale_api_gateway")
+            service_name = file_path.stem 
+            # Further clean up if there are multiple extensions like .log.1, get only the first part
+            if '.' in service_name: # Handle cases like service.log -> service
+                 service_name = service_name.split('.')[0]
+
+
+            logger.info(f"Processing log file: {file_path_str} for service: {service_name}")
+            
             with open(file_path, 'r') as f:
-                # Parse each line into a structured format
-                raw_logs[service] = [
+                raw_logs[service_name] = [
                     parse_log_line(line.strip())
                     for line in f.readlines()
-                    if line.strip()  # Skip empty lines
+                    if line.strip()
                 ]
         
+        if not raw_logs:
+            logger.error("No valid log files were processed. Exiting.")
+            print("Error: No valid log files were processed. Exiting.")
+            return None # Return None or raise an error if no logs are processed
+
         # Format log content for analysis
         log_content = format_log_content(raw_logs)
         
@@ -1841,4 +1959,13 @@ def main():
         raise
 
 if __name__ == "__main__":
-    main() 
+    parser = argparse.ArgumentParser(description="Run log analysis on specified log files.")
+    parser.add_argument(
+        "--log-files",
+        nargs='+',  # Accepts one or more log files
+        required=True,
+        help="List of log file paths to analyze (e.g., logs/file1.log logs/file2.log)."
+    )
+    args = parser.parse_args()
+    
+    main(args.log_files) 

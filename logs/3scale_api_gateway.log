@@ -67,4 +67,8 @@
 [2024-03-20 10:20:00] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=123, client_id=client_456, limit=1000, current=2000, severity=MEDIUM
 [2024-03-20 10:20:30] [ERROR] 3scale API Gateway: Rate limit exceeded for service_id=123, client_id=client_456, limit=1000, current=3000, severity=CRITICAL
 [2024-03-20 10:20:45] [ERROR] 3scale API Gateway: Backend service health check failed for service_id=123, status=503, severity=CRITICAL
-[2024-03-20 10:21:00] [ERROR] 3scale API Gateway: Authentication failed for service_id=123, invalid credentials, client_id=client_456, severity=MEDIUM 
+[2024-03-20 10:21:00] [ERROR] 3scale API Gateway: Authentication failed for service_id=123, invalid credentials, client_id=client_456, severity=MEDIUM
+[2025-05-26 17:00:00] [INFO] 3scale API Gateway: User 'test_user_2' logged in, session_id=xyz789, URC=root_xyz, details=Login successful
+[2025-05-26 17:00:01] [INFO] 3scale API Gateway: Request received for /api/v2/orders, session_id=xyz789, URC=order_req_001, UID=root_xyz, transaction_type=create_order
+[2025-05-26 17:00:08] [ERROR] 3scale API Gateway: Order creation failed due to internal error, session_id=xyz789, URC=order_req_fail_001, UID=order_req_001, status_code=500, error_details=Failed to process order due to user profile access failure
+[2025-05-26 17:00:09] [INFO] 3scale API Gateway: Response sent for /api/v2/orders, session_id=xyz789, URC=order_req_fail_001, UID=order_req_001, status_code=500, response_time=8000ms
