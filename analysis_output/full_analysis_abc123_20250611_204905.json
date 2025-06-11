@@ -1,0 +1,392 @@
+{
+  "messages": [],
+  "raw_logs": {
+    "file": [],
+    "elk": [
+      {
+        "@timestamp": "2024-03-20T10:17:00Z",
+        "log.level": "ERROR",
+        "service.name": "3scale API Gateway",
+        "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": "timeout",
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": "timeout",
+          "severity": "HIGH",
+          "metrics": {}
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:00Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms",
+        "is_login": true,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": null,
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": true,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 150
+          }
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:00Z",
+        "log.level": "ERROR",
+        "service.name": "3scale API Gateway",
+        "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": "timeout",
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": "timeout",
+          "severity": "HIGH",
+          "metrics": {}
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:00Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms",
+        "is_login": true,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": null,
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": true,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 150
+          }
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:00Z",
+        "log.level": "ERROR",
+        "service.name": "3scale API Gateway",
+        "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": "timeout",
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": "timeout",
+          "severity": "HIGH",
+          "metrics": {}
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:00Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "User logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms",
+        "is_login": true,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": "root123",
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": null,
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": true,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": "root123",
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 150
+          }
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:12Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "User logged out session_id=abc123 response_time=100ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": null,
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": null,
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": null,
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 100
+          }
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:12Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "User logged out session_id=abc123 response_time=100ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": null,
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": null,
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": null,
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 100
+          }
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:17:12Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "User logged out session_id=abc123 response_time=100ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": false,
+        "session_id": "abc123",
+        "cif_id": null,
+        "urc": null,
+        "uid": null,
+        "transaction_type": null,
+        "api_endpoint": null,
+        "error_type": null,
+        "severity": null,
+        "metrics": {},
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": false,
+          "session_id": "abc123",
+          "cif_id": null,
+          "urc": null,
+          "uid": null,
+          "transaction_type": null,
+          "api_endpoint": null,
+          "error_type": null,
+          "severity": null,
+          "metrics": {
+            "response_time_ms": 100
+          }
+        }
+      }
+    ]
+  },
+  "log_content": {
+    "file": "",
+    "elk": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms\nUser logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms\nBackend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms\nUser logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms\nBackend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms\nUser logged in session_id=abc123 cif_id=456789 URC=root123 response_time=150ms\nUser logged out session_id=abc123 response_time=100ms\nUser logged out session_id=abc123 response_time=100ms\nUser logged out session_id=abc123 response_time=100ms"
+  },
+  "correlations": [
+    {
+      "session_id": "abc123",
+      "root_urc": "root123",
+      "api_calls": [
+        {
+          "urc": "root123",
+          "children": [],
+          "level": 0
+        }
+      ],
+      "error_chains": [
+        {
+          "session_id": "abc123",
+          "errors": [
+            {
+              "timestamp": "2024-03-20T10:17:00Z",
+              "level": "ERROR",
+              "source": "3scale API Gateway",
+              "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+              "error_type": "timeout",
+              "urc": "root123",
+              "uid": null
+            },
+            {
+              "timestamp": "2024-03-20T10:17:00Z",
+              "level": "ERROR",
+              "source": "3scale API Gateway",
+              "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+              "error_type": "timeout",
+              "urc": "root123",
+              "uid": null
+            },
+            {
+              "timestamp": "2024-03-20T10:17:00Z",
+              "level": "ERROR",
+              "source": "3scale API Gateway",
+              "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+              "error_type": "timeout",
+              "urc": "root123",
+              "uid": null
+            }
+          ],
+          "total_errors": 3,
+          "impact_level": "LOW"
+        }
+      ],
+      "metrics": {
+        "total_calls": 1
+      }
+    }
+  ],
+  "root_causes": [
+    {
+      "triggering_error": {
+        "timestamp": "2024-03-20T10:17:00Z",
+        "level": "ERROR",
+        "source": "3scale API Gateway",
+        "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+        "error_type": "timeout",
+        "urc": "root123",
+        "uid": null
+      },
+      "llm_initial_analysis": {
+        "problem_description": "Insufficient configuration of the backend service to handle high traffic demands.",
+        "probable_root_cause_summary": "Inadequate settings in the backend service configuration may lead to timeouts and errors during high-traffic scenarios.",
+        "key_error_log_messages": [
+          "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms"
+        ],
+        "confidence_score": 0.8,
+        "associated_identifiers": {
+          "session_id": "abc123",
+          "urc": "root123",
+          "uid": null
+        }
+      },
+      "llm_recommendations": {}
+    }
+  ],
+  "session_id": "abc123"
+}

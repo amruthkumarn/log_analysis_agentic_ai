@@ -1,11 +1,16 @@
 from typing import List, Dict
 import PyPDF2
 import os
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_ollama import OllamaEmbeddings
+from langchain_redis import RedisVectorStore
 from langchain_core.documents import Document
 from pathlib import Path
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_ollama import OllamaEmbeddings
+from .redis_client import get_redis_client, get_redis_url
+
+def get_embeddings():
+    """Initializes and returns the Ollama embeddings."""
+    return OllamaEmbeddings(model="nomic-embed-text", base_url=os.getenv("OLLAMA_BASE_URL", "http://ollama:11434"))
 
 # Helper function to get project root
 def get_project_root() -> Path:
@@ -16,13 +21,12 @@ class DocumentProcessor:
     def __init__(self, docs_dir: str = "documentation"):
         self.project_root = get_project_root()
         self.docs_dir = self.project_root / docs_dir
-        self.embeddings = OllamaEmbeddings(model="llama3.2:1b")
+        self.embeddings = get_embeddings()
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
             chunk_overlap=200,
             length_function=len,
         )
-        self.vector_store = None
 
     def extract_text_from_pdf(self, pdf_path: str) -> str:
         """Extract text from a PDF file."""
@@ -33,13 +37,12 @@ class DocumentProcessor:
                 text += page.extract_text() + "\n"
         return text
 
-    def process_documents(self):
-        """Process all PDF documents in the documentation directory."""
+    def process_documents(self, session_id: str):
+        """Process all PDF documents in the documentation directory for a session."""
         documents = []
         
         if not self.docs_dir.exists():
             self.docs_dir.mkdir(parents=True, exist_ok=True)
-            # No documents to process if directory was just created
             return 0
 
         for filename in os.listdir(self.docs_dir):
@@ -47,10 +50,8 @@ class DocumentProcessor:
                 file_path = self.docs_dir / filename
                 text = self.extract_text_from_pdf(file_path)
                 
-                # Split text into chunks
                 chunks = self.text_splitter.split_text(text)
                 
-                # Create documents with metadata
                 for i, chunk in enumerate(chunks):
                     doc = Document(
                         page_content=chunk,
@@ -62,30 +63,33 @@ class DocumentProcessor:
                     )
                     documents.append(doc)
         
-        # Create vector store
         if documents:
-            self.vector_store = FAISS.from_documents(documents, self.embeddings)
+            clear_redis_session(session_id)
+            vector_store = get_vector_store(session_id)
+            vector_store.add_documents(documents)
+            
         return len(documents)
 
-    def query_documentation(self, query: str, k: int = 3) -> List[Dict]:
-        """Query the documentation for relevant information."""
-        if not self.vector_store:
+    def query_documentation(self, session_id: str, query: str, k: int = 3) -> List[Dict]:
+        """Query the documentation for relevant information for a session."""
+        vector_store = get_vector_store(session_id)
+        if not vector_store:
             return []
         
-        results = self.vector_store.similarity_search_with_score(query, k=k)
+        results = vector_store.similarity_search_with_score(query, k=k)
         return [
             {
                 "content": doc.page_content,
                 "source": doc.metadata["source"],
                 "relevance_score": score,
-                "chunk": doc.metadata["chunk"],
-                "total_chunks": doc.metadata["total_chunks"]
+                "chunk": doc.metadata.get("chunk"),
+                "total_chunks": doc.metadata.get("total_chunks")
             }
             for doc, score in results
         ]
 
-    def get_documentation_context(self, analysis_results: Dict) -> Dict:
-        """Get relevant documentation context for the analysis results."""
+    def get_documentation_context(self, session_id: str, analysis_results: Dict) -> Dict:
+        """Get relevant documentation context for the analysis results for a session."""
         context = {
             "error_patterns": [],
             "recommendations": [],
@@ -97,10 +101,8 @@ class DocumentProcessor:
         for correlation in analysis_results.get("correlations", []):
             for error in correlation.get("error_chains", []):
                 if isinstance(error, dict) and "message" in error:
-                    # Extract error type from the message if not directly available
                     error_type = error.get("error_type", "unknown")
                     if error_type == "unknown":
-                        # Try to infer error type from message
                         message = error["message"].lower()
                         if "timeout" in message:
                             error_type = "timeout"
@@ -116,8 +118,8 @@ class DocumentProcessor:
                             error_type = "performance"
                     error_queries.append(f"error pattern {error_type}")
         
-        for query in error_queries:
-            results = self.query_documentation(query)
+        for query in set(error_queries):
+            results = self.query_documentation(session_id, query)
             if results:
                 context["error_patterns"].extend(results)
         
@@ -129,7 +131,7 @@ class DocumentProcessor:
         ]
         
         for query in recommendation_queries:
-            results = self.query_documentation(query)
+            results = self.query_documentation(session_id, query)
             if results:
                 context["recommendations"].extend(results)
         
@@ -141,8 +143,37 @@ class DocumentProcessor:
         ]
         
         for query in best_practice_queries:
-            results = self.query_documentation(query)
+            results = self.query_documentation(session_id, query)
             if results:
                 context["best_practices"].extend(results)
         
-        return context 
+        return context
+
+def clear_redis_session(session_id: str):
+    """
+    Clear all keys associated with a session_id in Redis.
+    """
+    try:
+        redis_client = get_redis_client()
+        # This is a bit of a hack. The python client doesn't have a direct way to delete an index.
+        # We can flush the whole DB, but that's not ideal if it's shared.
+        # A better approach is to delete the keys associated with the index.
+        # FT.DROPINDEX is the command, but redis-py doesn't wrap it nicely for this use case.
+        # We will instead delete all docs, which is sufficient for this example.
+        schema_key = f"index:{session_id}"
+        if redis_client.exists(schema_key):
+             redis_client.ft(session_id).dropindex(delete_documents=True)
+    except Exception as e:
+        print(f"Could not clear Redis session {session_id}: {e}")
+
+
+def get_vector_store(session_id: str):
+    """
+    Get the vector store for a given session ID.
+    """
+    redis_url = get_redis_url()
+    return RedisVectorStore(
+        embeddings=get_embeddings(),
+        redis_url=redis_url,
+        index_name=session_id,
+    ) 

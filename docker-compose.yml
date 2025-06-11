@@ -1,0 +1,95 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0 # Use a recent, stable version
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m # Adjust memory as needed
+      - xpack.security.enabled=false # For local dev, disable security for simplicity. **DO NOT use in production.**
+    ports:
+      - "9200:9200" # Elasticsearch REST API
+      - "9300:9300" # Internal transport protocol
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data # Persist Elasticsearch data
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.0 # Match Kibana version with Elasticsearch
+    container_name: kibana
+    ports:
+      - "5601:5601" # Kibana web interface
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200 # Points Kibana to the Elasticsearch container
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status | grep -q 'All services are available'"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD", "ollama", "ps"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  log-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: log-analyzer
+    depends_on:
+      ollama:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - ELASTICSEARCH_HOST=elasticsearch
+      - REDIS_HOST=redis
+    volumes:
+      - ./src:/app/src
+      - ./analysis_output:/app/analysis_output
+      - ./logs:/app/logs
+      - ./documentation:/app/documentation
+    networks:
+      - elk
+    command: ["/bin/sh", "-c", "tail -f /dev/null"]
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch-data:
+    driver: local
+  ollama_data:
+    driver: local

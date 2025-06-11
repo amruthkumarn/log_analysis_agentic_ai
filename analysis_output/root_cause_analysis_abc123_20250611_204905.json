@@ -1,0 +1,31 @@
+{
+  "session_id": "abc123",
+  "timestamp": "20250611_204905",
+  "root_causes": [
+    {
+      "triggering_error": {
+        "timestamp": "2024-03-20T10:17:00Z",
+        "level": "ERROR",
+        "source": "3scale API Gateway",
+        "message": "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms",
+        "error_type": "timeout",
+        "urc": "root123",
+        "uid": null
+      },
+      "llm_initial_analysis": {
+        "problem_description": "Insufficient configuration of the backend service to handle high traffic demands.",
+        "probable_root_cause_summary": "Inadequate settings in the backend service configuration may lead to timeouts and errors during high-traffic scenarios.",
+        "key_error_log_messages": [
+          "Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms"
+        ],
+        "confidence_score": 0.8,
+        "associated_identifiers": {
+          "session_id": "abc123",
+          "urc": "root123",
+          "uid": null
+        }
+      },
+      "llm_recommendations": {}
+    }
+  ]
+}

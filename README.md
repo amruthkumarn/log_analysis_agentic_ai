@@ -4,33 +4,28 @@
 
 This project implements a sophisticated multi-agent system designed for comprehensive analysis of application and system logs. It leverages the power of Large Language Models (LLMs) through LangGraph and LangChain, integrated with Ollama for local model execution (e.g., `llama3.2:1b`). The primary goal is to automate the process of parsing diverse log formats, correlating events across multiple log sources, detecting anomalies, performing in-depth root cause analysis (RCA) for errors, and generating actionable recommendations for remediation and prevention.
 
-The system is built to handle complex error scenarios, including those involving chained URC/UIDs (Unique Request/Identifier Chains) for tracking transactions across microservices. It uses a Retrieval Augmented Generation (RAG) mechanism to enrich LLM analysis with contextual information from provided documentation, leading to more accurate and relevant insights.
+The system is built to handle complex error scenarios, including those involving chained URC/UIDs (Unique Request/Identifier Chains) for tracking transactions across microservices. It uses a Retrieval Augmented Generation (RAG) mechanism to enrich LLM analysis with contextual information from provided documentation, leading to more accurate and relevant insights. **The agent can ingest logs from both local files and a centralized Elasticsearch (ELK) stack.**
 
 ## Key Features
 
+*   **Flexible Data Ingestion**: Supports log analysis from both local log files and direct querying of an **Elasticsearch** index.
+*   **Local ELK Stack Support**: Includes a **Docker Compose** setup for spinning up a local Elasticsearch and Kibana stack for development and testing.
 *   **Multi-Agent System**: Utilizes a graph-based approach (LangGraph) to orchestrate specialized agents for different stages of log analysis.
 *   **Advanced Log Parsing**: Intelligently parses various log formats, extracting structured information including timestamps, log levels, service names, and detailed message content. It specifically looks for session IDs, URC/UIDs, API endpoints, transaction types, and error indicators.
 *   **Session-Based Correlation**: Groups log entries by session ID and correlates events within each session by analyzing URC/UID chains to build a coherent narrative of activities and errors.
 *   **API Call Tree Construction**: For each session, builds a hierarchical tree of API calls based on URC/UID relationships, allowing visualization and analysis of call dependencies and error propagation up to a defined depth (currently 4 levels).
 *   **Error Chain Analysis**: Identifies and analyzes chains of errors within a session, assessing impact levels (e.g., CRITICAL, HIGH) based on error types and severity.
-*   **LLM-Powered Root Cause Analysis (RCA)**: For identified critical error events, an LLM agent performs a detailed root cause analysis. This includes:
-    *   A concise problem description.
-    *   A probable root cause summary.
-    *   Identification of key error log messages.
-    *   A confidence score for the analysis.
-    *   Associated identifiers (session_id, urc, uid, service_name, etc.).
-*   **Actionable LLM-Generated Recommendations**: Based on the RCA, another LLM agent generates specific, actionable recommendations categorized into:
-    *   Immediate Remediation steps.
-    *   Preventive Measures.
-    Each recommendation includes action steps, relevant documentation references (if found by RAG), and applicable identifiers.
-*   **Retrieval Augmented Generation (RAG)**: Integrates with project-specific documentation (supports .txt, .md, .pdf files placed in the `documentation/` directory) to provide LLMs with relevant context, improving the quality of analysis and recommendations.
-*   **Structured JSON Output**: All analysis results, including detailed session breakdowns, API call trees, error chains, RCA, and recommendations, are saved in well-structured JSON files for easy consumption and further processing.
-*   **Command-Line Interface**: Log files for analysis are provided via command-line arguments, allowing flexibility.
-*   **Robust Error Handling**: Includes Pydantic model validation for LLM outputs and programmatic safeguards to ensure critical data integrity in the final JSON reports, even with LLM inconsistencies.
+*   **LLM-Powered Root Cause Analysis (RCA)**: For identified critical error events, an LLM agent performs a detailed root cause analysis.
+*   **Actionable LLM-Generated Recommendations**: Based on the RCA, another LLM agent generates specific, actionable recommendations.
+*   **Retrieval Augmented Generation (RAG)**: Integrates with project-specific documentation (supports .txt, .md, .pdf files placed in the `documentation/` directory) to provide LLMs with relevant context.
+*   **Structured JSON Output**: All analysis results are saved in well-structured JSON files for easy consumption and further processing.
+*   **Robust Command-Line Interface**: A flexible CLI allows users to specify the log source (files or ELK) and configure connection parameters.
+*   **Robust Error Handling**: Includes Pydantic model validation for LLM outputs and programmatic safeguards to ensure data integrity in final reports.
 
 ## Prerequisites
 
 *   Python >=3.13
+*   **Docker and Docker Compose**: Required for running the local ELK stack.
 *   Ollama installed and running locally.
 *   The `llama3.2:1b` model (or a compatible model) pulled via Ollama: `ollama pull llama3.2:1b`
 *   `uv` (Python packaging tool): If not present, install with `pip install uv`.
@@ -41,59 +36,154 @@ The system is built to handle complex error scenarios, including those involving
 .gitignore
 README.md
 analysis_output/	# Timestamped JSON output files from analysis runs
-documentation/		# User-provided documentation ( .txt, .md, .pdf) for RAG context
+docker-compose.yml	# Defines the local Elasticsearch and Kibana services for Docker
+documentation/		# User-provided documentation (.txt, .md, .pdf) for RAG context
 logs/			# Directory for input application/system log files for analysis
     3scale_api_gateway.log  # Example log file
     payment_service.log     # Example log file
     tibco_businessworks.log # Example log file
     log_analysis.log	# Operational logs of the Log Analysis AI Agent itself
-pyproject.toml		# Defines project metadata, dependencies, and build system (for PEP 517/518)
+pyproject.toml		# Defines project metadata, dependencies, and build system
 src/
     __init__.py
     document_processor.py	# Handles PDF document loading and splitting for RAG
-    log_analysis_agent.py	# Main script: includes agent definitions, LangGraph workflow, LLM interactions, RAG, parsing logic, and CLI argument handling.
+    log_analysis_agent.py	# Main script: includes agent definitions, LangGraph workflow, LLM interactions, and all analysis logic.
 # uv.lock (if generated by `uv pip install`)
 ```
 
 ## Setup and Installation
 
-1.  **Clone the repository:**
+1.  **Clone the repository.**
     ```bash
     git clone <repository-url>
-    cd <repository-name> # e.g., langgraph_ai_agents
+    cd <repository-name>
     ```
 
-2.  **Create and activate a virtual environment (recommended):**
+2.  **Create and activate a virtual environment.**
     ```bash
     python -m venv .venv
     source .venv/bin/activate
-    # On Windows: .venv\Scripts\activate
     ```
 
-3.  **Install dependencies using `uv`:**
+3.  **Install dependencies using `uv`.**
     ```bash
     uv pip install -e .
     ```
-    This command installs the package in editable mode, including dependencies specified in `pyproject.toml`.
+    This command installs the package in editable mode, including all dependencies like the Elasticsearch client, as defined in `pyproject.toml`.
 
-4.  **Prepare Documentation for RAG (Optional but Recommended):**
-    Place any relevant documentation files (e.g., system architecture diagrams, API specifications, troubleshooting guides, known issues) into the `documentation/` directory. Supported formats are `.txt`, `.md`, and `.pdf`. The RAG system will process these to provide better contextual understanding to the LLM agents.
+4.  **Prepare Documentation for RAG (Optional but Recommended).**
+    Place any relevant documentation files into the `documentation/` directory.
 
-5.  **Prepare Log Files:**
-    Place the log files you want to analyze into the `logs/` directory (or any other location, as paths will be passed via CLI). The agent can process multiple log files, deriving service names from filenames (e.g., `my_service.log` becomes service `my_service`).
+## Demonstration Steps
+
+This section outlines how to run a controlled, step-by-step demonstration using the provided static log files. This setup keeps the containers running for manual command execution.
+
+### Step 1: Start All Services
+
+This command will build the container images and start all services (`log-analyzer`, `elasticsearch`, `kibana`, `redis`) in the background. The `log-analyzer` will start and wait for instructions.
+
+```bash
+docker-compose up --build -d
+```
+Give the services a minute to initialize. You can check their status with `docker-compose ps`.
+
+### Step 2: Load Logs into Elasticsearch
+
+Execute the following command to run the log loading script. This will parse the static log files from the `logs/` directory and ingest them into the `test-logs-default` index in Elasticsearch.
+
+```bash
+docker-compose exec log-analyzer python src/load_logs_to_elk.py --log-files logs/3scale_api_gateway.log logs/payment_service.log logs/tibco_businessworks.log
+```
+
+### Step 3: Verify Logs in Kibana (Optional)
+
+1.  **Open Kibana:** In your web browser, navigate to: **[http://localhost:5601](http://localhost:5601)**
+2.  **Create a Data View:** If you haven't already, create a data view:
+    *   Go to **Stack Management** -> **Data Views**.
+    *   Click **Create data view**.
+    *   Use `test-logs-default` for the Name and Index pattern.
+    *   Select `@timestamp` as the Timestamp field.
+    *   Click **Save data view to Kibana**.
+3.  **Discover Your Logs:**
+    *   Go to **Analytics** -> **Discover**.
+    *   In the top-right, change the time picker to an **Absolute** range covering **January 1, 2024** to **January 1, 2026** to see the logs.
+
+### Step 4: Run the Log Analysis
+
+This command triggers the main analysis script inside the `log-analyzer` container. It will fetch the logs from Elasticsearch, correlate them, and perform the root cause analysis using your native Ollama instance.
+
+```bash
+docker-compose exec log-analyzer python src/run_analysis.py --log-source elk --elk-index test-logs-default
+```
+
+### Step 5: View the Results
+
+The analysis is complete when the command in Step 4 finishes. The results are saved in the `analysis_output/` directory on your local machine.
+
+*   `full_analysis_<session_id>_<timestamp>.json`
+*   `root_cause_analysis_<session_id>_<timestamp>.json`
 
 ## Running the Analysis
 
-To run the log analysis, execute the `log_analysis_agent.py` script as a module from the project root directory, providing the paths to your log files using the `--log-files` argument:
+You can run the analysis using two main methods: from an ELK stack (recommended) or from local log files.
 
+### Option A: Analyze Logs from a Local ELK Stack (Recommended)
+
+This approach uses Docker to run Elasticsearch and Kibana locally.
+
+#### 1. Start the ELK Stack
+
+From the project root directory, run:
 ```bash
-python -m src.log_analysis_agent --log-files logs/3scale_api_gateway.log logs/tibco_businessworks.log logs/payment_service.log
+docker-compose up -d
+```
+This will start Elasticsearch on `http://localhost:9200` and Kibana on `http://localhost:5601`. Wait a minute for them to initialize.
+
+#### 2. Push Log Data to Elasticsearch
+
+You need to load your log data into an Elasticsearch index. The agent can then query this index. You can use the Kibana Dev Tools (`http://localhost:5601`) or `curl` to push data.
+
+**Example using `curl` to push a single log entry:**
+```bash
+curl -X POST "localhost:9200/your_index_name/_doc" -H "Content-Type: application/json" -d '{
+  "@timestamp": "2024-07-29T10:00:00.000Z",
+  "service.name": "payment_service",
+  "log.level": "ERROR",
+  "message": "Transaction failed due to timeout. SessionID=elk_session_123, URC=elk_urc_abc"
+}'
+```
+*Replace `your_index_name` with a name like `project_application_logs`.*
+
+For bulk uploads, you can use the Elasticsearch Bulk API.
+
+#### 3. Run the Analysis on ELK Data
+
+Execute the script from the project root, pointing it to your Elasticsearch index.
+```bash
+python -m src.log_analysis_agent --elk-index "project_application_logs"
 ```
 
-**Command Breakdown:**
-*   `python -m src.log_analysis_agent`: Runs the agent script as a module.
-*   `--log-files`: Specifies that the following arguments are paths to log files.
-*   `logs/file1.log logs/file2.log ...`: Space-separated list of paths to the log files to be analyzed.
+**Key ELK Command-Line Arguments:**
+*   `--elk-index <name>`: **(Required)** The name of the Elasticsearch index to query.
+*   `--elk-host <url>`: The URL of the Elasticsearch instance. Defaults to `http://localhost:9200`.
+*   `--elk-time-field <field>`: The document field containing the timestamp. Defaults to `@timestamp`.
+*   `--elk-service-field <field>`: The document field for the service name. Defaults to `service.name`.
+*   `--elk-message-field <field>`: The document field for the log message. Defaults to `message`.
+*   `--elk-level-field <field>`: The document field for the log level. Defaults to `log.level`.
+*   (Other arguments for authentication, time ranges, and custom queries are available. Run with `--help` for details.)
+
+### Option B: Analyze Logs from Local Files
+
+This method reads log files directly from your filesystem.
+
+1.  **Prepare Log Files:**
+    Place the log files you want to analyze into the `logs/` directory (or any other location).
+
+2.  **Run the Analysis on Log Files:**
+    Provide the paths to your log files using the `--log-files` argument:
+    ```bash
+    python -m src.log_analysis_agent --log-files logs/3scale_api_gateway.log logs/tibco_businessworks.log logs/payment_service.log
+    ```
 
 ## Output
 
@@ -128,7 +218,7 @@ Detailed definitions for these models can be found at the end of the `src/log_an
 
 ## Architecture
 
-The application uses a multi-agent system built with LangGraph. Different agents are responsible for specific tasks such as log parsing, event correlation, anomaly detection, root cause analysis, and generating recommendations. A Retrieval Augmented Generation (RAG) component leverages documents in the `documentation/` directory to provide context to the LLM for more accurate analysis.
+The application uses a multi-agent system built with LangGraph. The data ingestion layer is flexible, allowing logs to be sourced from local files or an Elasticsearch index. Specialized agents are responsible for specific tasks such as log parsing, event correlation, anomaly detection, root cause analysis, and generating recommendations. A Retrieval Augmented Generation (RAG) component leverages documents in the `documentation/` directory to provide context to the LLM for more accurate analysis.
 
 ## Contributing
 

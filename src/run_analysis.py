@@ -1,70 +1,106 @@
+import argparse
 import os
-import logging
-from pathlib import Path
-from .log_analysis_agent import main
+import sys
+from datetime import datetime, timezone, timedelta
 
-# Helper function to get project root
-def get_project_root() -> Path:
-    return Path(__file__).parent.parent
+# Add the project root to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def setup_logging():
-    """Configure logging for the analysis run."""
-    project_root = get_project_root()
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(project_root / 'analysis_run.log'),
-            logging.StreamHandler()
-        ]
-    )
-    return logging.getLogger(__name__)
-
-def verify_log_files():
-    """Verify that required log files exist."""
-    project_root = get_project_root()
-    required_files = [
-        project_root / 'logs/3scale_api_gateway.log',
-        project_root / 'logs/tibco_businessworks.log'
-    ]
-    
-    missing_files = [f for f in required_files if not os.path.exists(f)]
-    if missing_files:
-        missing_files_str = [str(f) for f in missing_files]
-        raise FileNotFoundError(f"Missing required log files: {', '.join(missing_files_str)}")
-    
-    return required_files
-
-def verify_documentation():
-    """Verify that documentation exists."""
-    project_root = get_project_root()
-    doc_path = project_root / 'documentation/system_architecture.md'
-    if not os.path.exists(doc_path):
-        raise FileNotFoundError(f"Missing required documentation: {str(doc_path)}")
+from src.redis_log_analysis_agent import main as analysis_main
 
 if __name__ == "__main__":
-    logger = setup_logging()
-    project_root = get_project_root()
+    parser = argparse.ArgumentParser(description="Run the full log analysis pipeline.")
     
-    try:
-        # Ensure required directories exist
-        os.makedirs(project_root / "logs", exist_ok=True)
-        os.makedirs(project_root / "documentation", exist_ok=True)
-        os.makedirs(project_root / "analysis_output", exist_ok=True)
-        
-        # Verify required files
-        logger.info("Verifying required files...")
-        verify_log_files()
-        verify_documentation()
-        
-        # Run the analysis
-        logger.info("Starting log analysis...")
-        main()
-        logger.info("Analysis completed successfully")
-        
-    except FileNotFoundError as e:
-        logger.error(f"File error: {str(e)}")
-        raise
-    except Exception as e:
-        logger.error(f"Unexpected error during analysis: {str(e)}")
-        raise 
+    # Arguments for log source
+    parser.add_argument(
+        "--log-source", 
+        type=str, 
+        default=os.getenv("LOG_SOURCE", "file"), 
+        choices=["file", "elk"],
+        help="Source of the logs ('file' or 'elk')."
+    )
+
+    # Arguments for file-based logs
+    parser.add_argument(
+        "--log-dir", 
+        type=str, 
+        default=os.getenv("LOG_DIR", "logs/"),
+        help="Directory containing log files if source is 'file'."
+    )
+    
+    # Arguments for Elasticsearch
+    parser.add_argument(
+        "--elk-host", 
+        type=str, 
+        default=os.getenv("ELASTICSEARCH_HOST", "http://localhost:9200"),
+        help="Elasticsearch host URL."
+    )
+    parser.add_argument(
+        "--elk-index", 
+        type=str, 
+        default=os.getenv("ELK_INDEX", "logs-test_data-default"),
+        help="Elasticsearch index pattern to search."
+    )
+    parser.add_argument(
+        "--elk-user",
+        type=str,
+        default=os.getenv("ELASTICSEARCH_USER"),
+        help="Username for Elasticsearch authentication."
+    )
+    parser.add_argument(
+        "--elk-password",
+        type=str,
+        default=os.getenv("ELASTICSEARCH_PASSWORD"),
+        help="Password for Elasticsearch authentication."
+    )
+    parser.add_argument(
+        "--elk-max-results",
+        type=int,
+        default=os.getenv("ELK_MAX_RESULTS", 10000),
+        help="Maximum number of results to fetch from Elasticsearch."
+    )
+    parser.add_argument(
+        "--elk-time-field",
+        type=str,
+        default=os.getenv("ELK_TIME_FIELD", "@timestamp"),
+        help="Field name for the timestamp in Elasticsearch documents."
+    )
+    parser.add_argument(
+        "--elk-service-field",
+        type=str,
+        default=os.getenv("ELK_SERVICE_FIELD", "service.name"),
+        help="Field name for the service name in Elasticsearch documents."
+    )
+    parser.add_argument(
+        "--elk-message-field",
+        type=str,
+        default=os.getenv("ELK_MESSAGE_FIELD", "message"),
+        help="Field name for the log message in Elasticsearch documents."
+    )
+    parser.add_argument(
+        "--elk-level-field",
+        type=str,
+        default=os.getenv("ELK_LEVEL_FIELD", "log.level"),
+        help="Field name for the log level in Elasticsearch documents."
+    )
+
+    # Time window for analysis
+    DEFAULT_END_TIME = datetime.now(timezone.utc).isoformat()
+    DEFAULT_START_TIME = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+    parser.add_argument(
+        "--start-time", 
+        type=datetime.fromisoformat, 
+        default=os.getenv("START_TIME", DEFAULT_START_TIME),
+        help="Start time for log analysis (ISO 8601 format)."
+    )
+    parser.add_argument(
+        "--end-time", 
+        type=datetime.fromisoformat, 
+        default=os.getenv("END_TIME", DEFAULT_END_TIME),
+        help="End time for log analysis (ISO 8601 format)."
+    )
+
+    args = parser.parse_args()
+    
+    # Run the main analysis function from the new agent
+    analysis_main(args) 
