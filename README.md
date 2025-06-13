@@ -8,219 +8,306 @@ The system is built to handle complex error scenarios, including those involving
 
 ## Key Features
 
-*   **Flexible Data Ingestion**: Supports log analysis from both local log files and direct querying of an **Elasticsearch** index.
-*   **Local ELK Stack Support**: Includes a **Docker Compose** setup for spinning up a local Elasticsearch and Kibana stack for development and testing.
-*   **Multi-Agent System**: Utilizes a graph-based approach (LangGraph) to orchestrate specialized agents for different stages of log analysis.
-*   **Advanced Log Parsing**: Intelligently parses various log formats, extracting structured information including timestamps, log levels, service names, and detailed message content. It specifically looks for session IDs, URC/UIDs, API endpoints, transaction types, and error indicators.
-*   **Session-Based Correlation**: Groups log entries by session ID and correlates events within each session by analyzing URC/UID chains to build a coherent narrative of activities and errors.
-*   **API Call Tree Construction**: For each session, builds a hierarchical tree of API calls based on URC/UID relationships, allowing visualization and analysis of call dependencies and error propagation up to a defined depth (currently 4 levels).
-*   **Error Chain Analysis**: Identifies and analyzes chains of errors within a session, assessing impact levels (e.g., CRITICAL, HIGH) based on error types and severity.
-*   **LLM-Powered Root Cause Analysis (RCA)**: For identified critical error events, an LLM agent performs a detailed root cause analysis.
-*   **Actionable LLM-Generated Recommendations**: Based on the RCA, another LLM agent generates specific, actionable recommendations.
-*   **Retrieval Augmented Generation (RAG)**: Integrates with project-specific documentation (supports .txt, .md, .pdf files placed in the `documentation/` directory) to provide LLMs with relevant context.
-*   **Structured JSON Output**: All analysis results are saved in well-structured JSON files for easy consumption and further processing.
-*   **Robust Command-Line Interface**: A flexible CLI allows users to specify the log source (files or ELK) and configure connection parameters.
-*   **Robust Error Handling**: Includes Pydantic model validation for LLM outputs and programmatic safeguards to ensure data integrity in final reports.
+### 🔥 **Enhanced Critical Error Detection & Impact Assessment**
+*   **Intelligent Severity Calculation**: Automatically classifies errors as CRITICAL, HIGH, MEDIUM, or LOW based on error content analysis
+*   **Critical Error Indicators**: Detects system-wide failures like "database cluster unavailable", "data corruption detected", "emergency fallback failed"
+*   **Comprehensive Impact Analysis**: Provides detailed severity breakdown with counts of critical, high, medium, and low severity errors per session
+*   **Real-time Severity Context**: LLM receives calculated severity levels to guide analysis criticality
+
+### 🚀 **Advanced Multi-Agent Architecture**
+*   **Redis-Based State Management**: Uses Redis for robust checkpointing and session isolation
+*   **LangGraph Workflow**: Orchestrates specialized agents for different stages of log analysis
+*   **Fine-Tuned Prompts**: Extensively optimized prompts for accurate root cause analysis and recommendations
+*   **Enhanced JSON Parsing**: Robust handling of LLM outputs with markdown code block processing
+
+### 📊 **Comprehensive Data Processing**
+*   **Flexible Data Ingestion**: Supports log analysis from both local log files and direct querying of an **Elasticsearch** index
+*   **Session-Based Correlation**: Groups log entries by session ID and correlates events within each session by analyzing URC/UID chains
+*   **API Call Tree Construction**: Builds hierarchical trees of API calls based on URC/UID relationships up to 4 levels deep
+*   **Error Chain Analysis**: Identifies and analyzes chains of errors within sessions with proper impact assessment
+
+### 🤖 **AI-Powered Analysis**
+*   **LLM-Powered Root Cause Analysis (RCA)**: Detailed analysis of critical error events with confidence scoring
+*   **Actionable LLM-Generated Recommendations**: Specific, actionable recommendations with implementation steps
+*   **Retrieval Augmented Generation (RAG)**: Integrates with project documentation for contextual analysis
+*   **Smart Error Context**: Provides LLMs with calculated severity and detailed error context for accurate analysis
+
+### 🔧 **Production-Ready Features**
+*   **Docker Compose Setup**: Complete containerized environment with ELK stack, Redis, and Ollama integration
+*   **Robust Error Handling**: Comprehensive error handling with graceful degradation
+*   **Structured JSON Output**: Well-structured analysis results with detailed metadata
+*   **Command-Line Interface**: Flexible CLI with extensive configuration options
+*   **Documentation Integration**: Supports .txt, .md, .pdf files for RAG context
+
+## Critical Error Detection Capabilities
+
+The system now includes advanced error severity detection that automatically identifies:
+
+### 🔴 **CRITICAL Level Errors**
+- Database cluster unavailable / all nodes down
+- Data corruption detected
+- Emergency fallback failed / backup systems offline
+- Critical database errors
+- System-wide failures and infrastructure outages
+
+### 🟠 **HIGH Level Errors**
+- Connection pool exhausted
+- Database deadlocks
+- Gateway timeouts / upstream service unavailable
+- Authentication failures
+- 5xx status codes (500, 503, 504)
+- Resource locks and maintenance mode issues
+
+### 🟡 **MEDIUM Level Errors**
+- Validation failures (422 status codes)
+- Missing required fields
+- Bad requests (400 status codes)
+- Internal server errors
+
+### ⚪ **LOW Level Errors**
+- General application errors
+- Warning-level issues
+- Minor operational problems
+
+## Enhanced Analysis Output
+
+The system now provides:
+
+### **Impact Assessment**
+```json
+{
+  "overall_chain_impact": "CRITICAL",
+  "severity_breakdown": {
+    "critical": 4,
+    "high": 3,
+    "medium": 0,
+    "low": 0
+  }
+}
+```
+
+### **Detailed Root Cause Analysis**
+```json
+{
+  "problem_description": "Critical database cluster failure affecting all payment processing operations",
+  "probable_root_cause_summary": "Database cluster became unavailable due to all nodes going down simultaneously, causing cascading failures across payment services",
+  "confidence_score": 0.95,
+  "calculated_severity": "CRITICAL"
+}
+```
+
+### **Actionable Recommendations**
+```json
+{
+  "recommendations": [
+    {
+      "recommendation_type": "Immediate Remediation",
+      "recommendation_description": "Implement database cluster health monitoring with automatic failover",
+      "action_steps": [
+        "Configure cluster health checks with 30-second intervals",
+        "Set up automatic failover to backup cluster",
+        "Implement circuit breaker patterns for database connections"
+      ]
+    }
+  ]
+}
+```
 
 ## Prerequisites
 
-*   Python >=3.13
-*   **Docker and Docker Compose**: Required for running the local ELK stack.
-*   Ollama installed and running locally.
-*   The `llama3.2:1b` model (or a compatible model) pulled via Ollama: `ollama pull llama3.2:1b`
-*   `uv` (Python packaging tool): If not present, install with `pip install uv`.
+*   Python >=3.11
+*   **Docker and Docker Compose**: Required for running the complete stack
+*   Ollama installed and running locally
+*   The `llama3.2:1b` model (or compatible) pulled via Ollama: `ollama pull llama3.2:1b`
+*   `uv` (Python packaging tool): Install with `pip install uv` if not present
 
 ## Project Structure
 
 ```
 .gitignore
 README.md
-analysis_output/	# Timestamped JSON output files from analysis runs
-docker-compose.yml	# Defines the local Elasticsearch and Kibana services for Docker
-documentation/		# User-provided documentation (.txt, .md, .pdf) for RAG context
-logs/			# Directory for input application/system log files for analysis
-    3scale_api_gateway.log  # Example log file
-    payment_service.log     # Example log file
-    tibco_businessworks.log # Example log file
-    log_analysis.log	# Operational logs of the Log Analysis AI Agent itself
-pyproject.toml		# Defines project metadata, dependencies, and build system
+docker-compose.yml          # Complete stack: ELK, Redis, Ollama, log-analyzer
+analysis_output/             # Timestamped JSON analysis results
+documentation/               # RAG documentation (.txt, .md, .pdf)
+    red_hat_3scale_guide.pdf        # API management documentation
+    unravel_spark_guide.pdf         # Spark troubleshooting guide
+    system_architecture.md          # System architecture documentation
+    troubleshooting_guide.md        # General troubleshooting guide
+logs/                       # Input log files and operational logs
+    demo_logs.json                  # Comprehensive demo dataset with critical errors
+    3scale_api_gateway.log          # Example API gateway logs
+    payment_service.log             # Example payment service logs
+    tibco_businessworks.log         # Example integration logs
 src/
     __init__.py
-    document_processor.py	# Handles PDF document loading and splitting for RAG
-    log_analysis_agent.py	# Main script: includes agent definitions, LangGraph workflow, LLM interactions, and all analysis logic.
-# uv.lock (if generated by `uv pip install`)
+    redis_log_analysis_agent.py     # Main analysis engine with Redis integration
+    document_processor.py           # RAG document processing
+    redis_client.py                 # Redis connection management
+    load_logs_to_elk.py            # Log ingestion utility
+pyproject.toml              # Project dependencies and configuration
 ```
 
-## Setup and Installation
+## Quick Start
 
-1.  **Clone the repository.**
-    ```bash
-    git clone <repository-url>
-    cd <repository-name>
-    ```
-
-2.  **Create and activate a virtual environment.**
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate
-    ```
-
-3.  **Install dependencies using `uv`.**
-    ```bash
-    uv pip install -e .
-    ```
-    This command installs the package in editable mode, including all dependencies like the Elasticsearch client, as defined in `pyproject.toml`.
-
-4.  **Prepare Documentation for RAG (Optional but Recommended).**
-    Place any relevant documentation files into the `documentation/` directory.
-
-## Demonstration Steps
-
-This section outlines how to run a controlled, step-by-step demonstration using the provided static log files. This setup keeps the containers running for manual command execution.
-
-### Step 1: Start All Services
-
-This command will build the container images and start all services (`log-analyzer`, `elasticsearch`, `kibana`, `redis`) in the background. The `log-analyzer` will start and wait for instructions.
-
+### 1. Start the Complete Stack
 ```bash
 docker-compose up --build -d
 ```
-Give the services a minute to initialize. You can check their status with `docker-compose ps`.
+This starts:
+- **Elasticsearch** (port 9200)
+- **Kibana** (port 5601) 
+- **Redis** (port 6379)
+- **Ollama** (port 11434)
+- **Log Analyzer** (ready for commands)
 
-### Step 2: Load Logs into Elasticsearch
-
-Execute the following command to run the log loading script. This will parse the static log files from the `logs/` directory and ingest them into the `test-logs-default` index in Elasticsearch.
-
+### 2. Load Demo Data with Critical Errors
 ```bash
-docker-compose exec log-analyzer python src/load_logs_to_elk.py --log-files logs/3scale_api_gateway.log logs/payment_service.log logs/tibco_businessworks.log
+docker-compose exec log-analyzer python src/load_logs_to_elk.py --demo-data
+```
+This loads comprehensive demo data including:
+- **Session rlt509**: Critical system failures (database cluster down, data corruption, emergency fallback failures)
+- **Session gbx131**: Database issues (deadlocks, constraint violations, timeouts)
+- **Session nwj331**: Authentication failures (token expired, insufficient permissions)
+- **Session iym306**: Validation errors (missing fields, format issues)
+- **Session vcw023**: Successful operations with performance warnings
+
+### 3. Run Critical Error Analysis
+```bash
+docker-compose exec log-analyzer python -m src.redis_log_analysis_agent --elk-index demo-logs
 ```
 
-### Step 3: Verify Logs in Kibana (Optional)
+### 4. View Results
+Check the `analysis_output/` directory for:
+- `full_analysis_<session_id>_<timestamp>.json` - Complete analysis
+- `root_cause_analysis_<session_id>_<timestamp>.json` - Focused RCA with severity assessment
 
-1.  **Open Kibana:** In your web browser, navigate to: **[http://localhost:5601](http://localhost:5601)**
-2.  **Create a Data View:** If you haven't already, create a data view:
-    *   Go to **Stack Management** -> **Data Views**.
-    *   Click **Create data view**.
-    *   Use `test-logs-default` for the Name and Index pattern.
-    *   Select `@timestamp` as the Timestamp field.
-    *   Click **Save data view to Kibana**.
-3.  **Discover Your Logs:**
-    *   Go to **Analytics** -> **Discover**.
-    *   In the top-right, change the time picker to an **Absolute** range covering **January 1, 2024** to **January 1, 2026** to see the logs.
+## Advanced Usage
 
-### Step 4: Run the Log Analysis
-
-This command triggers the main analysis script inside the `log-analyzer` container. It will fetch the logs from Elasticsearch, correlate them, and perform the root cause analysis using your native Ollama instance.
-
+### Custom Log Analysis
 ```bash
-docker-compose exec log-analyzer python src/run_analysis.py --log-source elk --elk-index test-logs-default
+# Analyze specific time range
+docker-compose exec log-analyzer python -m src.redis_log_analysis_agent \
+  --elk-index your-index \
+  --start-time "2024-01-01T00:00:00Z" \
+  --end-time "2024-01-02T00:00:00Z"
+
+# Load custom logs
+docker-compose exec log-analyzer python src/load_logs_to_elk.py \
+  --log-files logs/your_app.log \
+  --index-name your-index
 ```
 
-### Step 5: View the Results
-
-The analysis is complete when the command in Step 4 finishes. The results are saved in the `analysis_output/` directory on your local machine.
-
-*   `full_analysis_<session_id>_<timestamp>.json`
-*   `root_cause_analysis_<session_id>_<timestamp>.json`
-
-## Running the Analysis
-
-You can run the analysis using two main methods: from an ELK stack (recommended) or from local log files.
-
-### Option A: Analyze Logs from a Local ELK Stack (Recommended)
-
-This approach uses Docker to run Elasticsearch and Kibana locally.
-
-#### 1. Start the ELK Stack
-
-From the project root directory, run:
+### RAG Documentation Enhancement
+Place your documentation in the `documentation/` directory:
 ```bash
-docker-compose up -d
-```
-This will start Elasticsearch on `http://localhost:9200` and Kibana on `http://localhost:5601`. Wait a minute for them to initialize.
-
-#### 2. Push Log Data to Elasticsearch
-
-You need to load your log data into an Elasticsearch index. The agent can then query this index. You can use the Kibana Dev Tools (`http://localhost:5601`) or `curl` to push data.
-
-**Example using `curl` to push a single log entry:**
-```bash
-curl -X POST "localhost:9200/your_index_name/_doc" -H "Content-Type: application/json" -d '{
-  "@timestamp": "2024-07-29T10:00:00.000Z",
-  "service.name": "payment_service",
-  "log.level": "ERROR",
-  "message": "Transaction failed due to timeout. SessionID=elk_session_123, URC=elk_urc_abc"
-}'
-```
-*Replace `your_index_name` with a name like `project_application_logs`.*
-
-For bulk uploads, you can use the Elasticsearch Bulk API.
-
-#### 3. Run the Analysis on ELK Data
-
-Execute the script from the project root, pointing it to your Elasticsearch index.
-```bash
-python -m src.log_analysis_agent --elk-index "project_application_logs"
+# The system automatically processes:
+documentation/
+├── api_guides.pdf           # API documentation
+├── troubleshooting.md       # Troubleshooting guides
+├── architecture.txt         # System architecture
+└── runbooks/               # Operational runbooks
 ```
 
-**Key ELK Command-Line Arguments:**
-*   `--elk-index <name>`: **(Required)** The name of the Elasticsearch index to query.
-*   `--elk-host <url>`: The URL of the Elasticsearch instance. Defaults to `http://localhost:9200`.
-*   `--elk-time-field <field>`: The document field containing the timestamp. Defaults to `@timestamp`.
-*   `--elk-service-field <field>`: The document field for the service name. Defaults to `service.name`.
-*   `--elk-message-field <field>`: The document field for the log message. Defaults to `message`.
-*   `--elk-level-field <field>`: The document field for the log level. Defaults to `log.level`.
-*   (Other arguments for authentication, time ranges, and custom queries are available. Run with `--help` for details.)
+## Analysis Output Structure
 
-### Option B: Analyze Logs from Local Files
+### Full Analysis File
+```json
+{
+  "session_id": "rlt509",
+  "timestamp": "20250612_091500",
+  "correlations": [
+    {
+      "session_id": "rlt509",
+      "root_urc": "urc-root-rlt509",
+      "api_calls": [...],
+      "error_chains": [
+        {
+          "impact_level": "CRITICAL",
+          "severity_breakdown": {
+            "critical": 4,
+            "high": 3,
+            "medium": 0,
+            "low": 0
+          }
+        }
+      ]
+    }
+  ]
+}
+```
 
-This method reads log files directly from your filesystem.
-
-1.  **Prepare Log Files:**
-    Place the log files you want to analyze into the `logs/` directory (or any other location).
-
-2.  **Run the Analysis on Log Files:**
-    Provide the paths to your log files using the `--log-files` argument:
-    ```bash
-    python -m src.log_analysis_agent --log-files logs/3scale_api_gateway.log logs/tibco_businessworks.log logs/payment_service.log
-    ```
-
-## Output
-
-The analysis results are saved in timestamped JSON files within the `analysis_output/` directory:
-
-*   **`full_analysis_<timestamp>.json`**: Contains the comprehensive data from the analysis run. This includes:
-    *   General LLM interaction messages.
-    *   Original log content provided to the agents.
-    *   Detailed session-by-session breakdown (`sessions` key), with each session containing:
-        *   Login event details.
-        *   The constructed API call tree with requests, responses, and associated errors for each node.
-        *   Programmatically identified error chains with impact analysis.
-        *   Performance metrics like average response time for the session.
-*   **`root_cause_analysis_<timestamp>.json`**: Presents a focused list of root causes (`root_causes` key). Each item in the list corresponds to a significant error event and includes:
-    *   The original triggering error message and its context (timestamp, source service, URC/UIDs).
-    *   `llm_initial_analysis`: The detailed root cause analysis from the LLM, including problem description, probable root cause summary, key error messages (programmatically verified), confidence score, and associated identifiers (programmatically verified/corrected).
-    *   `llm_recommendations`: A list of actionable recommendations from the LLM, each with a type, description, action steps, relevant documentation (if any from RAG), and applicable identifiers (programmatically verified/corrected to ensure relevance to the specific error event).
-
-Additionally, the Log Analysis AI Agent's own operational logs (diagnostics, debug messages) are written to `logs/log_analysis.log`.
-
-## Key Pydantic Models (for LLM output structure)
-
-The system relies on Pydantic models to define and validate the structure of JSON outputs expected from the LLMs. Key models include:
-
-*   `LLMRootCauseAnalysis`: Defines the expected structure for the initial root cause analysis.
-*   `RootCauseIdentifiers`: Nested model for identifiers within `LLMRootCauseAnalysis`.
-*   `LLMRecommendations`: Defines the expected structure for the list of recommendations.
-*   `RecommendationItem`: Defines the structure for an individual recommendation.
-*   `RecommendationIdentifiers`: Nested model for identifiers within `RecommendationItem`.
-
-Detailed definitions for these models can be found at the end of the `src/log_analysis_agent.py` file.
+### Root Cause Analysis File
+```json
+{
+  "session_id": "rlt509",
+  "root_causes": [
+    {
+      "overall_chain_impact": "CRITICAL",
+      "triggering_error_message": "Database cluster unavailable - all nodes down",
+      "llm_initial_analysis": {
+        "problem_description": "Critical database infrastructure failure",
+        "probable_root_cause_summary": "Complete database cluster failure due to...",
+        "confidence_score": 0.95,
+        "calculated_severity": "CRITICAL"
+      },
+      "llm_recommendations": {
+        "recommendations": [
+          {
+            "recommendation_type": "Immediate Remediation",
+            "recommendation_description": "Implement database cluster monitoring",
+            "action_steps": ["Configure health checks", "Set up failover"]
+          }
+        ]
+      }
+    }
+  ]
+}
+```
 
 ## Architecture
 
-The application uses a multi-agent system built with LangGraph. The data ingestion layer is flexible, allowing logs to be sourced from local files or an Elasticsearch index. Specialized agents are responsible for specific tasks such as log parsing, event correlation, anomaly detection, root cause analysis, and generating recommendations. A Retrieval Augmented Generation (RAG) component leverages documents in the `documentation/` directory to provide context to the LLM for more accurate analysis.
+### Multi-Agent Workflow
+1. **Document Ingestion Agent**: Processes RAG documentation
+2. **Root Cause Analysis Agent**: Performs detailed error analysis with severity context
+3. **Recommendation Agent**: Generates actionable remediation steps
+
+### Technology Stack
+- **LangGraph**: Multi-agent orchestration
+- **Ollama**: Local LLM execution
+- **Redis**: State management and vector storage
+- **Elasticsearch**: Log storage and querying
+- **Docker**: Containerized deployment
+
+### Error Severity Pipeline
+1. **Content Analysis**: Scans error messages for severity indicators
+2. **Classification**: Assigns CRITICAL/HIGH/MEDIUM/LOW levels
+3. **Context Enhancement**: Provides severity context to LLM
+4. **Impact Assessment**: Calculates overall session impact
+
+## Monitoring and Observability
+
+### Kibana Dashboard
+Access Kibana at `http://localhost:5601` to:
+- Visualize log patterns
+- Monitor error trends
+- Create custom dashboards
+- Set up alerting rules
+
+### Redis Insights
+Monitor Redis state and vector storage:
+- Session checkpoints
+- Document embeddings
+- Analysis progress
 
 ## Contributing
 
-Feel free to submit issues and enhancement requests!
+We welcome contributions! Areas for enhancement:
+- Additional error pattern detection
+- Custom severity rules
+- Enhanced visualization
+- Integration with monitoring tools
+
+## License
+
+[Your License Here]
 

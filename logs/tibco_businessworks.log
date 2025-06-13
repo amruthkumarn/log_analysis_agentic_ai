@@ -1,4 +1,28 @@
-[2025-05-26 17:00:02] [INFO] tibco_businessworks: Forwarding request to order_service, session_id=xyz789, URC=order_svc_call_101, UID=order_req_001, target_service=order_service
-[2025-05-26 17:00:03] [INFO] order_service: Requesting inventory check for order creation, session_id=xyz789, URC=inv_check_201, UID=order_svc_call_101, item_id=ITEMXYZ789
-[2025-05-26 17:00:05] [INFO] order_service: Requesting user profile for order authorization, session_id=xyz789, URC=profile_req_301, UID=order_svc_call_101, user_id=test_user_2
-[2025-05-26 17:00:07] [ERROR] order_service: Failed to retrieve user profile for order, session_id=xyz789, URC=order_svc_fail_101, UID=order_svc_call_101, reason=Downstream service reported permission denied, target_service=user_profile_service 
+[2024-03-20 10:15:25] [INFO] tibco_businessworks: Request received for /api/v1/validation, URC=urc-order-validation-db-gbx131-03, UID=urc-order-validation-gbx131-03, transaction_type=database_check
+[2024-03-20 10:15:25] [ERROR] tibco_businessworks: Response sent for /api/v1/validation, URC=urc-order-validation-db-gbx131-03, UID=urc-order-validation-gbx131-03, status_code=500, response_time=2445ms, error_details=Database validation failed - constraint violation
+[2024-03-20 10:15:26] [INFO] tibco_businessworks: Request received for /api/v1/database, URC=urc-profile-processing-db-gbx131-06, UID=urc-profile-processing-gbx131-05, transaction_type=database_operation
+[2024-03-20 10:15:26] [ERROR] tibco_businessworks: Response sent for /api/v1/database, URC=urc-profile-processing-db-gbx131-06, UID=urc-profile-processing-gbx131-05, status_code=503, response_time=3567ms, error_details=Database service unavailable - maintenance mode
+[2024-03-20 10:15:32] [INFO] tibco_businessworks: Request received for /api/v1/retry, URC=urc-order-validation-db-retry-gbx131-01, UID=urc-order-validation-db-gbx131-03, transaction_type=retry_operation
+[2024-03-20 10:15:32] [ERROR] tibco_businessworks: Response sent for /api/v1/retry, URC=urc-order-validation-db-retry-gbx131-01, UID=urc-order-validation-db-gbx131-03, status_code=408, response_time=5000ms, error_details=Retry timeout exceeded
+
+[2024-03-20 10:25:25] [INFO] tibco_businessworks: Request received for /api/v1/validation, URC=urc-order-validation-db-nwj331-03, UID=urc-order-validation-nwj331-03, transaction_type=database_check
+[2024-03-20 10:25:25] [INFO] tibco_businessworks: Response sent for /api/v1/validation, URC=urc-order-validation-db-nwj331-03, UID=urc-order-validation-nwj331-03, status_code=200, response_time=445ms
+[2024-03-20 10:25:26] [INFO] tibco_businessworks: Request received for /api/v1/database, URC=urc-profile-processing-db-nwj331-06, UID=urc-profile-processing-nwj331-05, transaction_type=database_operation
+[2024-03-20 10:25:26] [ERROR] tibco_businessworks: Response sent for /api/v1/database, URC=urc-profile-processing-db-nwj331-06, UID=urc-profile-processing-nwj331-05, status_code=401, response_time=567ms, error_details=Database authentication failed - invalid credentials
+
+[2024-03-20 10:35:25] [INFO] tibco_businessworks: Request received for /api/v1/validation, URC=urc-order-validation-db-iym306-03, UID=urc-order-validation-iym306-03, transaction_type=database_check
+[2024-03-20 10:35:25] [ERROR] tibco_businessworks: Response sent for /api/v1/validation, URC=urc-order-validation-db-iym306-03, UID=urc-order-validation-iym306-03, status_code=422, response_time=1445ms, error_details=Data validation failed - missing required fields
+[2024-03-20 10:35:26] [INFO] tibco_businessworks: Request received for /api/v1/database, URC=urc-profile-processing-db-iym306-06, UID=urc-profile-processing-iym306-05, transaction_type=database_operation
+[2024-03-20 10:35:26] [ERROR] tibco_businessworks: Response sent for /api/v1/database, URC=urc-profile-processing-db-iym306-06, UID=urc-profile-processing-iym306-05, status_code=500, response_time=2567ms, error_details=Database transaction rollback - integrity constraint violation
+
+[2024-03-20 10:45:25] [INFO] tibco_businessworks: Request received for /api/v1/validation, URC=urc-order-validation-db-vcw023-03, UID=urc-order-validation-vcw023-03, transaction_type=database_check
+[2024-03-20 10:45:25] [INFO] tibco_businessworks: Response sent for /api/v1/validation, URC=urc-order-validation-db-vcw023-03, UID=urc-order-validation-vcw023-03, status_code=200, response_time=445ms
+[2024-03-20 10:45:26] [INFO] tibco_businessworks: Request received for /api/v1/database, URC=urc-profile-processing-db-vcw023-06, UID=urc-profile-processing-vcw023-05, transaction_type=database_operation
+[2024-03-20 10:45:26] [WARN] tibco_businessworks: Response sent for /api/v1/database, URC=urc-profile-processing-db-vcw023-06, UID=urc-profile-processing-vcw023-05, status_code=202, response_time=1567ms, warning=Database operation completed with warnings - performance degraded
+
+[2024-03-20 10:55:25] [INFO] tibco_businessworks: Request received for /api/v1/validation, URC=urc-order-validation-db-rlt509-03, UID=urc-order-validation-rlt509-03, transaction_type=database_check
+[2024-03-20 10:55:25] [ERROR] tibco_businessworks: Response sent for /api/v1/validation, URC=urc-order-validation-db-rlt509-03, UID=urc-order-validation-rlt509-03, status_code=503, response_time=3445ms, error_details=Database cluster unavailable - all nodes down
+[2024-03-20 10:55:26] [INFO] tibco_businessworks: Request received for /api/v1/database, URC=urc-profile-processing-db-rlt509-06, UID=urc-profile-processing-rlt509-05, transaction_type=database_operation
+[2024-03-20 10:55:26] [ERROR] tibco_businessworks: Response sent for /api/v1/database, URC=urc-profile-processing-db-rlt509-06, UID=urc-profile-processing-rlt509-05, status_code=500, response_time=4567ms, error_details=Critical database error - data corruption detected
+[2024-03-20 10:55:32] [INFO] tibco_businessworks: Request received for /api/v1/emergency, URC=urc-emergency-fallback-rlt509-01, UID=urc-profile-processing-db-rlt509-06, transaction_type=emergency_fallback
+[2024-03-20 10:55:32] [ERROR] tibco_businessworks: Response sent for /api/v1/emergency, URC=urc-emergency-fallback-rlt509-01, UID=urc-profile-processing-db-rlt509-06, status_code=500, response_time=1000ms, error_details=Emergency fallback failed - backup systems offline 

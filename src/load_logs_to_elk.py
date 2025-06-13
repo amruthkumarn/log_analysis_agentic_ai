@@ -15,30 +15,90 @@ def parse_message_content(message: str, level: str) -> dict:
     """Parse log message content to extract structured information."""
     parsed = {
         'is_login': False, 'is_request': False, 'is_response': False,
-        'session_id': None, 'cif_id': None, 'urc': None, 'uid': None,
-        'transaction_type': None, 'api_endpoint': None, 'error_type': None,
-        'severity': None, 'metrics': {}
+        'metrics': {}
     }
+    
+    # Only add fields if they are actually present in the message
     session_match = re.search(r'session_id=([^,\s]+)', message)
     if session_match:
         parsed['session_id'] = session_match.group(1)
+    
     urc_match = re.search(r'URC=([^,\s]+)', message)
     if urc_match:
         parsed['urc'] = urc_match.group(1)
+        # If session_id not found but URC contains session pattern, extract it
+        if 'session_id' not in parsed:
+            # Extract session_id from URC pattern like urc-payment-req-gbx131-01
+            urc_session_match = re.search(r'urc-[^-]+-[^-]+-([a-z0-9]+)-\d+', parsed['urc'])
+            if urc_session_match:
+                parsed['session_id'] = urc_session_match.group(1)
+    
     uid_match = re.search(r'UID=([^,\s]+)', message)
     if uid_match:
         parsed['uid'] = uid_match.group(1)
+        # If session_id not found but UID contains session pattern, extract it
+        if 'session_id' not in parsed:
+            # Extract session_id from UID pattern like urc-payment-req-gbx131-01
+            uid_session_match = re.search(r'urc-[^-]+-[^-]+-([a-z0-9]+)-\d+', parsed['uid'])
+            if uid_session_match:
+                parsed['session_id'] = uid_session_match.group(1)
+    
+    # Extract other fields only if present
+    cif_match = re.search(r'cif_id=([^,\s]+)', message)
+    if cif_match:
+        parsed['cif_id'] = cif_match.group(1)
+    
+    transaction_match = re.search(r'transaction_type=([^,\s]+)', message)
+    if transaction_match:
+        parsed['transaction_type'] = transaction_match.group(1)
+    
+    endpoint_match = re.search(r'endpoint=([^,\s]+)', message)
+    if endpoint_match:
+        parsed['api_endpoint'] = endpoint_match.group(1)
+    
+    # Check for login event
     if 'logged in' in message.lower():
         parsed['is_login'] = True
+    
+    # Check for API request/response
     if 'request received' in message.lower():
         parsed['is_request'] = True
     elif 'response sent' in message.lower():
         parsed['is_response'] = True
-    if level.upper() in ['ERROR', 'WARN'] or 'error' in message.lower():
+    
+    # Extract error information only if it's an error
+    is_error_log_level = level.upper() in ['ERROR', 'WARN']
+    contains_error_keywords = 'error' in message.lower() or 'failed' in message.lower()
+    
+    if is_error_log_level or contains_error_keywords:
         if 'timeout' in message.lower():
             parsed['error_type'] = 'timeout'
+        elif 'rate limit' in message.lower():
+            parsed['error_type'] = 'rate_limit'
+        elif 'authentication' in message.lower():
+            parsed['error_type'] = 'authentication'
+        elif 'connection' in message.lower():
+            parsed['error_type'] = 'connection'
+        elif 'validation' in message.lower():
+            parsed['error_type'] = 'validation'
+        elif 'business' in message.lower():
+            parsed['error_type'] = 'business'
+        elif is_error_log_level:
+            parsed['error_type'] = 'system'
         else:
             parsed['error_type'] = 'unknown_error'
+        
+        # Set severity based on log level
+        if level.upper() == 'ERROR':
+            parsed['severity'] = 'HIGH'
+        elif level.upper() == 'WARN':
+            parsed['severity'] = 'MEDIUM'
+    
+    # Extract metrics if present
+    duration_match = re.search(r'duration[:\s]+(\d+)', message, re.IGNORECASE)
+    if duration_match:
+        parsed['metrics']['duration_ms'] = int(duration_match.group(1))
+    
     return parsed
 
 def parse_log_line(line: str) -> dict:

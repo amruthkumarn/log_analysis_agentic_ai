@@ -20,7 +20,7 @@ from langgraph.checkpoint.redis import RedisSaver
 import uuid
 import threading
 import time
-from langchain.output_parsers import OutputFixingParser
+from langchain_core.output_parsers import JsonOutputParser
 from .redis_client import get_redis_url
 
 # --- Setup ---
@@ -127,66 +127,142 @@ def get_llm():
     return OllamaLLM(model="llama3.2:1b", base_url=os.getenv("OLLAMA_BASE_URL", "http://ollama:11434"))
 
 def create_root_cause_prompt():
-    # This is the detailed prompt from log_analysis_agent.py
-    system_message = """
-    You are an expert system and network administrator tasked with identifying a root cause for a SPECIFIC TRIGGERING ERROR EVENT provided to you.
-    Analyze ONLY the provided single triggering error event, its immediate details, and its position within the larger error chain (also provided).
-    Your response MUST BE A SINGLE, VALID JSON OBJECT.
-
-    The JSON object must contain the following fields:
-    - "problem_description": [String: Brief 1-2 sentence description of the core problem observed FOR THE PROVIDED TRIGGERING ERROR EVENT.]
-    - "probable_root_cause_summary": [String: Concise summary of the MOST LIKELY root cause FOR THE PROVIDED TRIGGERING ERROR EVENT.]
-    - "key_error_log_messages": [List containing EXACTLY ONE string. This string itself MUST be the UNMODIFIED 'EXACT Triggering Error Message' from the input.]
-    - "confidence_score": [Float or null: Score 0.0-1.0 for confidence.]
-    - "associated_identifiers": {
-        "session_id": "[String or null: EXACT session_id from input.]",
-        "urc": "[String or null: EXACT URC from the triggering error event.]",
-        "uid": "[String or null: EXACT UID from the triggering error event.]",
-        "service_name": "[String or null: EXACT service_name where the triggering error was logged.]",
-        "api_endpoint": "[String or null: EXACT API endpoint from the triggering error event.]",
-        "transaction_type": "[String or null: EXACT transaction type from the triggering error event.]"
+    system_message_intro = (
+        "You are an expert system and network administrator tasked with identifying a root cause for a SPECIFIC TRIGGERING ERROR EVENT provided to you."
+        "Analyze ONLY the provided single triggering error event, its immediate details, and its position within the larger error chain (also provided). "
+        "Focus on the primary trigger for THIS SPECIFIC failure. "
+        "Your response MUST BE A SINGLE, VALID JSON OBJECT. No other text, no markdown, just the JSON. "
+        "All keys in the main JSON object (e.g., 'problem_description', 'probable_root_cause_summary', etc.) MUST be unique; do not repeat keys. "
+        "The JSON object must contain the following fields, populated with information derived from the provided error event details:"
+    )
+    
+    fields_description_content = {
+        "problem_description": "[String: Brief 1-2 sentence description of the core problem observed FOR THE PROVIDED TRIGGERING ERROR EVENT. Use details like the service name and error type FROM THE TRIGGERING ERROR. E.g., 'Timeout occurred in 3scale API Gateway while processing session abc123.' NOT 'Transaction X failed.']",
+        "probable_root_cause_summary": "[String: Concise summary of the MOST LIKELY root cause FOR THE PROVIDED TRIGGERING ERROR EVENT. This summary MUST explain what likely caused THIS SPECIFIC error message in THIS specific service. E.g., 'The 3scale API Gateway timed out because the backend service it called (service_id=123) did not respond within the 5000ms window.' NOT a generic summary or a summary of a different error in the chain.]",
+        "key_error_log_messages": "[List containing EXACTLY ONE string. This string itself MUST be the UNMODIFIED 'EXACT Triggering Error Message' from the input. DO NOT add any surrounding brackets or quotes to the message string itself within this list element. For example, if the input message is 'X failed', the list item should be \"X failed\", NOT \"[X failed]\" or \"'X failed'\".]",
+        "confidence_score": "[Float or null: Score 0.0-1.0 for confidence, e.g., 0.85, or null if unsure.]",
+        "associated_identifiers": {
+            "session_id": "[String or null: EXACT session_id from input.]",
+            "urc": "[String or null: EXACT URC from the triggering error event.]",
+            "uid": "[String or null: EXACT UID from the triggering error event.]",
+            "service_name": "[String or null: EXACT service_name where the triggering error was logged.]",
+            "api_endpoint": "[String or null: EXACT API endpoint from the triggering error event.]",
+            "transaction_type": "[String or null: EXACT transaction type from the triggering error event.]"
+        }
     }
-    """
+    fields_description = f"Description of fields to include in your JSON response (ensure all are present):\\n{json.dumps(fields_description_content, indent=2)}"
+
+    example_json_instruction = (
+        "\\nIMPORTANT: Follow the structure of this EXAMPLE JSON for your output. "
+        "Populate all fields using the ACTUAL data from THE SPECIFIC TRIGGERING ERROR EVENT provided in the input, NOT these example values. "
+        "Focus all descriptions and summaries on THAT specific triggering error. "
+        "The 'key_error_log_messages' field must contain ONLY the exact triggering message string from the input, without any extra brackets around the string itself."
+    )
+    
+    example_json_content = {
+        "problem_description": "A timeout error occurred in the '3scale API Gateway' service for session 'abc123' and URC 'root123'.",
+        "probable_root_cause_summary": "The '3scale API Gateway' service experienced a timeout because the backend service (identified by service_id=123) failed to respond within the configured 5000ms timeout period, as stated in the triggering error message.",
+        "key_error_log_messages": ["Backend service timeout for service_id=123, session_id=abc123, URC=root123, timeout=5000ms"],
+        "confidence_score": 0.9,
+        "associated_identifiers": {
+            "session_id": "abc123",
+            "urc": "root123",
+            "uid": None,
+            "service_name": "3scale API Gateway",
+            "api_endpoint": None,
+            "transaction_type": None
+        }
+    }
+    example_json = f"Example JSON structure to follow:\\n```json\\n{json.dumps(example_json_content, indent=2)}\\n```"
+    
+    # Construct the full system message
+    final_system_message = f"{system_message_intro}\\n\\n{fields_description}\\n\\n{example_json_instruction}\\n{example_json}"
+
     return ChatPromptTemplate.from_messages([
-        SystemMessage(content=system_message),
+        SystemMessage(content=final_system_message),
         MessagesPlaceholder(variable_name="messages"),
     ])
 
 def create_recommendation_prompt():
-    # This is the detailed prompt from log_analysis_agent.py
-    system_message = """
-    You are an expert system support engineer. You will be given a root cause analysis for a SINGLE, SPECIFIC triggering error event.
-    Your task is to provide recommendations that DIRECTLY ADDRESS THIS ANALYZED ERROR.
-    Your response MUST BE A SINGLE, VALID JSON OBJECT with ONE top-level key: "recommendations", which is a list of recommendation objects.
-    
-    Each recommendation object in the list must follow this schema:
-    - "recommendation_type": "[String: 'Immediate Remediation' or 'Preventive Measure'.]"
-    - "recommendation_description": "[String: Clear, concise description of action that DIRECTLY addresses the SPECIFIC PROBLEM.]"
-    - "action_steps": "[List of strings: Specific, actionable steps. Max 3-4 steps.]"
-    - "relevant_documentation": "[List of strings: Docs relevant to THIS specific recommendation. Use [] if none.]"
-    - "applicable_to_identifiers": {
-        "session_id": "[String or null: EXACT session_id from input analysis.]",
-        "service_name": "[String or null: EXACT service_name from input analysis.]",
-        "urc": "[String or null: EXACT URC from input analysis.]"
+    system_message_intro = (
+        "You are an expert system support engineer. "
+        "You will be given a root cause analysis for a SINGLE, SPECIFIC triggering error event. "
+        "Your task is to provide recommendations that DIRECTLY ADDRESS THIS ANALYZED ERROR. "
+        "Suggest 2-3 distinct recommendations: 1-2 for immediate remediation of THIS error, and 1 for prevention of THIS type of error in THIS context. "
+        "Your response MUST BE A SINGLE, VALID JSON OBJECT. No other text allowed. "
+        "The JSON object must have ONE top-level key: \"recommendations\", value is a list of recommendation objects. "
+        "Adhere strictly to the schema. Identifiers MUST be EXACT values from input. "
+        "Recommendations MUST be highly specific to the analyzed error (e.g., the specific service like '3scale API Gateway', the specific error type like 'timeout'). Generic advice is NOT acceptable."
+    )
+
+    # Define schema description with corrected newlines for the prompt
+    recommendation_item_schema = {
+        "recommendation_type": "[String: Type: 'Immediate Remediation' or 'Preventive Measure'.]",
+        "recommendation_description": "[String: Clear, concise description of action that DIRECTLY addresses the SPECIFIC PROBLEM identified in the provided analysis (e.g., 'Investigate network latency between 3scale API Gateway and its backend service with service_id=123', 'Implement a retry mechanism with backoff in 3scale API Gateway for calls to service_id=123').]",
+        "action_steps": ["[List of strings: Specific, actionable steps for THIS recommendation. Max 3-4 steps. E.g., ['Check firewall rules for 3scale API Gateway to backend service_id=123', 'Analyze historical performance metrics for service_id=123'].]"],
+        "relevant_documentation": ["[List of strings: Docs relevant to THIS specific recommendation and error type, e.g., ['3scale API Gateway Timeout Configuration Guide', 'Network Troubleshooting for Backend Services']. Use [] if none.]"],
+        "applicable_to_identifiers": {
+            "session_id": "[String or null: EXACT session_id from input analysis.]",
+            "service_name": "[String or null: EXACT service_name from input analysis (e.g., '3scale API Gateway'). MUST BE THE SERVICE FROM THE ANALYSIS.]",
+            "urc": "[String or null: EXACT URC from input analysis.]"
+        }
     }
-    """
+    schema_description = (
+        f"Schema for EACH object in the 'recommendations' list:\n{json.dumps(recommendation_item_schema, indent=2)}\n"
+    )
+
+    example_json_instruction = (
+        "\nBelow is an EXAMPLE. Populate with ACTUAL data from the input analysis. Recommendations MUST be specific to the error details provided in that analysis.\n"
+    )
+
+    # Define example_json using triple quotes for easier multiline JSON string
+    example_json_content = {
+        "recommendations": [
+            {
+                "recommendation_type": "Immediate Remediation",
+                "recommendation_description": "Investigate connectivity and current load on the backend service (service_id=123) that the '3scale API Gateway' failed to reach within the timeout period.",
+                "action_steps": ["Check logs for backend service (service_id=123) around the time of the incident.", "Verify network path connectivity between '3scale API Gateway' and service_id=123.", "Assess current resource utilization (CPU, memory, network) of service_id=123."],
+                "relevant_documentation": ["Troubleshooting Timeouts for 3scale API Gateway", "Backend Service (service_id=123) Operations Guide"],
+                "applicable_to_identifiers": {
+                    "session_id": "abc123",
+                    "service_name": "3scale API Gateway",
+                    "urc": "root123"
+                }
+            },
+            {
+                "recommendation_type": "Preventive Measure",
+                "recommendation_description": "Consider increasing the timeout configuration for backend service_id=123 within '3scale API Gateway' if legitimate calls are expected to take longer, or implement circuit breaker patterns.",
+                "action_steps": ["Analyze typical response times for service_id=123 to determine an appropriate timeout.", "Update timeout settings in '3scale API Gateway' configuration for this specific backend.", "Explore adding a circuit breaker library to the gateway's interaction with this backend."],
+                "relevant_documentation": ["3scale API Gateway Configuration: Timeouts", "Circuit Breaker Pattern for Microservices"],
+                "applicable_to_identifiers": {
+                    "session_id": "abc123",
+                    "service_name": "3scale API Gateway",
+                    "urc": "root123"
+                }
+            }
+        ]
+    }
+    example_json = f"```json\n{json.dumps(example_json_content, indent=2)}\n```"
+    
+    final_system_message = f"{system_message_intro}\n\n{schema_description}\n{example_json_instruction}\n{example_json}"
+
     return ChatPromptTemplate.from_messages([
-        SystemMessage(content=system_message),
+        SystemMessage(content=final_system_message),
         MessagesPlaceholder(variable_name="messages"),
     ])
 
 # --- Agent and Chain Creation ---
 def create_root_cause_agent(llm: OllamaLLM):
     prompt = create_root_cause_prompt()
-    parser = JsonOutputParser(pydantic_object=LLMRootCauseAnalysis)
-    output_fixing_parser = OutputFixingParser.from_llm(llm=llm, parser=parser)
-    return prompt | llm | output_fixing_parser
+    # Use simple JSON parser without Pydantic validation for better compatibility with Ollama
+    parser = JsonOutputParser()
+    return prompt | llm | parser
 
 def create_recommendation_agent(llm: OllamaLLM):
     prompt = create_recommendation_prompt()
-    parser = JsonOutputParser(pydantic_object=LLMRecommendations)
-    output_fixing_parser = OutputFixingParser.from_llm(llm=llm, parser=parser)
-    return prompt | llm | output_fixing_parser
+    # Use simple JSON parser without Pydantic validation for better compatibility with Ollama
+    parser = JsonOutputParser()
+    return prompt | llm | parser
 
 # --- Log Parsing and Correlation Logic (from log_analysis_agent.py) ---
 def parse_log_line(line: str) -> dict:
@@ -215,18 +291,10 @@ def parse_message_content(message: str, level: str) -> Dict:
         'is_login': False,
         'is_request': False,
         'is_response': False,
-        'session_id': None,
-        'cif_id': None,
-        'urc': None,
-        'uid': None,
-        'transaction_type': None,
-        'api_endpoint': None,
-        'error_type': None,
-        'severity': None,
         'metrics': {}
     }
     
-    # Extract session_id
+    # Only add fields if they are actually present in the message
     session_match = re.search(r'session_id=([^,\s]+)', message)
     if session_match:
         parsed['session_id'] = session_match.group(1)
@@ -240,6 +308,11 @@ def parse_message_content(message: str, level: str) -> Dict:
     uid_match = re.search(r'UID=([^,\s]+)', message)
     if uid_match:
         parsed['uid'] = uid_match.group(1)
+    
+    # Extract other fields only if present
+    cif_match = re.search(r'cif_id=([^,\s]+)', message)
+    if cif_match:
+        parsed['cif_id'] = cif_match.group(1)
     
     # Check for login event
     if 'logged in' in message.lower():
@@ -291,17 +364,9 @@ def parse_message_content(message: str, level: str) -> Dict:
             parsed['severity'] = 'MEDIUM'
     
     # Extract metrics
-    metrics = {}
     duration_match = re.search(r'duration[:\s]+(\d+)', message, re.IGNORECASE)
     if duration_match:
-        metrics['duration_ms'] = int(duration_match.group(1))
-    
-    response_time_match = re.search(r'response_time=(\d+)', message)
-    if response_time_match:
-        metrics['response_time_ms'] = int(response_time_match.group(1))
-    
-    if metrics:
-        parsed['metrics'] = metrics
+        parsed['metrics']['duration_ms'] = int(duration_match.group(1))
     
     return parsed
 
@@ -358,33 +423,94 @@ def build_api_call_tree(entries: List[dict]) -> Dict[str, APICallNode]:
 
     return nodes
 
+def calculate_error_severity(error_message: str, error_type: str = None) -> str:
+    """Calculate the severity level of an error based on its content."""
+    message_lower = error_message.lower()
+    
+    # CRITICAL level indicators
+    critical_indicators = [
+        'database cluster unavailable', 'all nodes down', 'data corruption detected',
+        'emergency fallback failed', 'backup systems offline', 'critical database error',
+        'system failure', 'catastrophic', 'total system', 'complete failure',
+        'service unavailable', 'cluster down', 'infrastructure failure'
+    ]
+    
+    # HIGH level indicators  
+    high_indicators = [
+        'connection pool exhausted', 'database deadlock detected', 'gateway timeout',
+        'upstream service unavailable', 'authentication failed', 'database authentication failed',
+        'status_code=50', 'status_code=503', 'status_code=504', 'status_code=401',
+        'timeout', 'deadlock', 'constraint violation', 'transaction rollback',
+        'resource locked', 'maintenance mode'
+    ]
+    
+    # MEDIUM level indicators
+    medium_indicators = [
+        'status_code=422', 'validation failed', 'missing required fields',
+        'internal server error', 'status_code=400', 'bad request'
+    ]
+    
+    # Check for critical errors first
+    if any(indicator in message_lower for indicator in critical_indicators):
+        return 'CRITICAL'
+    
+    # Check for high severity errors
+    if any(indicator in message_lower for indicator in high_indicators):
+        return 'HIGH'
+        
+    # Check for medium severity errors
+    if any(indicator in message_lower for indicator in medium_indicators):
+        return 'MEDIUM'
+    
+    # Default to LOW for other errors
+    return 'LOW'
+
 def analyze_error_chain(entries: List[dict], chain_scope_id: str) -> Dict:
     """Analyze a chain of errors and their relationships within a defined scope (e.g., session)."""
     error_chain = []
+    severity_levels = []
+    
     for entry in entries:
         if entry.get('log.level', '').upper() in ['ERROR', 'WARN']:
+            message = entry.get('message', '')
+            error_type = entry.get('error_type', 'unknown')
+            
+            # Calculate severity based on error content
+            severity = calculate_error_severity(message, error_type)
+            severity_levels.append(severity)
+            
             error_context = {
                 'timestamp': entry.get('@timestamp'),
                 'level': entry.get('log.level'),
                 'source': entry.get('service.name'),
-                'message': entry.get('message'),
-                'error_type': entry.get('error_type', 'unknown'),
+                'message': message,
+                'error_type': error_type,
                 'urc': entry.get('urc'),
-                'uid': entry.get('uid')
+                'uid': entry.get('uid'),
+                'calculated_severity': severity  # Add calculated severity
             }
             error_chain.append(error_context)
     
+    # Determine overall impact level based on highest severity found
     impact_level = 'LOW'
-    if any(e['level'] == 'HIGH' for e in error_chain):
+    if 'MEDIUM' in severity_levels:
+        impact_level = 'MEDIUM'
+    if 'HIGH' in severity_levels:
         impact_level = 'HIGH'
-    if any(e['level'] == 'CRITICAL' for e in error_chain):
+    if 'CRITICAL' in severity_levels:
         impact_level = 'CRITICAL'
         
     return {
         'session_id': chain_scope_id,
         'errors': error_chain,
         'total_errors': len(error_chain),
-        'impact_level': impact_level
+        'impact_level': impact_level,
+        'severity_breakdown': {
+            'critical': severity_levels.count('CRITICAL'),
+            'high': severity_levels.count('HIGH'),
+            'medium': severity_levels.count('MEDIUM'),
+            'low': severity_levels.count('LOW')
+        }
     }
 
 def find_error_chains(api_tree: Dict[str, APICallNode]) -> List[Dict]:
@@ -468,15 +594,58 @@ def analyze_root_cause(state: AgentState) -> AgentState:
             # The first error in the chain is often the primary trigger
             triggering_error = error_chain['errors'][0]
             
-            input_content = f"""
-            Analyze the following error for root cause.
-            Documentation Context: {' '.join(doc_context)}
-            Error Chain Context: {json.dumps(error_chain, default=str)}
-            EXACT Triggering Error Message: '{triggering_error['message']}'
-            """
+            # Calculate severity for this specific error
+            calculated_severity = calculate_error_severity(triggering_error.get('message', ''), triggering_error.get('error_type', ''))
+            
+            # Prepare detailed input content matching the fine-tuned prompt expectations
+            input_content_parts = [
+                f"Analyze the following specific error event for its root cause. ",
+                f"Focus EXCLUSIVELY on THIS triggering error event and its immediate details. ",
+                f"The 'Full Error Chain' and 'Documentation Context' are for overall context ONLY; your core analysis (problem_description, probable_root_cause_summary) MUST be about THIS specific error.\\n",
+                f"Key Details for THIS error (Your analysis MUST use these exact details):",
+                f"- Session ID: {session_id}",
+                f"- URC of this error event: {triggering_error.get('urc', 'N/A')}",
+                f"- UID of this error event: {triggering_error.get('uid', 'N/A')}",
+                f"- Service where error logged (use this for service_name in output): {triggering_error.get('source', 'unknown')}",
+                f"- Triggering Error Type (use this for descriptions): {triggering_error.get('error_type', 'unknown')}",
+                f"- EXACT Triggering Error Message (this is the primary subject of your analysis): '{triggering_error['message']}'",
+                f"- Calculated Error Severity: {calculated_severity} (Use this to guide the criticality of your analysis)",
+                f"- API Endpoint (if any): {triggering_error.get('api_endpoint', 'N/A')}",
+                f"- Transaction Type (if any): {triggering_error.get('transaction_type', 'N/A')}\\n",
+                f"Full Error Chain for broader context (DO NOT make this the subject of your 'problem_description' or 'probable_root_cause_summary'):",
+                json.dumps(error_chain, indent=2, default=str) + "\\n",
+                f"Documentation Context (for general understanding of error types or components - ONLY use if directly relevant to explaining THIS SPECIFIC error event):",
+                ' '.join(doc_context) + "\\n",
+                f"Instructions for filling the JSON object:",
+                f"1. Populate ALL fields according to schema.",
+                f"2. 'associated_identifiers': This MUST be an object. Populate its sub-fields ('session_id', 'urc', 'uid', 'service_name', 'api_endpoint', 'transaction_type') using relevant values from the \"Key Details for THIS error\" section. If a value is not applicable or available in those key details, it can be omitted or set to null.",
+                f"3. 'key_error_log_messages': MUST be a list with ONE string: the UNMODIFIED 'EXACT Triggering Error Message' (which is '{triggering_error['message']}'). The string itself should not have extra brackets or quotes added around it by you.",
+                f"4. 'problem_description': Describe THE PROBLEM shown by the 'EXACT Triggering Error Message' in the 'Service where error logged'. Be specific to THIS event. If the error indicates system-wide failures (database cluster down, data corruption, emergency fallback failures), emphasize the CRITICAL nature.",
+                f"5. 'probable_root_cause_summary': Explain THE LIKELY CAUSE of the 'EXACT Triggering Error Message' occurring in the 'Service where error logged'. Relate directly to THIS specific message and service. For critical errors (database cluster unavailable, data corruption, emergency fallback failures, connection pool exhausted), provide detailed analysis of the severity and system impact."
+            ]
+            input_content = "\n".join(input_content_parts)
             
             try:
                 raw_analysis = rca_agent.invoke({"messages": [HumanMessage(content=input_content)]})
+                
+                # Handle case where LLM wraps JSON in markdown code blocks
+                if isinstance(raw_analysis, str):
+                    # Remove markdown code blocks if present
+                    if raw_analysis.startswith('```') and raw_analysis.endswith('```'):
+                        lines = raw_analysis.split('\n')
+                        # Remove first and last lines (the ``` markers)
+                        raw_analysis = '\n'.join(lines[1:-1])
+                        # If first line after ``` is 'json', remove it too
+                        if raw_analysis.startswith('json\n'):
+                            raw_analysis = raw_analysis[5:]
+                    
+                    # Try to parse as JSON
+                    try:
+                        raw_analysis = json.loads(raw_analysis)
+                    except json.JSONDecodeError as json_err:
+                        logger.error(f"[{session_id}] Failed to parse LLM JSON output: {json_err}")
+                        logger.error(f"[{session_id}] Raw output: {raw_analysis}")
+                        continue
                 
                 # Add the initial analysis to a structure that will be passed to the recommendation step
                 final_rca_results.append({
@@ -504,14 +673,51 @@ def generate_recommendations(state: AgentState) -> AgentState:
         if not analysis:
             continue
             
-        input_content = f"""
-        Given the following root cause analysis, provide recommendations.
-        Documentation Context: {' '.join(doc_context)}
-        Root Cause Analysis: {json.dumps(analysis, default=str)}
-        """
+        # Get the triggering error details for context
+        triggering_error = rca_item.get("triggering_error", {})
+        
+        # Prepare detailed input content for recommendations
+        recommendation_parts = [
+            f"You are given the following root cause analysis FOR A SINGLE, SPECIFIC TRIGGERING ERROR:\\n",
+            json.dumps(analysis, indent=2, default=str) + "\\n",
+            f"Key context for THIS specific error event (Your recommendations MUST address this specific context):",
+            f"- Original Triggering Error Message: {triggering_error.get('message', 'N/A')}",
+            f"- Original Error Type: {triggering_error.get('error_type', 'unknown')}",
+            f"- Session ID: {session_id}",
+            f"- Service where error logged (recommendations should target this service): {triggering_error.get('source', 'unknown')}\\n",
+            f"Documentation Context (for general understanding - recommendations must be specific to the analyzed error, NOT generic documentation points unless they directly solve THIS specific analyzed error):",
+            ' '.join(doc_context) + "\\n",
+            f"Instructions for generating recommendations JSON:",
+            f"1. Create recommendations that DIRECTLY address the 'problem_description' and 'probable_root_cause_summary' from the provided analysis for the SPECIFIC error (e.g., if analysis says 'Timeout in X due to Y', recommend how to fix Y or handle timeouts in X related to Y).",
+            f"2. Populate ALL fields per schema.",
+            f"3. 'recommendation_description': Must be a direct consequence of the analyzed root cause FOR THIS SPECIFIC ERROR. E.g., if the problem is a timeout in '{triggering_error.get('source', 'unknown')}', recommendations must relate to fixing/handling timeouts in '{triggering_error.get('source', 'unknown')}'.",
+            f"4. 'applicable_to_identifiers': Use EXACT values from the 'Key context' (Session ID: {session_id}, and '{triggering_error.get('source', 'unknown')}' as service_name). URC should be from the analysis if relevant to the recommendation for THIS error.",
+            f"5. Recommendations MUST be specific to the problem outlined in the provided analysis and the 'Key context for this specific error event'. Do not recommend solutions for other problems that might be in the broader documentation or error chain unless they are the direct cause/solution for THIS specific triggering error."
+        ]
+        input_content = "\n".join(recommendation_parts)
 
         try:
             recommendations = rec_agent.invoke({"messages": [HumanMessage(content=input_content)]})
+            
+            # Handle case where LLM wraps JSON in markdown code blocks
+            if isinstance(recommendations, str):
+                # Remove markdown code blocks if present
+                if recommendations.startswith('```') and recommendations.endswith('```'):
+                    lines = recommendations.split('\n')
+                    # Remove first and last lines (the ``` markers)
+                    recommendations = '\n'.join(lines[1:-1])
+                    # If first line after ``` is 'json', remove it too
+                    if recommendations.startswith('json\n'):
+                        recommendations = recommendations[5:]
+                
+                # Try to parse as JSON
+                try:
+                    recommendations = json.loads(recommendations)
+                except json.JSONDecodeError as json_err:
+                    logger.error(f"[{session_id}] Failed to parse recommendations JSON output: {json_err}")
+                    logger.error(f"[{session_id}] Raw recommendations output: {recommendations}")
+                    continue
+            
             rca_item["llm_recommendations"] = recommendations
         except Exception as e:
             logger.error(f"[{session_id}] Error during LLM call for recommendations: {e}")
@@ -541,9 +747,12 @@ def save_analysis_to_json(analysis_results: Dict, output_dir: str = "analysis_ou
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     session_id = analysis_results.get("session_id", "unknown_session")
 
+    # Remove the empty root_causes key from the full analysis
+    clean_analysis = {k: v for k, v in analysis_results.items() if k != "root_causes"}
+
     full_analysis_path = output_path / f"full_analysis_{session_id}_{timestamp}.json"
     with open(full_analysis_path, 'w') as f:
-        json.dump(analysis_results, f, indent=2, default=str)
+        json.dump(clean_analysis, f, indent=2, default=str)
     logger.info(f"Full analysis for session {session_id} saved to {full_analysis_path}")
 
 def save_root_cause_to_json(analysis_results: Dict, output_dir: str = "analysis_output"):
@@ -553,13 +762,81 @@ def save_root_cause_to_json(analysis_results: Dict, output_dir: str = "analysis_
     session_id = analysis_results.get("session_id", "unknown_session")
     
     root_causes = analysis_results.get("root_causes", [])
+    correlations = analysis_results.get("correlations", [])
+    
+    # Only generate root cause analysis if there are actual errors/root causes
     if not root_causes:
-        return
+        # Check if there are any error chains in correlations
+        has_errors = False
+        for correlation in correlations:
+            if correlation.get("error_chains") and any(chain.get("errors") for chain in correlation.get("error_chains", [])):
+                has_errors = True
+                break
+        
+        if not has_errors:
+            logger.info(f"No errors found for session {session_id}, skipping root cause analysis file generation.")
+            return
 
-    root_cause_path = output_path / f"root_cause_analysis_{session_id}_{timestamp}.json"
-    with open(root_cause_path, 'w') as f:
-        json.dump({"session_id": session_id, "timestamp": timestamp, "root_causes": root_causes}, f, indent=2, default=str)
-    logger.info(f"Root cause analysis for session {session_id} saved to {root_cause_path}")
+    # Build the rich root cause analysis structure
+    rich_root_causes = []
+    
+    for root_cause in root_causes:
+        # Extract the triggering error from the root cause data
+        triggering_error = root_cause.get("triggering_error", {})
+        llm_analysis = root_cause.get("llm_initial_analysis", {})
+        llm_recommendations = root_cause.get("llm_recommendations", {})
+        
+        # Find the full error chain context from correlations
+        error_chain_context = None
+        for correlation in correlations:
+            for error_chain in correlation.get("error_chains", []):
+                if error_chain.get("errors"):
+                    # Check if this error chain contains our triggering error
+                    for error in error_chain["errors"]:
+                        if (error.get("message") == triggering_error.get("message") or
+                            error.get("timestamp") == triggering_error.get("timestamp")):
+                            error_chain_context = error_chain
+                            break
+                    if error_chain_context:
+                        break
+            if error_chain_context:
+                break
+        
+        rich_root_cause = {
+            "timestamp": triggering_error.get("timestamp", ""),
+            "triggering_error_message": triggering_error.get("message", ""),
+            "triggering_error_type": triggering_error.get("error_type", "unknown"),
+            "source_service_from_log": triggering_error.get("source", "unknown"),
+            "session_id": session_id,
+            "root_urc_of_session": next((c.get("root_urc") for c in correlations if c.get("session_id") == session_id), "unknown"),
+            "error_specific_urc": triggering_error.get("urc"),
+            "error_specific_uid": triggering_error.get("uid"),
+            "error_specific_api_endpoint": triggering_error.get("api_endpoint"),
+            "error_specific_transaction_type": triggering_error.get("transaction_type"),
+            "overall_chain_impact": error_chain_context.get("impact_level", "UNKNOWN") if error_chain_context else "UNKNOWN",
+            "full_error_chain_details_for_context": error_chain_context or {
+                "session_id": session_id,
+                "errors": [triggering_error] if triggering_error else [],
+                "total_errors": 1 if triggering_error else 0,
+                "impact_level": "UNKNOWN"
+            },
+            "llm_initial_analysis": llm_analysis,
+            "llm_recommendations": llm_recommendations
+        }
+        
+        rich_root_causes.append(rich_root_cause)
+
+    if rich_root_causes:
+        root_cause_path = output_path / f"root_cause_analysis_{session_id}_{timestamp}.json"
+        with open(root_cause_path, 'w') as f:
+            json.dump({
+                "session_id": session_id,
+                "timestamp": timestamp,
+                "root_causes": rich_root_causes
+            }, f, indent=2, default=str)
+        logger.info(f"Root cause analysis for session {session_id} saved to {root_cause_path}")
+    else:
+        logger.info(f"No structured root causes found for session {session_id}, skipping root cause analysis file generation.")
 
 
 # --- Log Fetching ---
@@ -625,18 +902,39 @@ def filter_logs_by_time(raw_logs: Dict[str, List[dict]], start_time: datetime, e
 # --- Main Application Logic ---
 def run_session_analysis(session_id: str, session_logs: Dict[str, List[dict]], app):
     logger.info(f"Starting analysis for session: {session_id}")
+    
+    # Add deduplication logic to prevent duplicate entries
+    deduplicated_logs = {}
+    for source, logs in session_logs.items():
+        seen_entries = set()
+        deduplicated_logs[source] = []
+        for log in logs:
+            # Create a unique key based on timestamp, message, and service
+            unique_key = f"{log.get('@timestamp', '')}-{log.get('message', '')}-{log.get('service.name', '')}"
+            if unique_key not in seen_entries:
+                seen_entries.add(unique_key)
+                deduplicated_logs[source].append(log)
+            else:
+                logger.warning(f"Duplicate entry detected and removed for session {session_id}: {unique_key[:100]}...")
+    
+    # Log the counts for debugging
+    original_count = sum(len(logs) for logs in session_logs.values())
+    deduplicated_count = sum(len(logs) for logs in deduplicated_logs.values())
+    if original_count != deduplicated_count:
+        logger.warning(f"Session {session_id}: Removed {original_count - deduplicated_count} duplicate entries ({original_count} -> {deduplicated_count})")
+    
     config = {"configurable": {"thread_id": session_id}}
     
     # Correlate logs for this session to build the initial state
-    correlations = correlate_logs_for_session(session_logs, session_id)
+    correlations = correlate_logs_for_session(deduplicated_logs, session_id)
     if not correlations:
         logger.warning(f"[{session_id}] No correlations found, ending analysis for this session.")
         return
 
     initial_state = {
         "messages": [],
-        "raw_logs": session_logs,
-        "log_content": {k: "\n".join(e['message'] for e in v) for k, v in session_logs.items()},
+        "raw_logs": deduplicated_logs,
+        "log_content": {k: "\n".join(e['message'] for e in v) for k, v in deduplicated_logs.items()},
         "correlations": correlations, 
         "root_causes": [], 
         "session_id": session_id

@@ -1,15 +1,52 @@
-[2024-03-20 10:17:01] [INFO] payment_service: Processing transfer request URC=root123 transaction_type=transfer
-[2024-03-20 10:17:02] [INFO] payment_service: Transfer request validated UID=root123 transaction_type=transfer
-[2024-03-20 10:17:03] [INFO] payment_service: Debit request initiated URC=child1 UID=root123 transaction_type=debit
-[2024-03-20 10:17:04] [INFO] payment_service: Debit processed UID=child1 transaction_type=debit
-[2024-03-20 10:17:05] [INFO] payment_service: Notification request sent URC=child2 UID=child1 transaction_type=notify
-[2024-03-20 10:17:06] [INFO] payment_service: Notification sent UID=child2 transaction_type=notify
-[2024-03-20 10:17:07] [ERROR] payment_service: Rate limit exceeded URC=child2 transaction_type=notify, severity=CRITICAL
-[2024-03-20 10:17:08] [INFO] payment_service: Audit request sent URC=child3 UID=child2 transaction_type=audit
-[2024-03-20 10:17:09] [INFO] payment_service: Audit completed UID=child3 transaction_type=audit
-[2024-03-20 10:17:10] [WARN] payment_service: High latency detected URC=child2 transaction_type=notify
-[2024-03-20 10:17:10] [WARN] payment_service: Database connection pool exhausted URC=child2 UID=child1, pool_size=100
-[2024-03-20 10:17:11] [ERROR] payment_service: Authentication failed URC=child3 transaction_type=audit, severity=CRITICAL
-[2024-03-20 10:17:15] [ERROR] payment_service: Invalid authentication token URC=req125 transaction_type=transfer, severity=MEDIUM
-[2025-05-26 17:00:04] [INFO] inventory_service: Inventory check received for item_id=ITEMXYZ789, session_id=xyz789, URC=inv_svc_resp_201, UID=inv_check_201, status=available, stock_level=150
-[2025-05-26 17:00:06] [ERROR] user_profile_service: Permission denied while accessing profile for user_id=test_user_2, session_id=xyz789, URC=profile_svc_err_301, UID=profile_req_301, error_code=AUTH_005, message=Access to requested user profile data is forbidden for the current operator. 
+[2024-03-20 10:15:02] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-payment-validation-gbx131-01, UID=urc-payment-req-gbx131-01, transaction_type=validation
+[2024-03-20 10:15:02] [INFO] payment_service: Response sent for /api/v1/validation, URC=urc-payment-validation-gbx131-01, UID=urc-payment-req-gbx131-01, status_code=200, response_time=234ms
+[2024-03-20 10:15:04] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-payment-processing-gbx131-02, UID=urc-payment-req-gbx131-01, transaction_type=processing
+[2024-03-20 10:15:04] [ERROR] payment_service: Response sent for /api/v1/processing, URC=urc-payment-processing-gbx131-02, UID=urc-payment-req-gbx131-01, status_code=503, response_time=2145ms, error_details=Database connection timeout
+[2024-03-20 10:15:07] [INFO] payment_service: Request received for /api/v1/cleanup, URC=urc-payment-cleanup-gbx131-01, UID=urc-payment-req-gbx131-01, transaction_type=cleanup
+[2024-03-20 10:15:07] [WARN] payment_service: Response sent for /api/v1/cleanup, URC=urc-payment-cleanup-gbx131-01, UID=urc-payment-req-gbx131-01, status_code=202, response_time=156ms, warning=Partial cleanup completed
+[2024-03-20 10:15:08] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-order-validation-gbx131-03, UID=urc-order-req-gbx131-02, transaction_type=validation
+[2024-03-20 10:15:08] [INFO] payment_service: Response sent for /api/v1/validation, URC=urc-order-validation-gbx131-03, UID=urc-order-req-gbx131-02, status_code=200, response_time=189ms
+[2024-03-20 10:15:10] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-order-processing-gbx131-04, UID=urc-order-req-gbx131-02, transaction_type=processing
+[2024-03-20 10:15:10] [INFO] payment_service: Response sent for /api/v1/processing, URC=urc-order-processing-gbx131-04, UID=urc-order-req-gbx131-02, status_code=200, response_time=445ms
+[2024-03-20 10:15:12] [INFO] payment_service: Request received for /api/v1/database, URC=urc-order-processing-db-gbx131-05, UID=urc-order-processing-gbx131-04, transaction_type=database_operation
+[2024-03-20 10:15:12] [ERROR] payment_service: Response sent for /api/v1/database, URC=urc-order-processing-db-gbx131-05, UID=urc-order-processing-gbx131-04, status_code=500, response_time=3245ms, error_details=Database deadlock detected
+[2024-03-20 10:15:17] [INFO] payment_service: Request received for /api/v1/cleanup, URC=urc-order-cleanup-gbx131-01, UID=urc-order-req-gbx131-02, transaction_type=cleanup
+[2024-03-20 10:15:17] [INFO] payment_service: Response sent for /api/v1/cleanup, URC=urc-order-cleanup-gbx131-01, UID=urc-order-req-gbx131-02, status_code=200, response_time=123ms
+
+[2024-03-20 10:25:02] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-payment-validation-nwj331-01, UID=urc-payment-req-nwj331-01, transaction_type=validation
+[2024-03-20 10:25:02] [ERROR] payment_service: Response sent for /api/v1/validation, URC=urc-payment-validation-nwj331-01, UID=urc-payment-req-nwj331-01, status_code=401, response_time=234ms, error_details=Authentication token expired
+[2024-03-20 10:25:04] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-payment-processing-nwj331-02, UID=urc-payment-req-nwj331-01, transaction_type=processing
+[2024-03-20 10:25:04] [ERROR] payment_service: Response sent for /api/v1/processing, URC=urc-payment-processing-nwj331-02, UID=urc-payment-req-nwj331-01, status_code=403, response_time=145ms, error_details=Insufficient permissions
+[2024-03-20 10:25:07] [INFO] payment_service: Request received for /api/v1/cleanup, URC=urc-payment-cleanup-nwj331-01, UID=urc-payment-req-nwj331-01, transaction_type=cleanup
+[2024-03-20 10:25:07] [INFO] payment_service: Response sent for /api/v1/cleanup, URC=urc-payment-cleanup-nwj331-01, UID=urc-payment-req-nwj331-01, status_code=200, response_time=156ms
+
+[2024-03-20 10:35:02] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-payment-validation-iym306-01, UID=urc-payment-req-iym306-01, transaction_type=validation
+[2024-03-20 10:35:02] [INFO] payment_service: Response sent for /api/v1/validation, URC=urc-payment-validation-iym306-01, UID=urc-payment-req-iym306-01, status_code=200, response_time=234ms
+[2024-03-20 10:35:04] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-payment-processing-iym306-02, UID=urc-payment-req-iym306-01, transaction_type=processing
+[2024-03-20 10:35:04] [INFO] payment_service: Response sent for /api/v1/processing, URC=urc-payment-processing-iym306-02, UID=urc-payment-req-iym306-01, status_code=200, response_time=445ms
+[2024-03-20 10:35:07] [INFO] payment_service: Request received for /api/v1/cleanup, URC=urc-payment-cleanup-iym306-01, UID=urc-payment-req-iym306-01, transaction_type=cleanup
+[2024-03-20 10:35:07] [INFO] payment_service: Response sent for /api/v1/cleanup, URC=urc-payment-cleanup-iym306-01, UID=urc-payment-req-iym306-01, status_code=200, response_time=156ms
+[2024-03-20 10:35:08] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-order-validation-iym306-03, UID=urc-order-req-iym306-02, transaction_type=validation
+[2024-03-20 10:35:08] [ERROR] payment_service: Response sent for /api/v1/validation, URC=urc-order-validation-iym306-03, UID=urc-order-req-iym306-02, status_code=422, response_time=189ms, error_details=Invalid request format
+[2024-03-20 10:35:10] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-order-processing-iym306-04, UID=urc-order-req-iym306-02, transaction_type=processing
+[2024-03-20 10:35:10] [ERROR] payment_service: Response sent for /api/v1/processing, URC=urc-order-processing-iym306-04, UID=urc-order-req-iym306-02, status_code=500, response_time=445ms, error_details=Internal server error
+
+[2024-03-20 10:45:02] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-payment-validation-vcw023-01, UID=urc-payment-req-vcw023-01, transaction_type=validation
+[2024-03-20 10:45:02] [INFO] payment_service: Response sent for /api/v1/validation, URC=urc-payment-validation-vcw023-01, UID=urc-payment-req-vcw023-01, status_code=200, response_time=234ms
+[2024-03-20 10:45:04] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-payment-processing-vcw023-02, UID=urc-payment-req-vcw023-01, transaction_type=processing
+[2024-03-20 10:45:04] [INFO] payment_service: Response sent for /api/v1/processing, URC=urc-payment-processing-vcw023-02, UID=urc-payment-req-vcw023-01, status_code=200, response_time=445ms
+[2024-03-20 10:45:07] [INFO] payment_service: Request received for /api/v1/cleanup, URC=urc-payment-cleanup-vcw023-01, UID=urc-payment-req-vcw023-01, transaction_type=cleanup
+[2024-03-20 10:45:07] [INFO] payment_service: Response sent for /api/v1/cleanup, URC=urc-payment-cleanup-vcw023-01, UID=urc-payment-req-vcw023-01, status_code=200, response_time=156ms
+
+[2024-03-20 10:55:02] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-payment-validation-rlt509-01, UID=urc-payment-req-rlt509-01, transaction_type=validation
+[2024-03-20 10:55:02] [INFO] payment_service: Response sent for /api/v1/validation, URC=urc-payment-validation-rlt509-01, UID=urc-payment-req-rlt509-01, status_code=200, response_time=234ms
+[2024-03-20 10:55:04] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-payment-processing-rlt509-02, UID=urc-payment-req-rlt509-01, transaction_type=processing
+[2024-03-20 10:55:04] [INFO] payment_service: Response sent for /api/v1/processing, URC=urc-payment-processing-rlt509-02, UID=urc-payment-req-rlt509-01, status_code=200, response_time=445ms
+[2024-03-20 10:55:07] [INFO] payment_service: Request received for /api/v1/cleanup, URC=urc-payment-cleanup-rlt509-01, UID=urc-payment-req-rlt509-01, transaction_type=cleanup
+[2024-03-20 10:55:07] [ERROR] payment_service: Response sent for /api/v1/cleanup, URC=urc-payment-cleanup-rlt509-01, UID=urc-payment-req-rlt509-01, status_code=500, response_time=2156ms, error_details=Cleanup operation failed - resource locked
+[2024-03-20 10:55:08] [INFO] payment_service: Request received for /api/v1/validation, URC=urc-order-validation-rlt509-03, UID=urc-order-req-rlt509-02, transaction_type=validation
+[2024-03-20 10:55:08] [INFO] payment_service: Response sent for /api/v1/validation, URC=urc-order-validation-rlt509-03, UID=urc-order-req-rlt509-02, status_code=200, response_time=189ms
+[2024-03-20 10:55:10] [INFO] payment_service: Request received for /api/v1/processing, URC=urc-order-processing-rlt509-04, UID=urc-order-req-rlt509-02, transaction_type=processing
+[2024-03-20 10:55:10] [ERROR] payment_service: Response sent for /api/v1/processing, URC=urc-order-processing-rlt509-04, UID=urc-order-req-rlt509-02, status_code=504, response_time=5445ms, error_details=Gateway timeout - upstream service unavailable
+[2024-03-20 10:55:12] [INFO] payment_service: Request received for /api/v1/database, URC=urc-order-processing-db-rlt509-05, UID=urc-order-processing-rlt509-04, transaction_type=database_operation
+[2024-03-20 10:55:12] [ERROR] payment_service: Response sent for /api/v1/database, URC=urc-order-processing-db-rlt509-05, UID=urc-order-processing-rlt509-04, status_code=500, response_time=1245ms, error_details=Connection pool exhausted
