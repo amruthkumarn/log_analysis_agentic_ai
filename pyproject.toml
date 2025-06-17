@@ -1,21 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "langgraph-ai-agents"
+name = "log-analyzer"
 version = "0.1.0"
-description = "Add your description here"
+description = "A log analysis system using LangGraph and AI agents"
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "ipykernel>=6.29.5",
-    "langchain[anthropic]>=0.3.25",
-    "langgraph>=0.4.3",
-    "python-dotenv>=1.1.0",
-    "langchain-community>=0.0.10",
-    "langchain-core>=0.1.10",
-    "langchain-ollama>=0.0.1",
-    "chromadb>=0.4.22",
-    "pydantic>=2.5.2",
-    "typing-extensions>=4.8.0",
-    "PyPDF2>=3.0.0",
-    "faiss-cpu>=1.7.4",
-    "elasticsearch~=8.14.0",
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
 ]
+dependencies = [
+    "langchain>=0.1.0",
+    "langgraph>=0.0.10",
+    "redis>=5.0.0",
+    "elasticsearch>=8.0.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+log-analyzer = "log_analyzer.scripts.run_analysis:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"

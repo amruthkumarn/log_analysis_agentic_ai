@@ -60,7 +60,7 @@ echo "   Log Files: $LOG_FILES"
 echo ""
 
 # Check if Docker Compose is running
-if ! docker-compose ps | grep -q "log-analyzer.*Up"; then
+if ! docker-compose -f config/docker-compose.yml ps | grep -q "log-analyzer.*Up"; then
     echo "❌ Error: log-analyzer container is not running"
     echo "Please start the services first: docker-compose up -d"
     exit 1
@@ -68,7 +68,7 @@ fi
 
 # Check if Elasticsearch is healthy
 echo "🔍 Checking Elasticsearch health..."
-if ! docker-compose exec elasticsearch curl -s http://localhost:9200/_cluster/health > /dev/null 2>&1; then
+if ! docker-compose -f config/docker-compose.yml exec elasticsearch curl -s http://localhost:9200/_cluster/health > /dev/null 2>&1; then
     echo "❌ Error: Elasticsearch is not responding"
     echo "Please ensure Elasticsearch is running and healthy"
     exit 1
@@ -84,7 +84,7 @@ echo "   Target Index: $ELK_INDEX"
 # Convert space-separated files to array for proper argument passing
 IFS=' ' read -ra FILE_ARRAY <<< "$LOG_FILES"
 
-docker-compose exec log-analyzer python src/load_logs_to_elk.py \
+docker-compose -f config/docker-compose.yml exec log-analyzer python src/log_analyzer/utils/load_logs_to_elk.py \
     --elk-host "$ELK_HOST" \
     --elk-index "$ELK_INDEX" \
     --log-files "${FILE_ARRAY[@]}"

@@ -21,7 +21,7 @@ import uuid
 import threading
 import time
 from langchain_core.output_parsers import JsonOutputParser
-from .redis_client import get_redis_url
+from ..utils.redis_client import get_redis_url
 
 # --- Setup ---
 def get_project_root() -> Path:
@@ -989,6 +989,15 @@ def main(args: argparse.Namespace):
 
         logger.info(f"Grouped logs into {len(combined_sessions)} sessions.")
         
+        # Filter to specific session if requested
+        if hasattr(args, 'session_id') and args.session_id:
+            if args.session_id in combined_sessions:
+                combined_sessions = {args.session_id: combined_sessions[args.session_id]}
+                logger.info(f"Filtered to session {args.session_id}")
+            else:
+                logger.error(f"Session {args.session_id} not found. Available sessions: {list(combined_sessions.keys())}")
+                return
+        
         threads = []
         for session_id, session_logs in combined_sessions.items():
             # The session_logs from ELK are already in the right format.
@@ -1009,6 +1018,9 @@ if __name__ == '__main__':
     source_group = parser.add_mutually_exclusive_group(required=True)
     source_group.add_argument('--log-files', type=str, nargs='+', help='Paths to log files.')
     source_group.add_argument('--elk-index', type=str, help='Elasticsearch index name.')
+
+    # Session filtering
+    parser.add_argument('--session-id', type=str, help='Analyze only this specific session ID.')
 
     time_group = parser.add_argument_group('Time Filtering')
     time_group.add_argument('--start-time', type=datetime.fromisoformat, help='Start time (YYYY-MM-DDTHH:MM:SS).')

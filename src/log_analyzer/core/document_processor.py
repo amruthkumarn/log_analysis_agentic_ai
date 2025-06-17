@@ -6,7 +6,7 @@ from langchain_core.documents import Document
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
-from .redis_client import get_redis_client, get_redis_url
+from ..utils.redis_client import get_redis_client, get_redis_url
 
 def get_embeddings():
     """Initializes and returns the Ollama embeddings."""

@@ -9,19 +9,8 @@ import os
 import sys
 from datetime import datetime
 
-# Add the src directory to the path so we can import our modules
-src_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.dirname(src_dir)
-sys.path.insert(0, src_dir)
-sys.path.insert(0, project_root)
-
 # Import the main analysis function
-try:
-    from redis_log_analysis_agent import main as run_analysis_main
-except ImportError:
-    # Fallback for different import scenarios
-    import redis_log_analysis_agent
-    run_analysis_main = redis_log_analysis_agent.main
+from log_analyzer.core.redis_log_analysis_agent import main as run_analysis_main
 
 def main():
     """Main entry point for the analysis script."""
@@ -31,6 +20,9 @@ def main():
     source_group = parser.add_mutually_exclusive_group(required=True)
     source_group.add_argument('--log-files', type=str, nargs='+', help='Paths to log files.')
     source_group.add_argument('--elk-index', type=str, help='Elasticsearch index name.')
+
+    # Session filtering
+    parser.add_argument('--session-id', type=str, help='Analyze only this specific session ID.')
 
     # Time filtering
     time_group = parser.add_argument_group('Time Filtering')
@@ -56,6 +48,9 @@ def main():
     
     print("🚀 Starting Log Analysis...")
     print(f"📊 Source: {'ELK Index: ' + args.elk_index if args.elk_index else 'Log Files: ' + ', '.join(args.log_files)}")
+    
+    if args.session_id:
+        print(f"🔍 Filtering to session: {args.session_id}")
     
     if args.start_time:
         print(f"⏰ Time Range: {args.start_time} to {args.end_time or 'now'}")

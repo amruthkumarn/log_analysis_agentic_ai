@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - elk
+    healthcheck:
+      test: ["CMD", "ollama", "ps"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  log-analyzer:
+    build:
+      context: ..
+      dockerfile: config/Dockerfile
+    container_name: log-analyzer
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - REDIS_HOST=redis
+      - LOG_LEVEL=INFO
+      - DOCKER_CONTAINER=true
+    volumes:
+      - ../logs:/app/logs
+      - ../analysis_output:/app/analysis_output
+      - ../docs:/app/docs
+    networks:
+      - elk
+      - redis
+    command: ["/bin/sh", "-c", "tail -f /dev/null"]
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - redis
+    command: redis-server --appendonly yes
+
+networks:
+  elk:
+    external: true
+  redis:
+    external: true
+
+volumes:
+  es_data:
+  redis_data:
+  ollama_data:
+    driver: local

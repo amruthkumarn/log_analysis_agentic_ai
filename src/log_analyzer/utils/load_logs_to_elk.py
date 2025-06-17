@@ -168,22 +168,30 @@ def main(args):
     create_index(es_client, args.elk_index)
 
     actions = []
-    for log_file_path in args.log_files:
+    for log_file in args.log_files:
+        # In the Docker container, the logs are in /app/logs
+        if not os.path.isabs(log_file) and os.getenv("DOCKER_CONTAINER"):
+            log_file_path = os.path.join("/app", log_file)
+        else:
+            log_file_path = log_file
+
         if not os.path.exists(log_file_path):
-            logging.warning(f"Log file not found: {log_file_path}. Skipping.")
+            logging.warning("Log file not found: %s. Skipping.", log_file_path)
             continue
         
-        logging.info(f"Processing log file: {log_file_path}")
-        with open(log_file_path, 'r') as f:
-            for line in f:
-                parsed_log = parse_log_line(line.strip())
-                if parsed_log:
-                    action = {
-                        "_op_type": "index",
-                        "_index": args.elk_index,
-                        "_source": parsed_log
-                    }
-                    actions.append(action)
+        try:
+            with open(log_file_path, 'r') as f:
+                for line in f:
+                    parsed_log = parse_log_line(line.strip())
+                    if parsed_log:
+                        action = {
+                            "_op_type": "index",
+                            "_index": args.elk_index,
+                            "_source": parsed_log
+                        }
+                        actions.append(action)
+        except IOError as e:
+            logging.error("Error reading log file %s: %s", log_file_path, e)
 
     if actions:
         logging.info(f"Bulk indexing {len(actions)} documents...")
