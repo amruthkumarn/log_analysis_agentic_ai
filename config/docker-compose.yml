@@ -64,6 +64,8 @@ services:
     volumes:
       - ../logs:/app/logs
       - ../analysis_output:/app/analysis_output
+      - ../custom_analysis_output:/app/custom_analysis_output
+      - ../my_custom_results:/app/my_custom_results
       - ../docs:/app/docs
     networks:
       - elk
