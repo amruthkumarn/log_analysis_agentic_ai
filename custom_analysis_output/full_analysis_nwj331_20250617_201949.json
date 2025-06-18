@@ -1,0 +1,580 @@
+{
+  "messages": [],
+  "raw_logs": {
+    "file": [],
+    "elk": [
+      {
+        "@timestamp": "2024-03-20T10:25:00Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "User 'user_9878' logged in session_id=nwj331 cif_id=238727 URC=urc-root-nwj331 response_time=228ms",
+        "is_login": true,
+        "is_request": false,
+        "is_response": false,
+        "metrics": {},
+        "session_id": "nwj331",
+        "urc": "urc-root-nwj331",
+        "cif_id": "238727",
+        "parsed_message": {
+          "is_login": true,
+          "is_request": false,
+          "is_response": false,
+          "metrics": {},
+          "session_id": "nwj331",
+          "urc": "urc-root-nwj331",
+          "cif_id": "238727"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:01Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "Response sent for /api/v1/audit, URC=urc-payment-req-nwj331-01, UID=urc-root-nwj331, status_code=200, response_time=324ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-payment-req-nwj331-01",
+        "session_id": "nwj331",
+        "uid": "urc-root-nwj331",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-payment-req-nwj331-01",
+          "uid": "urc-root-nwj331"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:02Z",
+        "log.level": "INFO",
+        "service.name": "payment_service",
+        "message": "Request received for /api/v1/validation, URC=urc-payment-validation-nwj331-01, UID=urc-payment-req-nwj331-01, transaction_type=validation",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-payment-validation-nwj331-01",
+        "session_id": "nwj331",
+        "uid": "urc-payment-req-nwj331-01",
+        "transaction_type": "validation",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-payment-validation-nwj331-01",
+          "uid": "urc-payment-req-nwj331-01",
+          "transaction_type": "validation"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:02Z",
+        "log.level": "ERROR",
+        "service.name": "payment_service",
+        "message": "Response sent for /api/v1/validation, URC=urc-payment-validation-nwj331-01, UID=urc-payment-req-nwj331-01, status_code=401, response_time=234ms, error_details=Authentication token expired",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-payment-validation-nwj331-01",
+        "session_id": "nwj331",
+        "uid": "urc-payment-req-nwj331-01",
+        "error_type": "authentication",
+        "severity": "HIGH",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-payment-validation-nwj331-01",
+          "uid": "urc-payment-req-nwj331-01",
+          "error_type": "authentication",
+          "severity": "HIGH"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:03Z",
+        "log.level": "INFO",
+        "service.name": "api_gateway",
+        "message": "Request received for /api/v1/audit, URC=urc-payment-req-nwj331-01, UID=urc-root-nwj331, transaction_type=payment",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-payment-req-nwj331-01",
+        "session_id": "nwj331",
+        "uid": "urc-root-nwj331",
+        "transaction_type": "payment",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-payment-req-nwj331-01",
+          "uid": "urc-root-nwj331",
+          "transaction_type": "payment"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:03Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Request received for /api/v1/inventory, URC=urc-order-req-nwj331-02, UID=urc-root-nwj331, transaction_type=refund",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-order-req-nwj331-02",
+        "session_id": "nwj331",
+        "uid": "urc-root-nwj331",
+        "transaction_type": "refund",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-order-req-nwj331-02",
+          "uid": "urc-root-nwj331",
+          "transaction_type": "refund"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:03Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Response sent for /api/v1/inventory, URC=urc-order-req-nwj331-02, UID=urc-root-nwj331, status_code=200, response_time=563ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-order-req-nwj331-02",
+        "session_id": "nwj331",
+        "uid": "urc-root-nwj331",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-order-req-nwj331-02",
+          "uid": "urc-root-nwj331"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:04Z",
+        "log.level": "INFO",
+        "service.name": "payment_service",
+        "message": "Request received for /api/v1/processing, URC=urc-payment-processing-nwj331-02, UID=urc-payment-req-nwj331-01, transaction_type=processing",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-payment-processing-nwj331-02",
+        "session_id": "nwj331",
+        "uid": "urc-payment-req-nwj331-01",
+        "transaction_type": "processing",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-payment-processing-nwj331-02",
+          "uid": "urc-payment-req-nwj331-01",
+          "transaction_type": "processing"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:04Z",
+        "log.level": "ERROR",
+        "service.name": "payment_service",
+        "message": "Response sent for /api/v1/processing, URC=urc-payment-processing-nwj331-02, UID=urc-payment-req-nwj331-01, status_code=403, response_time=145ms, error_details=Insufficient permissions",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-payment-processing-nwj331-02",
+        "session_id": "nwj331",
+        "uid": "urc-payment-req-nwj331-01",
+        "error_type": "system",
+        "severity": "HIGH",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-payment-processing-nwj331-02",
+          "uid": "urc-payment-req-nwj331-01",
+          "error_type": "system",
+          "severity": "HIGH"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:05Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Request received for /api/v1/profile, URC=urc-profile-req-nwj331-03, UID=urc-root-nwj331, transaction_type=debit",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-profile-req-nwj331-03",
+        "session_id": "nwj331",
+        "uid": "urc-root-nwj331",
+        "transaction_type": "debit",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-profile-req-nwj331-03",
+          "uid": "urc-root-nwj331",
+          "transaction_type": "debit"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:06Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Response sent for /api/v1/profile, URC=urc-profile-req-nwj331-03, UID=urc-root-nwj331, status_code=200, response_time=699ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-profile-req-nwj331-03",
+        "session_id": "nwj331",
+        "uid": "urc-root-nwj331",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-profile-req-nwj331-03",
+          "uid": "urc-root-nwj331"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:07Z",
+        "log.level": "INFO",
+        "service.name": "payment_service",
+        "message": "Request received for /api/v1/cleanup, URC=urc-payment-cleanup-nwj331-01, UID=urc-payment-req-nwj331-01, transaction_type=cleanup",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-payment-cleanup-nwj331-01",
+        "session_id": "nwj331",
+        "uid": "urc-payment-req-nwj331-01",
+        "transaction_type": "cleanup",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-payment-cleanup-nwj331-01",
+          "uid": "urc-payment-req-nwj331-01",
+          "transaction_type": "cleanup"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:07Z",
+        "log.level": "INFO",
+        "service.name": "payment_service",
+        "message": "Response sent for /api/v1/cleanup, URC=urc-payment-cleanup-nwj331-01, UID=urc-payment-req-nwj331-01, status_code=200, response_time=156ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-payment-cleanup-nwj331-01",
+        "session_id": "nwj331",
+        "uid": "urc-payment-req-nwj331-01",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-payment-cleanup-nwj331-01",
+          "uid": "urc-payment-req-nwj331-01"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:13Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Request received for /api/v2/payments, URC=urc-profile-validation-nwj331-04, UID=urc-profile-req-nwj331-03, transaction_type=validation",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-profile-validation-nwj331-04",
+        "session_id": "nwj331",
+        "uid": "urc-profile-req-nwj331-03",
+        "transaction_type": "validation",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-profile-validation-nwj331-04",
+          "uid": "urc-profile-req-nwj331-03",
+          "transaction_type": "validation"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:13Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Response sent for /api/v2/payments, URC=urc-profile-validation-nwj331-04, UID=urc-profile-req-nwj331-03, status_code=400, response_time=1033ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-profile-validation-nwj331-04",
+        "session_id": "nwj331",
+        "uid": "urc-profile-req-nwj331-03",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-profile-validation-nwj331-04",
+          "uid": "urc-profile-req-nwj331-03"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:15Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Request received for /api/v2/orders, URC=urc-profile-processing-nwj331-05, UID=urc-profile-req-nwj331-03, transaction_type=transfer",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-profile-processing-nwj331-05",
+        "session_id": "nwj331",
+        "uid": "urc-profile-req-nwj331-03",
+        "transaction_type": "transfer",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-profile-processing-nwj331-05",
+          "uid": "urc-profile-req-nwj331-03",
+          "transaction_type": "transfer"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:15Z",
+        "log.level": "INFO",
+        "service.name": "3scale API Gateway",
+        "message": "Response sent for /api/v2/orders, URC=urc-profile-processing-nwj331-05, UID=urc-profile-req-nwj331-03, status_code=500, response_time=835ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-profile-processing-nwj331-05",
+        "session_id": "nwj331",
+        "uid": "urc-profile-req-nwj331-03",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-profile-processing-nwj331-05",
+          "uid": "urc-profile-req-nwj331-03"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:25Z",
+        "log.level": "INFO",
+        "service.name": "tibco_businessworks",
+        "message": "Request received for /api/v1/validation, URC=urc-order-validation-db-nwj331-03, UID=urc-order-validation-nwj331-03, transaction_type=database_check",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-order-validation-db-nwj331-03",
+        "uid": "urc-order-validation-nwj331-03",
+        "session_id": "nwj331",
+        "transaction_type": "database_check",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-order-validation-db-nwj331-03",
+          "uid": "urc-order-validation-nwj331-03",
+          "transaction_type": "database_check"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:25Z",
+        "log.level": "INFO",
+        "service.name": "tibco_businessworks",
+        "message": "Response sent for /api/v1/validation, URC=urc-order-validation-db-nwj331-03, UID=urc-order-validation-nwj331-03, status_code=200, response_time=445ms",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-order-validation-db-nwj331-03",
+        "uid": "urc-order-validation-nwj331-03",
+        "session_id": "nwj331",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-order-validation-db-nwj331-03",
+          "uid": "urc-order-validation-nwj331-03"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:26Z",
+        "log.level": "INFO",
+        "service.name": "tibco_businessworks",
+        "message": "Request received for /api/v1/database, URC=urc-profile-processing-db-nwj331-06, UID=urc-profile-processing-nwj331-05, transaction_type=database_operation",
+        "is_login": false,
+        "is_request": true,
+        "is_response": false,
+        "metrics": {},
+        "urc": "urc-profile-processing-db-nwj331-06",
+        "uid": "urc-profile-processing-nwj331-05",
+        "session_id": "nwj331",
+        "transaction_type": "database_operation",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": true,
+          "is_response": false,
+          "metrics": {},
+          "urc": "urc-profile-processing-db-nwj331-06",
+          "uid": "urc-profile-processing-nwj331-05",
+          "transaction_type": "database_operation"
+        }
+      },
+      {
+        "@timestamp": "2024-03-20T10:25:26Z",
+        "log.level": "ERROR",
+        "service.name": "tibco_businessworks",
+        "message": "Response sent for /api/v1/database, URC=urc-profile-processing-db-nwj331-06, UID=urc-profile-processing-nwj331-05, status_code=401, response_time=567ms, error_details=Database authentication failed - invalid credentials",
+        "is_login": false,
+        "is_request": false,
+        "is_response": true,
+        "metrics": {},
+        "urc": "urc-profile-processing-db-nwj331-06",
+        "uid": "urc-profile-processing-nwj331-05",
+        "session_id": "nwj331",
+        "error_type": "authentication",
+        "severity": "HIGH",
+        "parsed_message": {
+          "is_login": false,
+          "is_request": false,
+          "is_response": true,
+          "metrics": {},
+          "urc": "urc-profile-processing-db-nwj331-06",
+          "uid": "urc-profile-processing-nwj331-05",
+          "error_type": "authentication",
+          "severity": "HIGH"
+        }
+      }
+    ]
+  },
+  "log_content": {
+    "file": "",
+    "elk": "User 'user_9878' logged in session_id=nwj331 cif_id=238727 URC=urc-root-nwj331 response_time=228ms\nResponse sent for /api/v1/audit, URC=urc-payment-req-nwj331-01, UID=urc-root-nwj331, status_code=200, response_time=324ms\nRequest received for /api/v1/validation, URC=urc-payment-validation-nwj331-01, UID=urc-payment-req-nwj331-01, transaction_type=validation\nResponse sent for /api/v1/validation, URC=urc-payment-validation-nwj331-01, UID=urc-payment-req-nwj331-01, status_code=401, response_time=234ms, error_details=Authentication token expired\nRequest received for /api/v1/audit, URC=urc-payment-req-nwj331-01, UID=urc-root-nwj331, transaction_type=payment\nRequest received for /api/v1/inventory, URC=urc-order-req-nwj331-02, UID=urc-root-nwj331, transaction_type=refund\nResponse sent for /api/v1/inventory, URC=urc-order-req-nwj331-02, UID=urc-root-nwj331, status_code=200, response_time=563ms\nRequest received for /api/v1/processing, URC=urc-payment-processing-nwj331-02, UID=urc-payment-req-nwj331-01, transaction_type=processing\nResponse sent for /api/v1/processing, URC=urc-payment-processing-nwj331-02, UID=urc-payment-req-nwj331-01, status_code=403, response_time=145ms, error_details=Insufficient permissions\nRequest received for /api/v1/profile, URC=urc-profile-req-nwj331-03, UID=urc-root-nwj331, transaction_type=debit\nResponse sent for /api/v1/profile, URC=urc-profile-req-nwj331-03, UID=urc-root-nwj331, status_code=200, response_time=699ms\nRequest received for /api/v1/cleanup, URC=urc-payment-cleanup-nwj331-01, UID=urc-payment-req-nwj331-01, transaction_type=cleanup\nResponse sent for /api/v1/cleanup, URC=urc-payment-cleanup-nwj331-01, UID=urc-payment-req-nwj331-01, status_code=200, response_time=156ms\nRequest received for /api/v2/payments, URC=urc-profile-validation-nwj331-04, UID=urc-profile-req-nwj331-03, transaction_type=validation\nResponse sent for /api/v2/payments, URC=urc-profile-validation-nwj331-04, UID=urc-profile-req-nwj331-03, status_code=400, response_time=1033ms\nRequest received for /api/v2/orders, URC=urc-profile-processing-nwj331-05, UID=urc-profile-req-nwj331-03, transaction_type=transfer\nResponse sent for /api/v2/orders, URC=urc-profile-processing-nwj331-05, UID=urc-profile-req-nwj331-03, status_code=500, response_time=835ms\nRequest received for /api/v1/validation, URC=urc-order-validation-db-nwj331-03, UID=urc-order-validation-nwj331-03, transaction_type=database_check\nResponse sent for /api/v1/validation, URC=urc-order-validation-db-nwj331-03, UID=urc-order-validation-nwj331-03, status_code=200, response_time=445ms\nRequest received for /api/v1/database, URC=urc-profile-processing-db-nwj331-06, UID=urc-profile-processing-nwj331-05, transaction_type=database_operation\nResponse sent for /api/v1/database, URC=urc-profile-processing-db-nwj331-06, UID=urc-profile-processing-nwj331-05, status_code=401, response_time=567ms, error_details=Database authentication failed - invalid credentials"
+  },
+  "correlations": [
+    {
+      "session_id": "nwj331",
+      "root_urc": "urc-root-nwj331",
+      "api_calls": [
+        {
+          "urc": "urc-root-nwj331",
+          "children": [
+            "urc-payment-req-nwj331-01",
+            "urc-order-req-nwj331-02",
+            "urc-profile-req-nwj331-03"
+          ],
+          "level": 0
+        },
+        {
+          "urc": "urc-payment-req-nwj331-01",
+          "children": [
+            "urc-payment-processing-nwj331-02",
+            "urc-payment-cleanup-nwj331-01"
+          ],
+          "level": 1
+        },
+        {
+          "urc": "urc-order-req-nwj331-02",
+          "children": [],
+          "level": 1
+        },
+        {
+          "urc": "urc-payment-processing-nwj331-02",
+          "children": [],
+          "level": 2
+        },
+        {
+          "urc": "urc-profile-req-nwj331-03",
+          "children": [
+            "urc-profile-validation-nwj331-04",
+            "urc-profile-processing-nwj331-05"
+          ],
+          "level": 1
+        },
+        {
+          "urc": "urc-payment-cleanup-nwj331-01",
+          "children": [],
+          "level": 2
+        },
+        {
+          "urc": "urc-profile-validation-nwj331-04",
+          "children": [],
+          "level": 2
+        },
+        {
+          "urc": "urc-profile-processing-nwj331-05",
+          "children": [
+            "urc-profile-processing-db-nwj331-06"
+          ],
+          "level": 2
+        },
+        {
+          "urc": "urc-profile-processing-db-nwj331-06",
+          "children": [],
+          "level": 3
+        }
+      ],
+      "error_chains": [
+        {
+          "session_id": "nwj331",
+          "errors": [
+            {
+              "timestamp": "2024-03-20T10:25:26Z",
+              "level": "ERROR",
+              "source": "tibco_businessworks",
+              "message": "Response sent for /api/v1/database, URC=urc-profile-processing-db-nwj331-06, UID=urc-profile-processing-nwj331-05, status_code=401, response_time=567ms, error_details=Database authentication failed - invalid credentials",
+              "error_type": "authentication",
+              "urc": "urc-profile-processing-db-nwj331-06",
+              "uid": "urc-profile-processing-nwj331-05",
+              "calculated_severity": "HIGH"
+            }
+          ],
+          "total_errors": 1,
+          "impact_level": "HIGH",
+          "severity_breakdown": {
+            "critical": 0,
+            "high": 1,
+            "medium": 0,
+            "low": 0
+          }
+        }
+      ],
+      "metrics": {
+        "total_calls": 9
+      }
+    }
+  ],
+  "session_id": "nwj331"
+}

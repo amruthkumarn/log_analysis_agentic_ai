@@ -742,8 +742,17 @@ def get_log_analysis_graph(checkpointer):
 
 # --- File Saving ---
 def save_analysis_to_json(analysis_results: Dict, output_dir: str = "analysis_output"):
-    output_path = get_project_root() / output_dir
-    output_path.mkdir(exist_ok=True)
+    # Handle both relative and absolute paths
+    if Path(output_dir).is_absolute():
+        output_path = Path(output_dir)
+    else:
+        # Check if we're in a Docker container and use app root instead of project root
+        if os.getenv("DOCKER_CONTAINER", "false").lower() == "true":
+            output_path = Path("/app") / output_dir
+        else:
+            output_path = get_project_root() / output_dir
+    
+    output_path.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     session_id = analysis_results.get("session_id", "unknown_session")
 
@@ -756,8 +765,17 @@ def save_analysis_to_json(analysis_results: Dict, output_dir: str = "analysis_ou
     logger.info(f"Full analysis for session {session_id} saved to {full_analysis_path}")
 
 def save_root_cause_to_json(analysis_results: Dict, output_dir: str = "analysis_output"):
-    output_path = get_project_root() / output_dir
-    output_path.mkdir(exist_ok=True)
+    # Handle both relative and absolute paths
+    if Path(output_dir).is_absolute():
+        output_path = Path(output_dir)
+    else:
+        # Check if we're in a Docker container and use app root instead of project root
+        if os.getenv("DOCKER_CONTAINER", "false").lower() == "true":
+            output_path = Path("/app") / output_dir
+        else:
+            output_path = get_project_root() / output_dir
+    
+    output_path.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     session_id = analysis_results.get("session_id", "unknown_session")
     
@@ -900,7 +918,7 @@ def filter_logs_by_time(raw_logs: Dict[str, List[dict]], start_time: datetime, e
 
 
 # --- Main Application Logic ---
-def run_session_analysis(session_id: str, session_logs: Dict[str, List[dict]], app):
+def run_session_analysis(session_id: str, session_logs: Dict[str, List[dict]], app, output_dir: str = "analysis_output"):
     logger.info(f"Starting analysis for session: {session_id}")
     
     # Add deduplication logic to prevent duplicate entries
@@ -943,9 +961,9 @@ def run_session_analysis(session_id: str, session_logs: Dict[str, List[dict]], a
     try:
         final_state = app.invoke(initial_state, config)
         logger.info(f"Final state for session {session_id} retrieved.")
-        # Save analysis files
-        save_analysis_to_json(final_state)
-        save_root_cause_to_json(final_state)
+        # Save analysis files with parameterized output directory
+        save_analysis_to_json(final_state, output_dir)
+        save_root_cause_to_json(final_state, output_dir)
     except Exception as e:
         logger.error(f"Error in session {session_id}: {e}", exc_info=True)
 
@@ -998,11 +1016,15 @@ def main(args: argparse.Namespace):
                 logger.error(f"Session {args.session_id} not found. Available sessions: {list(combined_sessions.keys())}")
                 return
         
+        # Get output directory from args with default fallback
+        output_dir = getattr(args, 'output_dir', 'analysis_output')
+        logger.info(f"Analysis output will be saved to: {output_dir}")
+        
         threads = []
         for session_id, session_logs in combined_sessions.items():
             # The session_logs from ELK are already in the right format.
             # For file logs, they are now grouped correctly as well.
-            thread = threading.Thread(target=run_session_analysis, args=(session_id, session_logs, app))
+            thread = threading.Thread(target=run_session_analysis, args=(session_id, session_logs, app, output_dir))
             threads.append(thread)
             thread.start()
             time.sleep(1) # Stagger thread starts slightly
@@ -1021,6 +1043,10 @@ if __name__ == '__main__':
 
     # Session filtering
     parser.add_argument('--session-id', type=str, help='Analyze only this specific session ID.')
+    
+    # Output configuration
+    parser.add_argument('--output-dir', type=str, default='analysis_output', 
+                       help='Directory to save analysis results (default: analysis_output)')
 
     time_group = parser.add_argument_group('Time Filtering')
     time_group.add_argument('--start-time', type=datetime.fromisoformat, help='Start time (YYYY-MM-DDTHH:MM:SS).')

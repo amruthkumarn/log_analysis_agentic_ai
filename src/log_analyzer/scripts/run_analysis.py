@@ -23,6 +23,10 @@ def main():
 
     # Session filtering
     parser.add_argument('--session-id', type=str, help='Analyze only this specific session ID.')
+    
+    # Output configuration
+    parser.add_argument('--output-dir', type=str, default='analysis_output', 
+                       help='Directory to save analysis results (default: analysis_output)')
 
     # Time filtering
     time_group = parser.add_argument_group('Time Filtering')
@@ -54,6 +58,8 @@ def main():
     
     if args.start_time:
         print(f"⏰ Time Range: {args.start_time} to {args.end_time or 'now'}")
+        
+    print(f"📁 Output directory: {args.output_dir}")
     
     # Run the analysis
     run_analysis_main(args)
