@@ -102,45 +102,76 @@ docker-compose -f config/docker-compose.yml ps
 ### 4. Run Analysis
 
 ```bash
-# Analyze all sessions
-./scripts/analyze_logs.sh
+# Analyze all sessions (default output directory)
+./scripts/analyze_logs.sh --elk-index demo-logs
 
-# OR analyze specific session
+# Analyze specific session with custom output directory
+./scripts/analyze_logs.sh --elk-index demo-logs --session-id gbx131 --output-dir my_results
+
+# OR use Python script directly
 docker-compose -f config/docker-compose.yml exec log-analyzer \
   python -m src.log_analyzer.scripts.run_analysis \
-  --elk-index demo-logs --session-id gbx131
+  --elk-index demo-logs --session-id gbx131 --output-dir custom_results
 ```
 
 ## 📊 Usage Examples
 
 ### Analyze All Sessions
 ```bash
+# Default output directory (analysis_output/)
 docker-compose -f config/docker-compose.yml exec log-analyzer \
   python -m src.log_analyzer.scripts.run_analysis \
   --elk-index demo-logs
+
+# Custom output directory
+docker-compose -f config/docker-compose.yml exec log-analyzer \
+  python -m src.log_analyzer.scripts.run_analysis \
+  --elk-index demo-logs --output-dir my_custom_results
 ```
 
 ### Analyze Specific Session
 ```bash
+# Single session analysis with custom output
 docker-compose -f config/docker-compose.yml exec log-analyzer \
   python -m src.log_analyzer.scripts.run_analysis \
-  --elk-index demo-logs --session-id gbx131
+  --elk-index demo-logs --session-id gbx131 --output-dir session_analysis
+
+# Using shell script (recommended)
+./scripts/analyze_logs.sh --elk-index demo-logs --session-id gbx131 --output-dir results
 ```
 
 ### Analyze Log Files Directly
 ```bash
+# Direct file analysis with custom output
 docker-compose -f config/docker-compose.yml exec log-analyzer \
   python -m src.log_analyzer.scripts.run_analysis \
-  --log-files /app/logs/api_gateway.log /app/logs/payment_service.log
+  --log-files /app/logs/api_gateway.log /app/logs/payment_service.log \
+  --output-dir file_analysis_results
 ```
 
 ### Time-Based Filtering
 ```bash
+# Time-filtered analysis with custom output
 docker-compose -f config/docker-compose.yml exec log-analyzer \
   python -m src.log_analyzer.scripts.run_analysis \
   --elk-index demo-logs \
   --start-time 2024-03-20T10:00:00 \
+  --end-time 2024-03-20T11:00:00 \
+  --output-dir time_filtered_results
+```
+
+### Advanced Shell Script Usage
+```bash
+# Shell script with all options
+./scripts/analyze_logs.sh \
+  --elk-index demo-logs \
+  --session-id gbx131 \
+  --output-dir production_analysis \
+  --start-time 2024-03-20T10:00:00 \
   --end-time 2024-03-20T11:00:00
+
+# Help for all available options
+./scripts/analyze_logs.sh --help
 ```
 
 ## 🧠 AI Analysis Capabilities
@@ -165,12 +196,45 @@ docker-compose -f config/docker-compose.yml exec log-analyzer \
 
 ## 📈 Analysis Output
 
+### Flexible Output Directory Configuration
+The system supports flexible output directory configuration for organizing analysis results:
+
+```bash
+# Default behavior - saves to analysis_output/
+./scripts/analyze_logs.sh --elk-index demo-logs
+
+# Custom relative directory - saves to custom_results/
+./scripts/analyze_logs.sh --elk-index demo-logs --output-dir custom_results
+
+# Multiple custom directories for different analyses
+./scripts/analyze_logs.sh --elk-index demo-logs --session-id session1 --output-dir session1_analysis
+./scripts/analyze_logs.sh --elk-index demo-logs --session-id session2 --output-dir session2_analysis
+```
+
 ### File Structure
 ```
-analysis_output/
-├── full_analysis_[session_id]_[timestamp].json     # Complete analysis
-└── root_cause_analysis_[session_id]_[timestamp].json  # Focused RCA
+langgraph_ai_agents/
+├── analysis_output/                    # Default output directory
+│   ├── full_analysis_[session_id]_[timestamp].json
+│   └── root_cause_analysis_[session_id]_[timestamp].json
+├── custom_results/                     # Custom output directory
+│   ├── full_analysis_[session_id]_[timestamp].json
+│   └── root_cause_analysis_[session_id]_[timestamp].json
+└── production_analysis/                # Another custom directory
+    ├── full_analysis_[session_id]_[timestamp].json
+    └── root_cause_analysis_[session_id]_[timestamp].json
 ```
+
+### Output Files
+- **Full Analysis**: `full_analysis_[session_id]_[timestamp].json`
+  - Complete analysis including correlations, raw logs, and AI insights
+  - Detailed session information and API call trees
+  - Comprehensive error chain analysis
+
+- **Root Cause Analysis**: `root_cause_analysis_[session_id]_[timestamp].json`
+  - Focused analysis of identified issues
+  - AI-generated problem descriptions and root causes
+  - Actionable recommendations for remediation
 
 ### Sample Root Cause Analysis
 ```json
@@ -202,6 +266,54 @@ analysis_output/
 
 ## 🔧 Configuration
 
+### Command Line Parameters
+
+#### Core Analysis Parameters
+```bash
+# Data source (required - choose one)
+--elk-index INDEX              # Analyze from Elasticsearch index
+--log-files FILE1 FILE2...     # Analyze from local log files
+
+# Session and time filtering
+--session-id SESSION_ID        # Analyze specific session only
+--start-time YYYY-MM-DDTHH:MM:SS  # Filter by start time
+--end-time YYYY-MM-DDTHH:MM:SS    # Filter by end time
+
+# Output configuration
+--output-dir DIRECTORY         # Custom output directory (default: analysis_output)
+
+# Elasticsearch configuration
+--elk-host HOST               # Elasticsearch host (default: elasticsearch)
+--elk-user USERNAME           # Elasticsearch username
+--elk-password PASSWORD       # Elasticsearch password
+--elk-max-results NUMBER      # Maximum results to fetch (default: 10000)
+```
+
+#### Shell Script Parameters
+```bash
+./scripts/analyze_logs.sh [OPTIONS]
+
+Options:
+  --elk-index INDEX         Analyze logs from Elasticsearch index
+  --log-files FILES          Analyze logs from local files (space-separated)
+  --session-id ID           Analyze only specific session ID
+  --output-dir DIR          Output directory for results (default: analysis_output)
+  --start-time TIME         Analysis start time
+  --end-time TIME           Analysis end time
+  --elk-host HOST           Elasticsearch host (default: elasticsearch)
+  --help                    Show help message
+
+Examples:
+  # Basic analysis
+  ./scripts/analyze_logs.sh --elk-index demo-logs
+  
+  # Session-specific analysis with custom output
+  ./scripts/analyze_logs.sh --elk-index demo-logs --session-id gbx131 --output-dir session_results
+  
+  # Time-filtered analysis
+  ./scripts/analyze_logs.sh --elk-index demo-logs --start-time 2024-03-20T10:00:00 --end-time 2024-03-20T11:00:00
+```
+
 ### Environment Variables
 ```bash
 # Elasticsearch
@@ -219,7 +331,20 @@ OLLAMA_PORT=11434
 
 # Analysis
 ANALYSIS_RETENTION_DAYS=30
+DOCKER_CONTAINER=true          # Enables proper path resolution in containers
 ```
+
+### Docker Volume Configuration
+The system automatically mounts common output directories to the host filesystem:
+
+```yaml
+volumes:
+  - ../analysis_output:/app/analysis_output           # Default directory
+  - ../custom_analysis_output:/app/custom_analysis_output
+  - ../my_custom_results:/app/my_custom_results
+```
+
+**Note**: For new custom directory names, add them to the docker-compose.yml volume mounts to ensure files appear on the host filesystem.
 
 ### Service Configuration
 - **Elasticsearch**: Port 9200, stores log data
@@ -322,29 +447,180 @@ python -m pytest tests/
 
 ## 📋 Command Reference
 
-### Analysis Commands
+### Quick Start Commands
 ```bash
-# Basic analysis
-./scripts/analyze_logs.sh
+# Start all services
+docker-compose -f config/docker-compose.yml up -d
+
+# Load sample data
+./scripts/load_logs.sh
+
+# Run basic analysis
+./scripts/analyze_logs.sh --elk-index demo-logs
+
+# Check results
+ls -ltr analysis_output/
+```
+
+### Analysis Commands
+
+#### Shell Script (Recommended)
+```bash
+# Basic analysis with default output
+./scripts/analyze_logs.sh --elk-index demo-logs
+
+# Session-specific analysis with custom output directory
+./scripts/analyze_logs.sh --elk-index demo-logs --session-id gbx131 --output-dir session_results
+
+# Time-filtered analysis
+./scripts/analyze_logs.sh --elk-index demo-logs \
+  --start-time 2024-03-20T10:00:00 \
+  --end-time 2024-03-20T11:00:00 \
+  --output-dir time_analysis
+
+# File-based analysis
+./scripts/analyze_logs.sh --log-files "logs/app1.log logs/app2.log" --output-dir file_results
+
+# Show all available options
+./scripts/analyze_logs.sh --help
+```
+
+#### Direct Python Script
+```bash
+# All sessions with custom output
+docker-compose -f config/docker-compose.yml exec log-analyzer \
+  python -m src.log_analyzer.scripts.run_analysis \
+  --elk-index demo-logs --output-dir comprehensive_analysis
+
+# Single session analysis
+docker-compose -f config/docker-compose.yml exec log-analyzer \
+  python -m src.log_analyzer.scripts.run_analysis \
+  --elk-index demo-logs --session-id gbx131 --output-dir single_session
+
+# File-based analysis
+docker-compose -f config/docker-compose.yml exec log-analyzer \
+  python -m src.log_analyzer.scripts.run_analysis \
+  --log-files /app/logs/api_gateway.log /app/logs/payment_service.log \
+  --output-dir direct_file_analysis
+
+# Time-filtered with custom output
+docker-compose -f config/docker-compose.yml exec log-analyzer \
+  python -m src.log_analyzer.scripts.run_analysis \
+  --elk-index demo-logs \
+  --start-time 2024-03-20T10:00:00 \
+  --end-time 2024-03-20T11:00:00 \
+  --output-dir time_filtered
+```
+
+### Output Management Commands
+```bash
+# List analysis outputs in default directory
+ls -ltr analysis_output/
+
+# List outputs in custom directory
+ls -ltr my_custom_results/
+
+# View latest analysis results
+find analysis_output/ -name "*.json" -type f -exec ls -lt {} + | head -10
+
+# Check analysis file sizes
+du -sh analysis_output/* | sort -hr
+
+# Search for specific session results
+find . -name "*gbx131*" -type f
+
+# Clean old analysis results (if using manage_analysis.sh)
+./scripts/manage_analysis.sh clean 7  # Remove files older than 7 days
+```
+
+### Data Loading Commands
+```bash
+# Load test logs to Elasticsearch
+./scripts/load_logs.sh
 
 # Load and analyze in one step
 ./scripts/load_and_analyze.sh
 
-# Custom analysis
+# Load with custom index name
 docker-compose -f config/docker-compose.yml exec log-analyzer \
-  python -m src.log_analyzer.scripts.run_analysis [options]
+  python -m src.log_analyzer.utils.load_logs_to_elk --index-name custom-logs
 ```
 
-### Management Commands
+### Service Management Commands
 ```bash
-# List analysis outputs
-./scripts/manage_analysis.sh list
+# Start all services
+docker-compose -f config/docker-compose.yml up -d
 
-# Clean old outputs
-./scripts/manage_analysis.sh clean [days]
+# Stop all services
+docker-compose -f config/docker-compose.yml down
 
-# Service management
-docker-compose -f config/docker-compose.yml [up|down|restart|logs]
+# Restart specific service
+docker-compose -f config/docker-compose.yml restart log-analyzer
+
+# View service logs
+docker-compose -f config/docker-compose.yml logs log-analyzer
+docker-compose -f config/docker-compose.yml logs ollama
+
+# Check service status
+docker-compose -f config/docker-compose.yml ps
+
+# Pull latest AI models
+docker-compose -f config/docker-compose.yml exec ollama ollama pull llama3.2:1b
+docker-compose -f config/docker-compose.yml exec ollama ollama pull nomic-embed-text
+```
+
+### Development Commands
+```bash
+# Build log-analyzer container
+docker-compose -f config/docker-compose.yml build log-analyzer
+
+# Access container shell
+docker-compose -f config/docker-compose.yml exec log-analyzer /bin/bash
+
+# Run tests
+docker-compose -f config/docker-compose.yml exec log-analyzer python -m pytest tests/
+
+# Generate test data
+python tests/data_generators/generate_test_logs.py
+
+# Check container resources
+docker stats
+```
+
+### Troubleshooting Commands
+```bash
+# Check Elasticsearch health
+docker-compose -f config/docker-compose.yml exec log-analyzer \
+  curl -X GET "elasticsearch:9200/_cluster/health"
+
+# Test Redis connectivity
+docker-compose -f config/docker-compose.yml exec redis redis-cli ping
+
+# Check Ollama models
+docker-compose -f config/docker-compose.yml exec ollama ollama list
+
+# View detailed logs
+docker-compose -f config/docker-compose.yml logs --tail=100 log-analyzer
+
+# Check disk usage
+docker system df
+docker volume ls
+```
+
+### Cleanup Commands
+```bash
+# Remove old analysis outputs
+find analysis_output/ -name "*.json" -mtime +7 -delete
+
+# Clean Docker resources
+docker system prune -f
+
+# Remove unused volumes
+docker volume prune -f
+
+# Full cleanup (WARNING: removes all data)
+docker-compose -f config/docker-compose.yml down -v
+docker system prune -a -f
 ```
 
 ## 📄 License
